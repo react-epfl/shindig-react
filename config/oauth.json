@@ -31,7 +31,8 @@
       "consumer_secret" : "secret",
       "key_type" : "HMAC_SYMMETRIC"
     }
-  }
+  },
+  
 }
   
 
