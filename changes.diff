@@ -1,3 +1,425 @@
+<<<<<<< HEAD
+=======
+diff --git a/.gitignore b/.gitignore
+new file mode 100644
+index 0000000..62aef71
+--- /dev/null
++++ b/.gitignore
+@@ -0,0 +1,22 @@
+
++.lock
++.plugins/
++version.ini
++devtest.war
++
++# Targets #
++###########
+
++java/graaasp/target/
++target/
+
+diff --git a/config/oauth.json b/config/oauth.json
+index 7fd714f..a45b028 100644
+--- a/config/oauth.json
++++ b/config/oauth.json
+@@ -31,7 +31,35 @@
+       "consumer_secret" : "secret",
+       "key_type" : "HMAC_SYMMETRIC"
+     }
+-  }
++  },
++  "http://graasp.epfl.ch/gadget/oauth_example.xml" : {
++        "google" : {
++            "consumer_secret" : "WbzgnbaXg2kdXHr2WEVnN+WF",
++            "consumer_key"    : "graasp.epfl.ch",
++            "key_type"        : "HMAC_SHA1"
++        }
++  },
++  "http://iamac71.epfl.ch:3000/gadget/oauth_graaasp.xml" : {
++        "graaasp" : {
++            "consumer_secret" : "kAgoDAEDKBoCnMdThTgoqN0Lvo1w7WBGjtSiqhrA",
++            "consumer_key"    : "M8dkbY4SYJNOSnf0CaMw",
++            "key_type"        : "HMAC_SHA1"
++        }
++  },
++  "http://iamac71.epfl.ch:3000/gadget/portability.xml" : {
++        "portability" : {
++            "consumer_secret" : "mJlIprRWyLD9iccVeXSfcTS2fKFwyVBg1HjT0frN",
++            "consumer_key"    : "MDHFY2Iy3blxxkj52xwY",
++            "key_type"        : "HMAC_SHA1"
++        }
++  },
++  "http://role-project.svn.sourceforge.net/viewvc/role-project/trunk/gadgets/cam/cam_oauth.xml" : {
++            "CamV2Service" : {
++                  "consumer_secret" : "66b54f9bc0d65a779399e11b46e3982c",
++                  "consumer_key" : "9eedb7987c2956c8adf9e5f5ad8acb69",
++                  "key_type" : "HMAC-SHA1"
++            }
++    },
+ }
+   
+ 
+diff --git a/features/src/main/javascript/features/features.txt b/features/src/main/javascript/features/features.txt
+index d583f78..9aae4f1 100644
+--- a/features/src/main/javascript/features/features.txt
++++ b/features/src/main/javascript/features/features.txt
+@@ -1,27 +1,7 @@
+-#
+-#  Licensed to the Apache Software Foundation (ASF) under one
+-#  or more contributor license agreements.  See the NOTICE file
+-#  distributed with this work for additional information
+-#  regarding copyright ownership.  The ASF licenses this file
+-#  to you under the Apache License, Version 2.0 (the
+-#  "License"); you may not use this file except in compliance
+-#  with the License.  You may obtain a copy of the License at
+-# 
+-#    http://www.apache.org/licenses/LICENSE-2.0
+-# 
+-#  Unless required by applicable law or agreed to in writing,
+-#  software distributed under the License is distributed on an
+-#  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+-#  KIND, either express or implied.  See the License for the
+-#  specific language governing permissions and limitations
+-#  under the License.
+-#
+-# List each feature you want to support here
+-
+-features/globals/feature.xml
+ features/analytics/feature.xml
+ features/auth-refresh/feature.xml
+ features/caja/feature.xml
++features/com.google.gadgets.analytics/feature.xml
+ features/container/feature.xml
+ features/content-rewrite/feature.xml
+ features/core.config/feature.xml
+@@ -36,6 +16,7 @@ features/core/feature.xml
+ features/dynamic-height.util/feature.xml
+ features/dynamic-height/feature.xml
+ features/flash/feature.xml
++features/globals/feature.xml
+ features/i18n/feature.xml
+ features/jsondom/feature.xml
+ features/locked-domain/feature.xml
+@@ -61,11 +42,11 @@ features/security-token/feature.xml
+ features/setprefs/feature.xml
+ features/settitle/feature.xml
+ features/shindig.auth/feature.xml
+-features/shindig.container/feature.xml
+ features/shindig.container-1.0/feature.xml
++features/shindig.container/feature.xml
+ features/shindig.random/feature.xml
+-features/shindig.uri/feature.xml
+ features/shindig.uri.ext/feature.xml
++features/shindig.uri/feature.xml
+ features/shindig.xhrwrapper/feature.xml
+ features/skins/feature.xml
+ features/swfobject/feature.xml
+@@ -73,4 +54,3 @@ features/tabs/feature.xml
+ features/views/feature.xml
+ features/xhrwrapper/feature.xml
+ features/xmlutil/feature.xml
+-features/com.google.gadgets.analytics/feature.xml
+diff --git a/features/src/main/javascript/features/shindig.container/feature.xml b/features/src/main/javascript/features/shindig.container/feature.xml
+index eaf72b8..2217e1d 100644
+--- a/features/src/main/javascript/features/shindig.container/feature.xml
++++ b/features/src/main/javascript/features/shindig.container/feature.xml
+@@ -28,6 +28,10 @@ A map of view names to view attributes. Examples:
+   <dependency>rpc</dependency>
+   <dependency>osapi</dependency>
+   <dependency>shindig.uri.ext</dependency>
++  <gadget>
++    <script src="util.js"/>
++    <script src="shindig-container.js"/>
++  </gadget>
+   <container>
+     <script src="util.js"/>
+     <script src="cookies.js"/>
+diff --git a/features/src/main/javascript/features/shindig.container/shindig-container.js b/features/src/main/javascript/features/shindig.container/shindig-container.js
+index 337c26b..db2f53d 100644
+--- a/features/src/main/javascript/features/shindig.container/shindig-container.js
++++ b/features/src/main/javascript/features/shindig.container/shindig-container.js
+@@ -648,6 +648,17 @@ shindig.BaseIfrGadget.prototype.queryIfrGadgetType_ = function() {
+   // Get the gadget metadata and check if the gadget requires the 'pubsub-2'
+   // feature.  If so, then we use OpenAjax Hub in order to create and manage
+   // the iframe.  Otherwise, we create the iframe ourselves.
++
++  // ***********************
++  // TODO: Evgeny's extension to avoid buggy metadata call
++  var gadget = this;
++  var subClass = shindig.IfrGadget;
++  for (var name in subClass) if (subClass.hasOwnProperty(name)) {
++    gadget[name] = subClass[name];
++  }
++  return;
++  // ***********************
++
+   var request = {
+     context: {
+       country: "default",
+@@ -660,7 +671,7 @@ shindig.BaseIfrGadget.prototype.queryIfrGadgetType_ = function() {
+       moduleId: 1
+     }]
+   };
+-
++  
+   var makeRequestParams = {
+     "CONTENT_TYPE" : "JSON",
+     "METHOD" : "POST",
+diff --git a/java/common/conf/readme.md b/java/common/conf/readme.md
+new file mode 100644
+index 0000000..a0da838
+--- /dev/null
++++ b/java/common/conf/readme.md
+@@ -0,0 +1 @@
++placeholder for shindig.properties file
+diff --git a/java/common/conf/shindig.properties b/java/common/conf/shindig.properties
+deleted file mode 100644
+index 1eb829d..0000000
+--- a/java/common/conf/shindig.properties
++++ /dev/null
+@@ -1,149 +0,0 @@
+-# Licensed to the Apache Software Foundation (ASF) under one
+-# or more contributor license agreements.  See the NOTICE file
+-# distributed with this work for additional information
+-# regarding copyright ownership.  The ASF licenses this file
+-# to you under the Apache License, Version 2.0 (the
+-# "License"); you may not use this file except in compliance
+-# with the License.  You may obtain a copy of the License at
+-#
+-#  http://www.apache.org/licenses/LICENSE-2.0
+-#
+-# Unless required by applicable law or agreed to in writing,
+-# software distributed under the License is distributed on an
+-# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+-# KIND, either express or implied.  See the License for the
+-# specific language governing permissions and limitations
+-# under the License.
+-
+-# Location of feature manifests (comma separated)
+-shindig.features.default=res://features/features.txt
+-
+-# Location of container configurations (comma separated)
+-shindig.containers.default=res://containers/default/container.js
+-
+-# A file containing blacklisted gadgets.
+-shindig.blacklist.file=
+-
+-### Inbound OAuth support
+-# The URL base to use for full OAuth support (three-legged)
+-shindig.oauth.base-url=/oauth/
+-shindig.oauth.authorize-action=/WEB-INF/authorize.jsp
+-
+-### Outbound OAuth support
+-shindig.signing.state-key=
+-shindig.signing.key-name=
+-shindig.signing.key-file=
+-shindig.signing.global-callback-url=http://localhost:8080/gadgets/oauthcallback
+-shindig.signing.enable-signed-callbacks=true
+-
+-# Set to true if you want to allow the use of 3-legged OAuth tokens when viewer != owner.
+-# This setting is not recommeneded for pages that allow user-controlled javascript, since
+-# that javascript could be used to make unauthorized requests on behalf of the viewer of the page
+-shindig.signing.viewer-access-tokens-enabled=false
+-
+-# If enabled here, configuration values can be found in container configuration files.
+-shindig.locked-domain.enabled=false
+-
+-# TODO: This needs to be moved to container configuration.
+-shindig.content-rewrite.only-allow-excludes=false
+-shindig.content-rewrite.include-urls=.*
+-shindig.content-rewrite.exclude-urls=
+-shindig.content-rewrite.include-tags=body,embed,img,input,link,script,style
+-shindig.content-rewrite.expires=86400
+-shindig.content-rewrite.proxy-url=/gadgets/proxy?container=default&url=
+-shindig.content-rewrite.concat-url=/gadgets/concat?container=default&
+-shindig.content-rewrite.enable-split-js-concat=true
+-
+-#
+-# Default set of forced libs to allow for better caching
+-#
+-# NOTE: setting this causes the EndToEnd test to fail the opensocial-templates test
+-shindig.gadget-rewrite.default-forced-libs=core:rpc
+-#shindig.gadget-rewrite.default-forced-libs=
+-
+-#
+-# Allow supported JavaScript features required by a gadget to be externalized on demand
+-shindig.gadget-rewrite.externalize-feature-libs=false
+-
+-# Configuration for image rewriter
+-shindig.image-rewrite.max-inmem-bytes = 1048576
+-shindig.image-rewrite.max-palette-size = 256
+-shindig.image-rewrite.allow-jpeg-conversion = true
+-shindig.image-rewrite.jpeg-compression = 0.75
+-shindig.image-rewrite.min-threshold-bytes = 200
+-
+-# Configuration for the os:Flash tag
+-shindig.flash.min-version = 9.0.115
+-
+-# Configuration for template rewriter
+-shindig.template-rewrite.extension-tag-namespace=http://ns.opensocial.org/2009/extensions
+-
+-# These values provide default TTLs for HTTP responses that don't use caching headers.
+-shindig.cache.http.defaultTtl=3600000
+-shindig.cache.http.negativeCacheTtl=60000
+-
+-# A default refresh interval for XML files, since there is no natural way for developers to
+-# specify this value, and most HTTP responses don't include good cache control headers.
+-shindig.cache.xml.refreshInterval=300000
+-
+-# Add entries in the form shindig.cache.lru.<name>.capacity to specify capacities for different
+-# caches when using the LruCacheProvider.
+-# It is highly recommended that the EhCache implementation be used instead of the LRU cache.
+-shindig.cache.lru.default.capacity=1000
+-shindig.cache.lru.expressions.capacity=1000
+-shindig.cache.lru.gadgetSpecs.capacity=1000
+-shindig.cache.lru.messageBundles.capacity=1000
+-shindig.cache.lru.httpResponses.capacity=10000
+-
+-# The location of the EhCache configuration file.
+-shindig.cache.ehcache.config=res://org/apache/shindig/common/cache/ehcache/ehcacheConfig.xml
+-
+-# True to enable JMX integration with cache stats
+-shindig.cache.ehcache.jmx.enabled=true
+-
+-# true to enable JMX stats.
+-shindig.cache.ehcache.jmx.stats=true
+-
+-# true to skip expensive encoding detection.
+-# if true, will only attempt to validate utf-8. Assumes all other encodings are ISO-8859-1.
+-shindig.http.fast-encoding-detection=true
+-
+-# Configuration for the HttpFetcher
+-# Connection timeout, in milliseconds, for requests.
+-shindig.http.client.connection-timeout-ms=5000
+-
+-# Maximum size, in bytes, of the object we fetched, 0 == no limit
+-shindig.http.client.max-object-size-bytes=0
+-
+-# Strict-mode parsing for proxy and concat URIs ensures that the authority/host and path
+-# for the URIs match precisely what is found in the container config for it. This is
+-# useful where statistics and traffic routing patterns, typically in large installations,
+-# key on hostname (and occasionally path). Enforcing this does come at the cost that
+-# mismatches break, which in turn mandates that URI generation always happen in consistent
+-# fashion, ie. by the class itself or tightly controlled code.
+-shindig.uri.proxy.use-strict-parsing=false
+-shindig.uri.concat.use-strict-parsing=false
+-
+-# Host:port of the proxy to use while fetching urls. Leave blank if proxy is
+-# not to be used.
+-org.apache.shindig.gadgets.http.basicHttpFetcherProxy=
+-
+-org.apache.shindig.serviceExpirationDurationMinutes=60
+-
+-#
+-# Older versions of shindig used 'data' in the json-rpc response format
+-# The spec calls for using 'result' instead, however to avoid breakage we
+-# allow you to set it back to the old way here
+-#
+-# valid values are
+-#  result  - new form
+-#  data    - old broken form
+-#  both    - return both fields for full compatibility
+-#
+-shindig.json-rpc.result-field=result
+-
+-# Remap "Internal server error"s received from the basicHttpFetcherProxy server to
+-# "Bad Gateway error"s, so that it is clear to the user that the proxy server is
+-# the one that threw the exception.
+-shindig.accelerate.remapInternalServerError=true
+-shindig.proxy.remapInternalServerError=true
+diff --git a/java/common/src/main/java/org/apache/shindig/auth/BasicSecurityTokenCodec.java b/java/common/src/main/java/org/apache/shindig/auth/BasicSecurityTokenCodec.java
+index 20ea4d8..c4750b8 100644
+--- a/java/common/src/main/java/org/apache/shindig/auth/BasicSecurityTokenCodec.java
++++ b/java/common/src/main/java/org/apache/shindig/auth/BasicSecurityTokenCodec.java
+@@ -78,8 +78,10 @@ public class BasicSecurityTokenCodec implements SecurityTokenCodec {
+ 
+     try {
+       String[] tokens = StringUtils.split(token, ':');
+-      if (tokens.length != TOKEN_COUNT) {
++      if (tokens.length < TOKEN_COUNT) {
+         throw new SecurityTokenException("Malformed security token");
++      }else{
++    	  tokens = this.parseToken(tokens);
+       }
+ 
+       return new BasicSecurityToken(
+@@ -104,4 +106,25 @@ public class BasicSecurityTokenCodec implements SecurityTokenCodec {
+    */
+   public BasicSecurityTokenCodec() {
+   }
++  /**
++   * Parses the security token
++   */
++  public String[] parseToken(String[] tokens) {
++	  int url_number = tokens.length-6;
++	  String[] output = new String[TOKEN_COUNT];
++	  //get array elements corresponding to broken url - http://host:port/gadget.xml -> ["http","//host","port/gadget.xml"]
++	  
++	  String[] url_array = new String[url_number];
++	  //copy first part (before url)
++	  System.arraycopy(tokens,0,output,0,4);
++	  //build url
++	  System.arraycopy(tokens, 4, url_array, 0, url_number);
++	  String url = Joiner.on(":").join(url_array);
++	  //copy url
++	  output[4] = url;
++	  //copy last part (after url)
++	  System.arraycopy(tokens,(4+url_number),output,5,2);
++	  
++	  return output;	  
++  }
+ }
+diff --git a/java/common/src/main/java/org/apache/shindig/protocol/DataServiceServlet.java b/java/common/src/main/java/org/apache/shindig/protocol/DataServiceServlet.java
+index 84d7572..7e4c174 100644
+--- a/java/common/src/main/java/org/apache/shindig/protocol/DataServiceServlet.java
++++ b/java/common/src/main/java/org/apache/shindig/protocol/DataServiceServlet.java
+@@ -36,6 +36,8 @@ import java.util.concurrent.Future;
+ import java.util.logging.Level;
+ import java.util.logging.Logger;
+ 
++import java.util.regex.*;
++
+ /**
+  * Servlet used to process REST requests (/rest/* etc.)
+  */
+@@ -153,6 +155,9 @@ public class DataServiceServlet extends ApiServlet {
+ 
+     // Always returns a non-null handler.
+     RestHandler handler = getRestHandler(servletRequest);
++    // Hack for documents    
++    String path = servletRequest.getPathInfo();       
++    // -----
+ 
+     Reader bodyReader = null;
+     if (!servletRequest.getMethod().equals("GET") && !servletRequest.getMethod().equals("HEAD")) {
+@@ -172,7 +177,10 @@ public class DataServiceServlet extends ApiServlet {
+       Object response = responseItem.getResponse();
+       // TODO: ugliness resulting from not using RestfulItem
+       if (!(response instanceof DataCollection) && !(response instanceof RestfulCollection)) {
+-        response = ImmutableMap.of("entry", response);
++        // Hack for documents, only single endpoints (rest/documents/5 or rest/documents)
++        if (!(path.matches("^/documents/[^/]*") || path.matches("^/documents[^/]*"))) {
++          response = ImmutableMap.of("entry", response);          
++        }
+       }
+ 
+       // JSONP style callbacks
+@@ -180,7 +188,13 @@ public class DataServiceServlet extends ApiServlet {
+           servletRequest.getParameter("callback") : null;
+ 
+       if (callback != null) writer.write(callback + '(');
+-      writer.write(converter.convertToString(response));
++      // Hack for documents, only single endpoints (rest/documents/5 or rest/documents)
++      if (path.matches("^/documents/[^/]*") || path.matches("^/documents[^/]*")) {
++        writer.write((String)response);
++      } else {
++        writer.write(converter.convertToString(response));
++      }
++      
+       if (callback != null) writer.write(");\n");
+     } else {
+       sendError(servletResponse, responseItem);
+>>>>>>> updates .gitignore, adds diff file for previous version of shindig
 diff --git a/java/common/src/test/java/org/apache/shindig/auth/BasicSecurityTokenDecoderTest.java b/java/common/src/test/java/org/apache/shindig/auth/BasicSecurityTokenDecoderTest.java
 new file mode 100644
 index 0000000..ee289dd
@@ -7715,7 +8137,39 @@ index 0000000..9f8b584
 +    "canonical" : "password"
 +  }
 +}
+<<<<<<< HEAD
 
+=======
+diff --git a/java/samples/src/main/resources/META-INF/orm.xml b/java/samples/src/main/resources/META-INF/orm.xml
+index 99b9e2c..7674ceb 100644
+--- a/java/samples/src/main/resources/META-INF/orm.xml
++++ b/java/samples/src/main/resources/META-INF/orm.xml
+@@ -74,7 +74,7 @@
+   </entity>
+   <entity class="org.apache.shindig.social.opensocial.jpa.GroupPropertyDb">
+   </entity>
+-  <entity class="org.apache.shindig.social.opensocial.jpa.ApplicationDb">
++  <entity class="org.apache.shindig.social.opensocial.jpa.AppDb">
+   </entity>
+   <entity class="org.apache.shindig.social.opensocial.jpa.ApplicationPropertyDb">
+   </entity>
+diff --git a/java/server/pom.xml b/java/server/pom.xml
+index 48b7b17..7cc54a2 100644
+--- a/java/server/pom.xml
++++ b/java/server/pom.xml
+@@ -125,6 +125,11 @@
+       <groupId>org.apache.shindig</groupId>
+       <artifactId>shindig-extras</artifactId>
+     </dependency>
++    <dependency>
++      <groupId>org.apache.shindig</groupId>
++      <artifactId>shindig-graaasp</artifactId>
++    </dependency>
++    
+ 
+     <!-- external dependencies -->
+     <dependency>
+>>>>>>> updates .gitignore, adds diff file for previous version of shindig
 diff --git a/java/server/src/main/webapp/WEB-INF/web.xml b/java/server/src/main/webapp/WEB-INF/web.xml
 deleted file mode 100644
 index c32e917..0000000
@@ -8001,7 +8455,61 @@ index c32e917..0000000
 -    <url-pattern>/oauth/*</url-pattern>
 -  </servlet-mapping>
 -</web-app>
+<<<<<<< HEAD
 
+=======
+diff --git a/java/social-api/pom.xml b/java/social-api/pom.xml
+index 3a639b0..a6b1831 100644
+--- a/java/social-api/pom.xml
++++ b/java/social-api/pom.xml
+@@ -118,6 +118,34 @@
+       <groupId>net.oauth.core</groupId>
+       <artifactId>oauth-httpclient4</artifactId>
+     </dependency>
++    
++    <!-- Hibernate -->
++    <dependency>
++      <groupId>org.hibernate</groupId>
++      <artifactId>hibernate</artifactId>
++      <version>3.2.6.ga</version>
++    </dependency>
++    <dependency>
++      <groupId>org.hibernate</groupId>
++      <artifactId>hibernate-annotations</artifactId>
++      <version>3.3.1.GA</version>
++    </dependency>
++    <dependency>
++      <groupId>org.hibernate</groupId>
++      <artifactId>hibernate-entitymanager</artifactId>
++      <version>3.3.1.ga</version>
++    </dependency>
++    <dependency>
++      <groupId>org.hibernate</groupId>
++      <artifactId>hibernate-tools</artifactId>
++      <version>3.2.0.ga</version>
++    </dependency>
++    <dependency>
++      <groupId>org.hibernate</groupId>
++      <artifactId>ejb3-persistence</artifactId>
++      <version>1.0.1.GA</version>
++    </dependency>
++    
+ 
+     <!-- may only be needed for JDK < 1.6 -->
+     <dependency>
+@@ -141,6 +169,11 @@
+       <artifactId>httpclient</artifactId>
+     </dependency>
+     <dependency>
++    	<groupId>org.apache.httpcomponents</groupId>
++    	<artifactId>httpmime</artifactId>
++    	<version>4.1.2</version>
++    </dependency>
++    <dependency>
+       <groupId>xml-apis</groupId>
+       <artifactId>xml-apis</artifactId>
+     </dependency>
+>>>>>>> updates .gitignore, adds diff file for previous version of shindig
 diff --git a/java/social-api/src/main/java/org/apache/shindig/social/core/config/SocialApiGuiceModule.java b/java/social-api/src/main/java/org/apache/shindig/social/core/config/SocialApiGuiceModule.java
 index 911431d..8f8a4ae 100644
 --- a/java/social-api/src/main/java/org/apache/shindig/social/core/config/SocialApiGuiceModule.java
@@ -14577,7 +15085,45 @@ index 0000000..059c740
 +
 +
 +}
+<<<<<<< HEAD
 
+=======
+diff --git a/java/social-api/src/main/java/org/apache/shindig/social/core/model/PersonImpl.java b/java/social-api/src/main/java/org/apache/shindig/social/core/model/PersonImpl.java
+index ac16516..e47431b 100644
+--- a/java/social-api/src/main/java/org/apache/shindig/social/core/model/PersonImpl.java
++++ b/java/social-api/src/main/java/org/apache/shindig/social/core/model/PersonImpl.java
+@@ -20,6 +20,7 @@ package org.apache.shindig.social.core.model;
+ import org.apache.shindig.protocol.model.Enum;
+ import org.apache.shindig.social.opensocial.model.Account;
+ import org.apache.shindig.social.opensocial.model.Address;
++import org.apache.shindig.social.opensocial.model.Competence;
+ import org.apache.shindig.social.opensocial.model.BodyType;
+ import org.apache.shindig.social.opensocial.model.Drinker;
+ import org.apache.shindig.social.opensocial.model.ListField;
+@@ -45,6 +46,7 @@ public class PersonImpl implements Person {
+   private List<Account> accounts;
+   private List<String> activities;
+   private List<Address> addresses;
++  private List<Competence> competences;
+   private Integer age;
+   private Map<String, ?> appData;
+   private Date birthday;
+@@ -152,6 +154,14 @@ public class PersonImpl implements Person {
+     this.addresses = addresses;
+   }
+ 
++  public List<Competence> getCompetences() {
++    return competences;
++  }
++
++  public void setCompetences(List<Competence> competences) {
++    this.competences = competences;
++  }
++
+   public Integer getAge() {
+     return age;
+   }
+>>>>>>> updates .gitignore, adds diff file for previous version of shindig
 diff --git a/java/social-api/src/main/java/org/apache/shindig/social/core/model/PersonOrganizationDb.java b/java/social-api/src/main/java/org/apache/shindig/social/core/model/PersonOrganizationDb.java
 new file mode 100644
 index 0000000..17ef5c7
@@ -21070,7 +21616,82 @@ index 0000000..7aa87b2
 +  Future<Space> getSpace(SpaceId spaceId, Set<String> fields, SecurityToken token)
 +      throws ProtocolException;
 +}
+<<<<<<< HEAD
 
+=======
+diff --git a/java/social-api/src/main/java/org/apache/shindig/social/sample/spi/JsonDbOpensocialService.java b/java/social-api/src/main/java/org/apache/shindig/social/sample/spi/JsonDbOpensocialService.java
+index 0a81d80..b564404 100644
+--- a/java/social-api/src/main/java/org/apache/shindig/social/sample/spi/JsonDbOpensocialService.java
++++ b/java/social-api/src/main/java/org/apache/shindig/social/sample/spi/JsonDbOpensocialService.java
+@@ -52,10 +52,13 @@ import org.apache.shindig.social.opensocial.spi.MediaItemService;
+ import org.apache.shindig.social.opensocial.spi.MessageService;
+ import org.apache.shindig.social.opensocial.spi.PersonService;
+ import org.apache.shindig.social.opensocial.spi.UserId;
++import org.apache.shindig.social.opensocial.spi.Context;
+ import org.json.JSONArray;
+ import org.json.JSONException;
+ import org.json.JSONObject;
+ 
++import org.apache.shindig.social.opensocial.service.SocialRequestItem;
++
+ import com.google.common.collect.ImmutableSortedSet;
+ import com.google.common.collect.Lists;
+ import com.google.common.collect.Maps;
+@@ -365,6 +368,53 @@ public class JsonDbOpensocialService implements ActivityService, PersonService,
+           je);
+     }
+   }
++  
++  /** {@inheritDoc} */
++  public Future<Person> updatePerson(UserId id, Person person, Set<String> fields, SecurityToken token)
++      throws ProtocolException {
++    try {
++      JSONArray people = db.getJSONArray(PEOPLE_TABLE);
++
++      for (int i = 0; i < people.length(); i++) {
++        JSONObject personDb = people.getJSONObject(i);
++        if (id != null && personDb.get(Person.Field.ID.toString()).equals(id.getUserId(token))) {
++          Person personObj = filterFields(personDb, fields, Person.class);
++          Map<String, Object> appData = getPersonAppData(personDb.getString(Person.Field.ID
++              .toString()), fields);
++          personObj.setAppData(appData);
++
++          return ImmediateFuture.newInstance(personObj);
++        }
++      }
++      throw new ProtocolException(HttpServletResponse.SC_BAD_REQUEST, "Person '" + id.getUserId(token) + "' not found");
++    } catch (JSONException je) {
++      throw new ProtocolException(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, je.getMessage(),
++          je);
++    }
++  }
++
++  // example from real db implementation
++  public Future<RestfulCollection<Person>> getPeopleForContext(Context context, 
++      CollectionOptions collectionOptions, Set<String> fields,
++       SecurityToken token) throws ProtocolException {
++    // list of spaces is retrieved for a context
++
++    // not dealing with the collection options at the moment, and not the fields because they are
++    // either lazy or at no extra costs, the consumer will either access the properties or not
++    List<Person> plist = null;
++    int lastPos = 1;
++    Long totalResults = null;
++
++  	plist = Lists.newArrayList();
++    // FIXME: use JPQLUtils.getTotalResults for it
++    totalResults = new Long(plist.size());
++    // all of the above could equally have been placed into a thread to overlay the
++    // db wait times.
++    RestfulCollection<Person> restCollection = new RestfulCollection<Person>(
++        plist, collectionOptions.getFirst(), totalResults.intValue(), collectionOptions.getMax());
++    return ImmediateFuture.newInstance(restCollection);
++  }
++
+ 
+   private Map<String, Object> getPersonAppData(String id, Set<String> fields) {
+     try {
+>>>>>>> updates .gitignore, adds diff file for previous version of shindig
 diff --git a/java/social-api/src/test/java/org/apache/shindig/social/opensocial/service/DocumentHandlerTest.java b/java/social-api/src/test/java/org/apache/shindig/social/opensocial/service/DocumentHandlerTest.java
 new file mode 100644
 index 0000000..dfb9ba4
@@ -21301,4 +21922,163 @@ index 0000000..dfb9ba4
 +    verify();
 +    reset();
 +  }
+<<<<<<< HEAD
 +}
+=======
++}
+diff --git a/java/social-api/src/test/java/org/apache/shindig/social/opensocial/service/PersonHandlerTest.java b/java/social-api/src/test/java/org/apache/shindig/social/opensocial/service/PersonHandlerTest.java
+index 6092742..eecc6d0 100644
+--- a/java/social-api/src/test/java/org/apache/shindig/social/opensocial/service/PersonHandlerTest.java
++++ b/java/social-api/src/test/java/org/apache/shindig/social/opensocial/service/PersonHandlerTest.java
+@@ -88,9 +88,11 @@ public class PersonHandlerTest extends EasyMockTestCase {
+     converter = mock(BeanJsonConverter.class);
+     personService = mock(PersonService.class);
+     JSONObject config = new JSONObject('{' + ContainerConfig.DEFAULT_CONTAINER + ':' +
+-            "{'gadgets.features':{opensocial:" +
+-               "{supportedFields: {person: ['id', {name: 'familyName'}]}}" +
+-             "}}}");
++              "{'gadgets.features':{opensocial:" +
++                 "{supportedFields: {person: ['id', {name: 'familyName'}]}}}," +
++               "'gadgets.securityTokenKeyFile': '/Graaasp/current/config/security_token.txt'," +
++              "}" +
++            "}");
+ 
+     containerConfig = new JsonContainerConfig(config, Expressions.forTesting());
+     handler = new PersonHandler(personService, containerConfig);
+@@ -254,4 +256,22 @@ public class PersonHandlerTest extends EasyMockTestCase {
+ 
+     verify();
+   }
++  @Test
++  public void testHandleGetCryptedSecurityToken() throws Exception {
++    String path = "/people/crypted_security_token";
++    RestHandler operation = registry.getRestHandler(path, "GET");
++
++    replay();
++    @SuppressWarnings("unchecked")
++    Map<String, String[]> params = Maps.newHashMap();
++    params.put("tokens", new String[]{"1:2:4,11:22:44"});
++
++    List<String> received = (List<String>) operation.execute(params, null, token, converter).get();
++    System.out.println(received);
++    assertEquals(2, received.size());
++    assertEquals("hello", received.get(0).toString());
++    assertEquals("hello2", received.get(1).toString());
++
++    verify();
++  }
+ }
+
+diff --git a/pom.xml b/pom.xml
+index 7d07458..032567f 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -431,6 +431,7 @@
+         <module>java/gadgets</module>
+         <module>java/social-api</module>
+         <module>java/server</module>
++        <module>java/graaasp</module>
+         <module>extras</module>
+       </modules>
+     </profile>
+@@ -473,6 +474,14 @@
+       </modules>
+     </profile>
+ 
++    <!-- profile to build java/graaasp -->
++    <profile>
++      <id>graaasp</id>
++      <modules>
++        <module>java/graaasp</module>
++      </modules>
++    </profile>
++
+     <profile>
+       <id>run</id>
+       <dependencies>
+@@ -494,9 +503,10 @@
+           <artifactId>shindig-extras</artifactId>
+           <version>${project.version}</version>
+         </dependency>
++
+         <!-- external dependencies -->
+       </dependencies>
+-
++      
+       <build>
+         <defaultGoal>jetty:run-war</defaultGoal>
+         <plugins>
+@@ -1390,6 +1400,11 @@
+       </dependency>
+       <dependency>
+         <groupId>org.apache.shindig</groupId>
++        <artifactId>shindig-graaasp</artifactId>
++        <version>${project.version}</version>
++      </dependency>
++      <dependency>
++        <groupId>org.apache.shindig</groupId>
+         <artifactId>shindig-common</artifactId>
+         <version>${project.version}</version>
+         <type>test-jar</type>
+
+diff --git a/root.dir b/root.dir
+new file mode 100644
+index 0000000..e69de29
+diff --git a/ssl_keys/oauthkey.pem b/ssl_keys/oauthkey.pem
+new file mode 100644
+index 0000000..a4bac72
+--- /dev/null
++++ b/ssl_keys/oauthkey.pem
+@@ -0,0 +1,16 @@
++-----BEGIN PRIVATE KEY-----
++MIICdQIBADANBgkqhkiG9w0BAQEFAASCAl8wggJbAgEAAoGBALkgdROj7T3gG6ri
++z04tUbgfWrOZe1c0f6AY1ApgPdku4lnLP7NJdsSfARDdVMLviVZjKVxj48kAR7Yk
++EfPU0JuQKN4avNADw5KtXMemWSVKiMfDr6IGljKFKGNiTtC1SqEsl0D+YJXPnHHj
++JkXg7i+KTZKq7nzyoES7tonFpy8fAgMBAAECgYB73m7X/GiCbVC179r8GTDDvR8I
++axrvR65ZpiNC6hCYIFnN8UQnJ3GzsBybdyz+3h4L0n/bVO8WD/zrr4jfmLcXKrHL
++t/IG1CK12hGAhQkdvy2DWTa5tlHh4ZFl/LLsNPsRm/c44tLwhaaXc2/cUJPoodGo
++1rKLfw0NAx21KzcYqQJBAPLwyi7XfOhK5eeP++yPcA+YqPjGN/5hN0aj1a5Spn7+
++iUkKK+I53Cid8TdujD19i5dcSZ4Fj/DKA6f37gdvfy0CQQDDFBEh53fuof16UC5p
++xO2MFv38JI2VvSCKTe+uSyWnOZbjMKylOLc7Ye2c1D63wrcHbRq94RiShAO+HXkx
++yjb7AkBVrKUgr83U/dTmPNjTLCKQ3X15fi3w/8fGmbCZsXwV/R3dLEEdntoNWOXg
++bpP2e3fnARzVJZEFkbiIW98NsDxhAkBWHQubDdSxcKy2S6LRae76wkOIBJLDoOM2
++akT9iYqrkQ58Z8YugSTRf98mNcMh10B4dL8zRqRUORZ13Ajd48f1AkBJUsMNQ3+K
++WIeu+j7lex66ELLE7mj7IbkGJJfngYroyFAZ3zrgwdHlm4xRIIfpSSwHpUwsuf6g
++z4iFsj/D9J9v
++-----END PRIVATE KEY-----
+diff --git a/ssl_keys/testkey.pem b/ssl_keys/testkey.pem
+new file mode 100644
+index 0000000..d2c8464
+--- /dev/null
++++ b/ssl_keys/testkey.pem
+@@ -0,0 +1,29 @@
++-----BEGIN RSA PRIVATE KEY-----
++MIICWwIBAAKBgQC5IHUTo+094Buq4s9OLVG4H1qzmXtXNH+gGNQKYD3ZLuJZyz+z
++SXbEnwEQ3VTC74lWYylcY+PJAEe2JBHz1NCbkCjeGrzQA8OSrVzHplklSojHw6+i
++BpYyhShjYk7QtUqhLJdA/mCVz5xx4yZF4O4vik2Squ588qBEu7aJxacvHwIDAQAB
++AoGAe95u1/xogm1Qte/a/Bkww70fCGsa70euWaYjQuoQmCBZzfFEJydxs7Acm3cs
++/t4eC9J/21TvFg/866+I35i3Fyqxy7fyBtQitdoRgIUJHb8tg1k2ubZR4eGRZfyy
++7DT7EZv3OOLS8IWml3Nv3FCT6KHRqNayi38NDQMdtSs3GKkCQQDy8Mou13zoSuXn
++j/vsj3APmKj4xjf+YTdGo9WuUqZ+/olJCiviOdwonfE3bow9fYuXXEmeBY/wygOn
++9+4Hb38tAkEAwxQRIed37qH9elAuacTtjBb9/CSNlb0gik3vrkslpzmW4zCspTi3
++O2HtnNQ+t8K3B20aveEYkoQDvh15Mco2+wJAVaylIK/N1P3U5jzY0ywikN19eX4t
++8P/HxpmwmbF8Ff0d3SxBHZ7aDVjl4G6T9nt35wEc1SWRBZG4iFvfDbA8YQJAVh0L
++mw3UsXCstkui0Wnu+sJDiASSw6DjNmpE/YmKq5EOfGfGLoEk0X/fJjXDIddAeHS/
++M0akVDkWddwI3ePH9QJASVLDDUN/iliHrvo+5XseuhCyxO5o+yG5BiSX54GK6MhQ
++Gd864MHR5ZuMUSCH6UksB6VMLLn+oM+IhbI/w/Sfbw==
++-----END RSA PRIVATE KEY-----
++-----BEGIN CERTIFICATE-----
++MIICGzCCAYSgAwIBAgIJAPXpbapD9to9MA0GCSqGSIb3DQEBBQUAMBQxEjAQBgNV
++BAMTCW15dGVzdGtleTAeFw0xMDExMTkxNTMwNDdaFw0xMTExMTkxNTMwNDdaMBQx
++EjAQBgNVBAMTCW15dGVzdGtleTCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEA
++uSB1E6PtPeAbquLPTi1RuB9as5l7VzR/oBjUCmA92S7iWcs/s0l2xJ8BEN1Uwu+J
++VmMpXGPjyQBHtiQR89TQm5Ao3hq80APDkq1cx6ZZJUqIx8OvogaWMoUoY2JO0LVK
++oSyXQP5glc+cceMmReDuL4pNkqrufPKgRLu2icWnLx8CAwEAAaN1MHMwHQYDVR0O
++BBYEFMYJV0E3UTzTEwM/Bn078ko/qiuNMEQGA1UdIwQ9MDuAFMYJV0E3UTzTEwM/
++Bn078ko/qiuNoRikFjAUMRIwEAYDVQQDEwlteXRlc3RrZXmCCQD16W2qQ/baPTAM
++BgNVHRMEBTADAQH/MA0GCSqGSIb3DQEBBQUAA4GBAKR8i8wJWZIm9O1eILUwxbV2
++fEJLSSKrFWbXkFO7kRz3H5WKEvUbTMpNvmli+mmGtfkOWkp8KfTjJtcKJ3lg6PTk
++Ds/2RLuapBy3ZofUmtTjggAO5wN7hJu9t23qmVEd5Es9cKM0uUepSK9j638MA2w3
++uetJNgwzKtzsroZCirzZ
++-----END CERTIFICATE-----
+>>>>>>> updates .gitignore, adds diff file for previous version of shindig
