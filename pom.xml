@@ -511,6 +511,7 @@
     <module>java/server-resources</module>
     <module>java/server-dependencies</module>
     <module>java/server</module>
+    <module>java/graaasp</module>
     <module>extras</module>
   </modules>
 
@@ -530,6 +531,14 @@
       <id>samples</id>
       <modules>
         <module>java/samples</module>
+      </modules>
+    </profile>
+
+    <!-- profile to build java/graaasp -->
+    <profile>
+      <id>graaasp</id>
+      <modules>
+        <module>java/graaasp</module>
       </modules>
     </profile>
 
@@ -1568,6 +1577,13 @@
         <version>2.5.0-SNAPSHOT</version>
         <classifier>${shindig.jdk.classifier}</classifier>
       </dependency>
+
+      <dependency>
+        <groupId>org.apache.shindig</groupId>
+        <artifactId>shindig-graaasp</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+
       <dependency>
         <groupId>org.apache.shindig</groupId>
         <artifactId>shindig-common</artifactId>
