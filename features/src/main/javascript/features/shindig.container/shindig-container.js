@@ -658,6 +658,17 @@ shindig.BaseIfrGadget.prototype.queryIfrGadgetType_ = function() {
   // Get the gadget metadata and check if the gadget requires the 'pubsub-2'
   // feature.  If so, then we use OpenAjax Hub in order to create and manage
   // the iframe.  Otherwise, we create the iframe ourselves.
+
+  // ***********************
+  // TODO: Evgeny's extension to avoid buggy metadata call
+  var gadget = this;
+  var subClass = shindig.IfrGadget;
+  for (var name in subClass) if (subClass.hasOwnProperty(name)) {
+    gadget[name] = subClass[name];
+  }
+  return;
+  // ***********************
+
   var request = {
     context: {
       country: 'default',
