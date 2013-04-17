@@ -21865,6 +21865,7 @@ index 6092742..eecc6d0 100644
 +
 +    verify();
 +  }
+<<<<<<< HEAD
  }
 
 diff --git a/pom.xml b/pom.xml
@@ -21984,3 +21985,6 @@ index 0000000..d2c8464
 =======
          <type>test-jar</type>
 >>>>>>> modifies changes diff adds readme
+=======
+ }
+>>>>>>> updates main pom and changes diff
