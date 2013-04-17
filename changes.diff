@@ -1,21 +1,3 @@
-diff --git a/.gitignore b/.gitignore
-new file mode 100644
-index 0000000..62aef71
---- /dev/null
-+++ b/.gitignore
-@@ -0,0 +1,22 @@
-
-+.lock
-+.plugins/
-+version.ini
-+devtest.war
-+
-+# Targets #
-+###########
-
-+java/graaasp/target/
-+target/
-
 
 diff --git a/features/src/main/javascript/features/shindig.container/feature.xml b/features/src/main/javascript/features/shindig.container/feature.xml
 index eaf72b8..2217e1d 100644
@@ -14918,41 +14900,7 @@ index 0000000..059c740
 +
 +
 +}
-diff --git a/java/social-api/src/main/java/org/apache/shindig/social/core/model/PersonImpl.java b/java/social-api/src/main/java/org/apache/shindig/social/core/model/PersonImpl.java
-index ac16516..e47431b 100644
---- a/java/social-api/src/main/java/org/apache/shindig/social/core/model/PersonImpl.java
-+++ b/java/social-api/src/main/java/org/apache/shindig/social/core/model/PersonImpl.java
-@@ -20,6 +20,7 @@ package org.apache.shindig.social.core.model;
- import org.apache.shindig.protocol.model.Enum;
- import org.apache.shindig.social.opensocial.model.Account;
- import org.apache.shindig.social.opensocial.model.Address;
-+import org.apache.shindig.social.opensocial.model.Competence;
- import org.apache.shindig.social.opensocial.model.BodyType;
- import org.apache.shindig.social.opensocial.model.Drinker;
- import org.apache.shindig.social.opensocial.model.ListField;
-@@ -45,6 +46,7 @@ public class PersonImpl implements Person {
-   private List<Account> accounts;
-   private List<String> activities;
-   private List<Address> addresses;
-+  private List<Competence> competences;
-   private Integer age;
-   private Map<String, ?> appData;
-   private Date birthday;
-@@ -152,6 +154,14 @@ public class PersonImpl implements Person {
-     this.addresses = addresses;
-   }
- 
-+  public List<Competence> getCompetences() {
-+    return competences;
-+  }
-+
-+  public void setCompetences(List<Competence> competences) {
-+    this.competences = competences;
-+  }
-+
-   public Integer getAge() {
-     return age;
-   }
+
 diff --git a/java/social-api/src/main/java/org/apache/shindig/social/core/model/PersonOrganizationDb.java b/java/social-api/src/main/java/org/apache/shindig/social/core/model/PersonOrganizationDb.java
 new file mode 100644
 index 0000000..17ef5c7
