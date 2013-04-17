@@ -18,107 +18,7 @@ index 0000000..62aef71
 +java/graaasp/target/
 +target/
 
-diff --git a/config/oauth.json b/config/oauth.json
-index 7fd714f..a45b028 100644
---- a/config/oauth.json
-+++ b/config/oauth.json
-@@ -31,7 +31,35 @@
-       "consumer_secret" : "secret",
-       "key_type" : "HMAC_SYMMETRIC"
-     }
--  }
-+  },
-+  "http://graasp.epfl.ch/gadget/oauth_example.xml" : {
-+        "google" : {
-+            "consumer_secret" : "WbzgnbaXg2kdXHr2WEVnN+WF",
-+            "consumer_key"    : "graasp.epfl.ch",
-+            "key_type"        : "HMAC_SHA1"
-+        }
-+  },
-+  "http://iamac71.epfl.ch:3000/gadget/oauth_graaasp.xml" : {
-+        "graaasp" : {
-+            "consumer_secret" : "kAgoDAEDKBoCnMdThTgoqN0Lvo1w7WBGjtSiqhrA",
-+            "consumer_key"    : "M8dkbY4SYJNOSnf0CaMw",
-+            "key_type"        : "HMAC_SHA1"
-+        }
-+  },
-+  "http://iamac71.epfl.ch:3000/gadget/portability.xml" : {
-+        "portability" : {
-+            "consumer_secret" : "mJlIprRWyLD9iccVeXSfcTS2fKFwyVBg1HjT0frN",
-+            "consumer_key"    : "MDHFY2Iy3blxxkj52xwY",
-+            "key_type"        : "HMAC_SHA1"
-+        }
-+  },
-+  "http://role-project.svn.sourceforge.net/viewvc/role-project/trunk/gadgets/cam/cam_oauth.xml" : {
-+            "CamV2Service" : {
-+                  "consumer_secret" : "66b54f9bc0d65a779399e11b46e3982c",
-+                  "consumer_key" : "9eedb7987c2956c8adf9e5f5ad8acb69",
-+                  "key_type" : "HMAC-SHA1"
-+            }
-+    },
- }
-   
- 
-diff --git a/features/src/main/javascript/features/features.txt b/features/src/main/javascript/features/features.txt
-index d583f78..9aae4f1 100644
---- a/features/src/main/javascript/features/features.txt
-+++ b/features/src/main/javascript/features/features.txt
-@@ -1,27 +1,7 @@
--#
--#  Licensed to the Apache Software Foundation (ASF) under one
--#  or more contributor license agreements.  See the NOTICE file
--#  distributed with this work for additional information
--#  regarding copyright ownership.  The ASF licenses this file
--#  to you under the Apache License, Version 2.0 (the
--#  "License"); you may not use this file except in compliance
--#  with the License.  You may obtain a copy of the License at
--# 
--#    http://www.apache.org/licenses/LICENSE-2.0
--# 
--#  Unless required by applicable law or agreed to in writing,
--#  software distributed under the License is distributed on an
--#  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
--#  KIND, either express or implied.  See the License for the
--#  specific language governing permissions and limitations
--#  under the License.
--#
--# List each feature you want to support here
--
--features/globals/feature.xml
- features/analytics/feature.xml
- features/auth-refresh/feature.xml
- features/caja/feature.xml
-+features/com.google.gadgets.analytics/feature.xml
- features/container/feature.xml
- features/content-rewrite/feature.xml
- features/core.config/feature.xml
-@@ -36,6 +16,7 @@ features/core/feature.xml
- features/dynamic-height.util/feature.xml
- features/dynamic-height/feature.xml
- features/flash/feature.xml
-+features/globals/feature.xml
- features/i18n/feature.xml
- features/jsondom/feature.xml
- features/locked-domain/feature.xml
-@@ -61,11 +42,11 @@ features/security-token/feature.xml
- features/setprefs/feature.xml
- features/settitle/feature.xml
- features/shindig.auth/feature.xml
--features/shindig.container/feature.xml
- features/shindig.container-1.0/feature.xml
-+features/shindig.container/feature.xml
- features/shindig.random/feature.xml
--features/shindig.uri/feature.xml
- features/shindig.uri.ext/feature.xml
-+features/shindig.uri/feature.xml
- features/shindig.xhrwrapper/feature.xml
- features/skins/feature.xml
- features/swfobject/feature.xml
-@@ -73,4 +54,3 @@ features/tabs/feature.xml
- features/views/feature.xml
- features/xhrwrapper/feature.xml
- features/xmlutil/feature.xml
--features/com.google.gadgets.analytics/feature.xml
+
 diff --git a/features/src/main/javascript/features/shindig.container/feature.xml b/features/src/main/javascript/features/shindig.container/feature.xml
 index eaf72b8..2217e1d 100644
 --- a/features/src/main/javascript/features/shindig.container/feature.xml
@@ -165,13 +65,7 @@ index 337c26b..db2f53d 100644
    var makeRequestParams = {
      "CONTENT_TYPE" : "JSON",
      "METHOD" : "POST",
-diff --git a/java/common/conf/readme.md b/java/common/conf/readme.md
-new file mode 100644
-index 0000000..a0da838
---- /dev/null
-+++ b/java/common/conf/readme.md
-@@ -0,0 +1 @@
-+placeholder for shindig.properties file
+
 diff --git a/java/common/conf/shindig.properties b/java/common/conf/shindig.properties
 deleted file mode 100644
 index 1eb829d..0000000
@@ -8456,6 +8350,7 @@ index c32e917..0000000
 -  </servlet-mapping>
 -</web-app>
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 diff --git a/java/social-api/pom.xml b/java/social-api/pom.xml
@@ -8510,6 +8405,9 @@ index 3a639b0..a6b1831 100644
        <artifactId>xml-apis</artifactId>
      </dependency>
 >>>>>>> updates .gitignore, adds diff file for previous version of shindig
+=======
+
+>>>>>>> modifies changes diff adds readme
 diff --git a/java/social-api/src/main/java/org/apache/shindig/social/core/config/SocialApiGuiceModule.java b/java/social-api/src/main/java/org/apache/shindig/social/core/config/SocialApiGuiceModule.java
 index 911431d..8f8a4ae 100644
 --- a/java/social-api/src/main/java/org/apache/shindig/social/core/config/SocialApiGuiceModule.java
@@ -22019,6 +21917,7 @@ index 7d07458..032567f 100644
 +        <groupId>org.apache.shindig</groupId>
          <artifactId>shindig-common</artifactId>
          <version>${project.version}</version>
+<<<<<<< HEAD
          <type>test-jar</type>
 
 diff --git a/root.dir b/root.dir
@@ -22082,3 +21981,6 @@ index 0000000..d2c8464
 +uetJNgwzKtzsroZCirzZ
 +-----END CERTIFICATE-----
 >>>>>>> updates .gitignore, adds diff file for previous version of shindig
+=======
+         <type>test-jar</type>
+>>>>>>> modifies changes diff adds readme
