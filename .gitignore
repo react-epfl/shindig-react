@@ -378,3 +378,10 @@
 java/server/src/main/webapp/WEB-INF/web.xml*
 java/graaasp/src/main/resources/socialjpa.properties*
 java/common/conf/shindig.properties*
+
+# Graasp
+java/graaasp/target
+devtest.war
+version.ini
+.plugins
+.lock
