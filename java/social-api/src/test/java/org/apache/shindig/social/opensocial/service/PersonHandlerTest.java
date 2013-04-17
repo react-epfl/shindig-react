@@ -295,4 +295,23 @@ public class PersonHandlerTest extends EasyMockTestCase {
 
     verify();
   }
+
+  @Test
+  public void testHandleGetCryptedSecurityToken() throws Exception {
+    String path = "/people/crypted_security_token";
+    RestHandler operation = registry.getRestHandler(path, "GET");
+
+    replay();
+    @SuppressWarnings("unchecked")
+    Map<String, String[]> params = Maps.newHashMap();
+    params.put("tokens", new String[]{"1:2:4,11:22:44"});
+
+    List<String> received = (List<String>) operation.execute(params, null, token, converter).get();
+    System.out.println(received);
+    assertEquals(2, received.size());
+    assertEquals("hello", received.get(0).toString());
+    assertEquals("hello2", received.get(1).toString());
+
+    verify();
+  }
 }
