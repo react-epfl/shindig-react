@@ -38,6 +38,7 @@ import java.util.Set;
 import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.*;
 
 /**
  * Servlet used to process REST requests (/rest/* etc.)
@@ -155,6 +156,9 @@ public class DataServiceServlet extends ApiServlet {
     // Always returns a non-null handler.
     RestHandler handler = getRestHandler(servletRequest);
 
+    // Hack for documents    
+    String path = servletRequest.getPathInfo();
+
     // Get Content-Type and format
     String format = null;
     String contentType = null;
@@ -200,7 +204,10 @@ public class DataServiceServlet extends ApiServlet {
       Object response = responseItem.getResponse();
       // TODO: ugliness resulting from not using RestfulItem
       if (!(response instanceof DataCollection) && !(response instanceof RestfulCollection)) {
-        response = ImmutableMap.of("entry", response);
+        // Hack for documents, only single endpoints (rest/documents/5 or rest/documents)
+        if (!(path.matches("^/documents/[^/]*") || path.matches("^/documents[^/]*"))) {
+          response = ImmutableMap.of("entry", response);          
+        }
       }
 
       // JSONP style callbacks
@@ -209,7 +216,13 @@ public class DataServiceServlet extends ApiServlet {
           servletRequest.getParameter("callback") : null;
 
       if (callback != null) writer.write(callback + '(');
-      writer.write(responseConverter.convertToString(response));
+      // Hack for documents, only single endpoints (rest/documents/5 or rest/documents)
+      if (path.matches("^/documents/[^/]*") || path.matches("^/documents[^/]*")) {
+        writer.write((String)response);
+      } else {
+        writer.write(converter.convertToString(response));
+      }
+
       if (callback != null) writer.write(");\n");
     } else {
       sendError(servletResponse, responseItem);
