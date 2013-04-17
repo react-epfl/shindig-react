@@ -91,6 +91,11 @@
       <type>war</type>
     </dependency>
 
+    <dependency>
+      <groupId>org.apache.shindig</groupId>
+      <artifactId>shindig-graaasp</artifactId>
+    </dependency>
+
     <!-- test dependencies -->
     <dependency>
       <groupId>org.apache.shindig</groupId>
