@@ -32,7 +32,32 @@
       "key_type" : "HMAC_SYMMETRIC"
     }
   },
-  
+  "http://graasp.epfl.ch/gadget/oauth_example.xml" : {
+        "google" : {
+            "consumer_secret" : "WbzgnbaXg2kdXHr2WEVnN+WF",
+            "consumer_key"    : "graasp.epfl.ch",
+            "key_type"        : "HMAC_SHA1"
+        }
+  },
+  "http://iamac71.epfl.ch:3000/gadget/oauth_graaasp.xml" : {
+        "graaasp" : {
+            "consumer_secret" : "kAgoDAEDKBoCnMdThTgoqN0Lvo1w7WBGjtSiqhrA",
+            "consumer_key"    : "M8dkbY4SYJNOSnf0CaMw",
+            "key_type"        : "HMAC_SHA1"
+        }
+  },
+  "http://iamac71.epfl.ch:3000/gadget/portability.xml" : {
+        "portability" : {
+            "consumer_secret" : "mJlIprRWyLD9iccVeXSfcTS2fKFwyVBg1HjT0frN",
+            "consumer_key"    : "MDHFY2Iy3blxxkj52xwY",
+            "key_type"        : "HMAC_SHA1"
+        }
+  },
+  "http://role-project.svn.sourceforge.net/viewvc/role-project/trunk/gadgets/cam/cam_oauth.xml" : {
+            "CamV2Service" : {
+                  "consumer_secret" : "66b54f9bc0d65a779399e11b46e3982c",
+                  "consumer_key" : "9eedb7987c2956c8adf9e5f5ad8acb69",
+                  "key_type" : "HMAC-SHA1"
+            }
+    },
 }
-  
-
