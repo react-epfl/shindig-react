@@ -1,54 +1,3 @@
-
-diff --git a/java/common/src/main/java/org/apache/shindig/protocol/DataServiceServlet.java b/java/common/src/main/java/org/apache/shindig/protocol/DataServiceServlet.java
-index 84d7572..7e4c174 100644
---- a/java/common/src/main/java/org/apache/shindig/protocol/DataServiceServlet.java
-+++ b/java/common/src/main/java/org/apache/shindig/protocol/DataServiceServlet.java
-@@ -36,6 +36,8 @@ import java.util.concurrent.Future;
- import java.util.logging.Level;
- import java.util.logging.Logger;
- 
-+import java.util.regex.*;
-+
- /**
-  * Servlet used to process REST requests (/rest/* etc.)
-  */
-@@ -153,6 +155,9 @@ public class DataServiceServlet extends ApiServlet {
- 
-     // Always returns a non-null handler.
-     RestHandler handler = getRestHandler(servletRequest);
-+    // Hack for documents    
-+    String path = servletRequest.getPathInfo();       
-+    // -----
- 
-     Reader bodyReader = null;
-     if (!servletRequest.getMethod().equals("GET") && !servletRequest.getMethod().equals("HEAD")) {
-@@ -172,7 +177,10 @@ public class DataServiceServlet extends ApiServlet {
-       Object response = responseItem.getResponse();
-       // TODO: ugliness resulting from not using RestfulItem
-       if (!(response instanceof DataCollection) && !(response instanceof RestfulCollection)) {
--        response = ImmutableMap.of("entry", response);
-+        // Hack for documents, only single endpoints (rest/documents/5 or rest/documents)
-+        if (!(path.matches("^/documents/[^/]*") || path.matches("^/documents[^/]*"))) {
-+          response = ImmutableMap.of("entry", response);          
-+        }
-       }
- 
-       // JSONP style callbacks
-@@ -180,7 +188,13 @@ public class DataServiceServlet extends ApiServlet {
-           servletRequest.getParameter("callback") : null;
- 
-       if (callback != null) writer.write(callback + '(');
--      writer.write(converter.convertToString(response));
-+      // Hack for documents, only single endpoints (rest/documents/5 or rest/documents)
-+      if (path.matches("^/documents/[^/]*") || path.matches("^/documents[^/]*")) {
-+        writer.write((String)response);
-+      } else {
-+        writer.write(converter.convertToString(response));
-+      }
-+      
-       if (callback != null) writer.write(");\n");
-     } else {
-       sendError(servletResponse, responseItem);
 diff --git a/java/common/src/test/java/org/apache/shindig/auth/BasicSecurityTokenDecoderTest.java b/java/common/src/test/java/org/apache/shindig/auth/BasicSecurityTokenDecoderTest.java
 new file mode 100644
 index 0000000..ee289dd
@@ -7766,35 +7715,7 @@ index 0000000..9f8b584
 +    "canonical" : "password"
 +  }
 +}
-diff --git a/java/samples/src/main/resources/META-INF/orm.xml b/java/samples/src/main/resources/META-INF/orm.xml
-index 99b9e2c..7674ceb 100644
---- a/java/samples/src/main/resources/META-INF/orm.xml
-+++ b/java/samples/src/main/resources/META-INF/orm.xml
-@@ -74,7 +74,7 @@
-   </entity>
-   <entity class="org.apache.shindig.social.opensocial.jpa.GroupPropertyDb">
-   </entity>
--  <entity class="org.apache.shindig.social.opensocial.jpa.ApplicationDb">
-+  <entity class="org.apache.shindig.social.opensocial.jpa.AppDb">
-   </entity>
-   <entity class="org.apache.shindig.social.opensocial.jpa.ApplicationPropertyDb">
-   </entity>
-diff --git a/java/server/pom.xml b/java/server/pom.xml
-index 48b7b17..7cc54a2 100644
---- a/java/server/pom.xml
-+++ b/java/server/pom.xml
-@@ -125,6 +125,11 @@
-       <groupId>org.apache.shindig</groupId>
-       <artifactId>shindig-extras</artifactId>
-     </dependency>
-+    <dependency>
-+      <groupId>org.apache.shindig</groupId>
-+      <artifactId>shindig-graaasp</artifactId>
-+    </dependency>
-+    
- 
-     <!-- external dependencies -->
-     <dependency>
+
 diff --git a/java/server/src/main/webapp/WEB-INF/web.xml b/java/server/src/main/webapp/WEB-INF/web.xml
 deleted file mode 100644
 index c32e917..0000000
