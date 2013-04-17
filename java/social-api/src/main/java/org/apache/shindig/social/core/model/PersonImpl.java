@@ -32,6 +32,8 @@ import org.apache.shindig.social.opensocial.model.Person;
 import org.apache.shindig.social.opensocial.model.Smoker;
 import org.apache.shindig.social.opensocial.model.Url;
 
+import org.apache.shindig.social.opensocial.model.Competence;
+
 import com.google.common.collect.Lists;
 
 import java.util.Date;
@@ -102,6 +104,8 @@ public class PersonImpl implements Person {
   private Date updated;
   private List<Url> urls;
 
+  private List<Competence> competences;
+
   // Note: Not in the opensocial js person object directly
   private boolean isOwner = false;
   private boolean isViewer = false;
@@ -151,6 +155,14 @@ public class PersonImpl implements Person {
 
   public void setAddresses(List<Address> addresses) {
     this.addresses = addresses;
+  }
+
+  public List<Competence> getCompetences() {
+    return competences;
+  }
+
+  public void setCompetences(List<Competence> competences) {
+    this.competences = competences;
   }
 
   public Integer getAge() {
