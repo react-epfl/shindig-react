@@ -19,6 +19,7 @@
 package org.apache.shindig.social.core.model;
 
 import org.apache.shindig.social.opensocial.model.Address;
+import org.apache.shindig.social.opensocial.model.Person;
 
 /**
  * Default representation of an {@link org.apache.shindig.social.opensocial.model.Address}
@@ -129,5 +130,9 @@ public class AddressImpl implements Address {
   /** {@inheritDoc} */
   public void setPrimary(Boolean primary) {
     this.primary = primary;
+  }
+
+  public void setPerson(Person person) {
+    // this.person = person;
   }
 }

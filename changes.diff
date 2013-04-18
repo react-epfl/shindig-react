@@ -8002,46 +8002,6 @@ index c32e917..0000000
 -  </servlet-mapping>
 -</web-app>
 
-diff --git a/java/social-api/src/main/java/org/apache/shindig/social/core/config/SocialApiGuiceModule.java b/java/social-api/src/main/java/org/apache/shindig/social/core/config/SocialApiGuiceModule.java
-index 911431d..8f8a4ae 100644
---- a/java/social-api/src/main/java/org/apache/shindig/social/core/config/SocialApiGuiceModule.java
-+++ b/java/social-api/src/main/java/org/apache/shindig/social/core/config/SocialApiGuiceModule.java
-@@ -38,6 +38,14 @@ import org.apache.shindig.social.opensocial.service.AppDataHandler;
- import org.apache.shindig.social.opensocial.service.MediaItemHandler;
- import org.apache.shindig.social.opensocial.service.MessageHandler;
- import org.apache.shindig.social.opensocial.service.PersonHandler;
-+import org.apache.shindig.social.opensocial.service.SpaceHandler;
-+import org.apache.shindig.social.opensocial.service.AppHandler;
-+import org.apache.shindig.social.opensocial.service.DocumentHandler;
-+import org.apache.shindig.social.opensocial.service.RecommenderHandler;
-+import org.apache.shindig.social.opensocial.service.ContextHandler;
-+
-+import org.apache.shindig.social.opensocial.oauth.OAuthDataStore;
-+import org.apache.shindig.social.sample.oauth.SampleOAuthDataStore;
- 
- import com.google.common.collect.ImmutableSet;
- import com.google.inject.AbstractModule;
-@@ -70,7 +78,9 @@ public class SocialApiGuiceModule extends AbstractModule {
-     bind(BeanConverter.class).annotatedWith(Names.named("shindig.bean.converter.atom")).to(
-         BeanXStreamAtomConverter.class);
- 
--    bind(new TypeLiteral<List<AuthenticationHandler>>(){}).toProvider(
-+	bind(OAuthDataStore.class).to(SampleOAuthDataStore.class);
-+    
-+	bind(new TypeLiteral<List<AuthenticationHandler>>(){}).toProvider(
-         AuthenticationHandlerProvider.class);
- 
-     Multibinder<Object> handlerBinder = Multibinder.newSetBinder(binder(), Object.class, Names.named("org.apache.shindig.handlers"));
-@@ -85,6 +95,8 @@ public class SocialApiGuiceModule extends AbstractModule {
-    */
-   protected Set<Class<?>> getHandlers() {
-     return ImmutableSet.<Class<?>>of(ActivityHandler.class, AppDataHandler.class,
--        PersonHandler.class, MessageHandler.class, AlbumHandler.class, MediaItemHandler.class);
-+        PersonHandler.class, MessageHandler.class, AlbumHandler.class, MediaItemHandler.class, 
-+		SpaceHandler.class, AppHandler.class, DocumentHandler.class, ContextHandler.class,
-+		RecommenderHandler.class);
-   }
- }
 diff --git a/java/social-api/src/main/java/org/apache/shindig/social/core/model/AccountDb.java b/java/social-api/src/main/java/org/apache/shindig/social/core/model/AccountDb.java
 new file mode 100644
 index 0000000..4e0aa4f
@@ -9373,27 +9333,7 @@ index 0000000..59c9930
 +    // this.person = person;
 +  }
 +}
-diff --git a/java/social-api/src/main/java/org/apache/shindig/social/core/model/AddressImpl.java b/java/social-api/src/main/java/org/apache/shindig/social/core/model/AddressImpl.java
-index 2279558..c8d5048 100644
---- a/java/social-api/src/main/java/org/apache/shindig/social/core/model/AddressImpl.java
-+++ b/java/social-api/src/main/java/org/apache/shindig/social/core/model/AddressImpl.java
-@@ -18,6 +18,7 @@
- package org.apache.shindig.social.core.model;
- 
- import org.apache.shindig.social.opensocial.model.Address;
-+import org.apache.shindig.social.opensocial.model.Person;
- 
- /**
-  * Default representation of an {@link org.apache.shindig.social.opensocial.model.Address}
-@@ -129,4 +130,8 @@ public class AddressImpl implements Address {
-   public void setPrimary(Boolean primary) {
-     this.primary = primary;
-   }
-+  
-+  public void setPerson(Person person) {
-+    // this.person = person;
-+  }
- }
+
 diff --git a/java/social-api/src/main/java/org/apache/shindig/social/core/model/AppDb.java b/java/social-api/src/main/java/org/apache/shindig/social/core/model/AppDb.java
 new file mode 100644
 index 0000000..b7317d1
@@ -12337,27 +12277,7 @@ index 0000000..4b07e15
 +  }
 +
 +}
-diff --git a/java/social-api/src/main/java/org/apache/shindig/social/core/model/ListFieldImpl.java b/java/social-api/src/main/java/org/apache/shindig/social/core/model/ListFieldImpl.java
-index d5f44d0..1e27c20 100644
---- a/java/social-api/src/main/java/org/apache/shindig/social/core/model/ListFieldImpl.java
-+++ b/java/social-api/src/main/java/org/apache/shindig/social/core/model/ListFieldImpl.java
-@@ -18,6 +18,7 @@
- package org.apache.shindig.social.core.model;
- 
- import org.apache.shindig.social.opensocial.model.ListField;
-+import org.apache.shindig.social.opensocial.model.Person;
- 
- /**
-  * ListField data structure
-@@ -60,4 +61,8 @@ public class ListFieldImpl implements ListField {
-   public void setPrimary(Boolean primary) {
-     this.primary = primary;
-   }
-+  
-+  public void setPerson(Person person) {
-+    // this.person = person;
-+  }
- }
+
 diff --git a/java/social-api/src/main/java/org/apache/shindig/social/core/model/MediaItemDb.java b/java/social-api/src/main/java/org/apache/shindig/social/core/model/MediaItemDb.java
 new file mode 100644
 index 0000000..2c3271d
@@ -15538,27 +15458,7 @@ index 0000000..b6681a1
 +    this.linkText = linkText;
 +  }
 +}
-diff --git a/java/social-api/src/main/java/org/apache/shindig/social/core/model/UrlImpl.java b/java/social-api/src/main/java/org/apache/shindig/social/core/model/UrlImpl.java
-index f1c2217..f3f9ea4 100644
---- a/java/social-api/src/main/java/org/apache/shindig/social/core/model/UrlImpl.java
-+++ b/java/social-api/src/main/java/org/apache/shindig/social/core/model/UrlImpl.java
-@@ -18,6 +18,7 @@
- package org.apache.shindig.social.core.model;
- 
- import org.apache.shindig.social.opensocial.model.Url;
-+import org.apache.shindig.social.opensocial.model.Person;
- 
- /**
-  * see
-@@ -41,4 +42,8 @@ public class UrlImpl extends ListFieldImpl implements Url {
-   public void setLinkText(String linkText) {
-     this.linkText = linkText;
-   }
-+  
-+  public void setPerson(Person person) {
-+    // this.person = person;
-+  }
- }
+
 diff --git a/java/social-api/src/main/java/org/apache/shindig/social/core/model/UserDb.java b/java/social-api/src/main/java/org/apache/shindig/social/core/model/UserDb.java
 new file mode 100644
 index 0000000..8b248fb
