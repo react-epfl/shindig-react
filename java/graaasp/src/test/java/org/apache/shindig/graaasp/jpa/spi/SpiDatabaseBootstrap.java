@@ -20,7 +20,6 @@ package org.apache.shindig.graaasp.jpa.spi;
 
 import org.apache.shindig.protocol.model.Enum;
 import org.apache.shindig.protocol.model.EnumImpl;
-import org.apache.shindig.graaasp.jpa.EnumDb;
 import org.apache.shindig.social.core.model.ActivityDb;
 import org.apache.shindig.social.core.model.AddressDb;
 import org.apache.shindig.social.core.model.ApplicationDataMapDb;
