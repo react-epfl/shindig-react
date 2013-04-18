@@ -20,7 +20,7 @@ package org.apache.shindig.social.opensocial.model;
 
 import org.apache.shindig.protocol.model.Enum;
 import org.apache.shindig.protocol.model.Exportablebean;
-import org.apache.shindig.social.core.model.PersonImpl;
+import org.apache.shindig.social.core.model.UserDb;
 
 import com.google.common.base.Functions;
 import com.google.common.collect.ImmutableSet;
@@ -40,7 +40,7 @@ import java.util.Set;
  * This field is currently only in the RESTful spec.
  *
  */
-@ImplementedBy(PersonImpl.class)
+@ImplementedBy(UserDb.class)
 @Exportablebean
 public interface Person {
   /**
@@ -1218,4 +1218,20 @@ public interface Person {
    * @param thumbnailUrl the person's photo thumbnail URL
    */
   void setThumbnailUrl(String thumbnailUrl);
+
+  /**
+   * Get addresses associated with the person, specified as an List of Address objects. Container
+   * support for this field is OPTIONAL.
+   *
+   * @return a List of address objects
+   */
+  List<Competence> getCompetences();
+
+  /**
+   * Set addresses associated with the person, specified as an List of Address objects. Container
+   * support for this field is OPTIONAL.
+   *
+   * @param addresses a list of address objects
+   */
+  void setCompetences(List<Competence> competences);
 }

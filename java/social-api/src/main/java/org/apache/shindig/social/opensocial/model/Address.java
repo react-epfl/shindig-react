@@ -22,7 +22,7 @@ import java.util.EnumSet;
 import java.util.Map;
 
 import org.apache.shindig.protocol.model.Exportablebean;
-import org.apache.shindig.social.core.model.AddressImpl;
+import org.apache.shindig.social.core.model.PersonAddressDb;
 
 import com.google.common.base.Functions;
 import com.google.common.collect.Maps;
@@ -34,7 +34,7 @@ import com.google.inject.ImplementedBy;
  * http://www.opensocial.org/Technical-Resources/opensocial-spec-v081/opensocial-reference#opensocial.Address</a>.
  */
 
-@ImplementedBy(AddressImpl.class)
+@ImplementedBy(PersonAddressDb.class)
 @Exportablebean
 public interface Address {
 
@@ -244,4 +244,6 @@ public interface Address {
    * @param primary set the Primary status of this Address.
    */
   void setPrimary(Boolean primary);
+
+  void setPerson(Person person);
 }
