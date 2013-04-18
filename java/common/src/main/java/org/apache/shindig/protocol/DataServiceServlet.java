@@ -220,7 +220,7 @@ public class DataServiceServlet extends ApiServlet {
       if (path.matches("^/documents/[^/]*") || path.matches("^/documents[^/]*")) {
         writer.write((String)response);
       } else {
-        writer.write(converter.convertToString(response));
+        writer.write(responseConverter.convertToString(response));
       }
 
       if (callback != null) writer.write(");\n");

@@ -61,7 +61,6 @@ public class SPIUtils {
   
   /**
    * @param spaceIds
-   * @param token
    * @return
    */
   public static List<String> getSpaceList(Set<SpaceId> spaceIds) {
@@ -82,7 +81,6 @@ public class SPIUtils {
   
   /**
    * @param AppIds
-   * @param token
    * @return
    */
   public static List<String> getAppList(Set<AppId> AppIds) {
@@ -103,7 +101,6 @@ public class SPIUtils {
 
   /**
    * @param documentIds
-   * @param token
    * @return
    */
   public static List<String> getDocumentList(Set<DocumentId> documentIds) {

@@ -94,8 +94,8 @@ public class CompetenceDb implements Competence, DbObject {
 
   /**
    * Create a message object with body, title and type.
-   * @param topic the body of the message.
-   * @param value the title of the message.
+   * @param initTopic the body of the message.
+   * @param initValue the title of the message.
    */
   public CompetenceDb(String initTopic, String initValue) {
     this.topic = initTopic;

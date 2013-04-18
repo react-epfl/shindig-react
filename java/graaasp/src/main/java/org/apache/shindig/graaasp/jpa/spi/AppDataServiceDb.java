@@ -106,10 +106,10 @@ public class AppDataServiceDb implements AppDataService {
   }
 
   /**
-   * @param userId
+   * @param contextId
+   * @param contextType
    * @param groupId
    * @param appId
-   * @param token
    * @return
    */
   private Map<String,AppdataDb> getDataMap(long contextId, String contextType, GroupId groupId, String appId) {
