@@ -17537,35 +17537,7 @@ index 0000000..ae30477
 +  {
 +  }
 +}
-diff --git a/java/social-api/src/main/java/org/apache/shindig/social/opensocial/model/Address.java b/java/social-api/src/main/java/org/apache/shindig/social/opensocial/model/Address.java
-index e243872..9ed9d88 100644
---- a/java/social-api/src/main/java/org/apache/shindig/social/opensocial/model/Address.java
-+++ b/java/social-api/src/main/java/org/apache/shindig/social/opensocial/model/Address.java
-@@ -21,7 +21,7 @@ import java.util.EnumSet;
- import java.util.Map;
- 
- import org.apache.shindig.protocol.model.Exportablebean;
--import org.apache.shindig.social.core.model.AddressImpl;
-+import org.apache.shindig.social.core.model.PersonAddressDb;
- 
- import com.google.common.base.Functions;
- import com.google.common.collect.Maps;
-@@ -33,7 +33,7 @@ import com.google.inject.ImplementedBy;
-  * http://www.opensocial.org/Technical-Resources/opensocial-spec-v081/opensocial-reference#opensocial.Address</a>.
-  */
- 
--@ImplementedBy(AddressImpl.class)
-+@ImplementedBy(PersonAddressDb.class)
- @Exportablebean
- public interface Address {
- 
-@@ -243,4 +243,6 @@ public interface Address {
-    * @param primary set the Primary status of this Address.
-    */
-   void setPrimary(Boolean primary);
-+  
-+  void setPerson(Person person);
- }
+
 diff --git a/java/social-api/src/main/java/org/apache/shindig/social/opensocial/model/App.java b/java/social-api/src/main/java/org/apache/shindig/social/opensocial/model/App.java
 new file mode 100644
 index 0000000..0540b1f
@@ -18813,100 +18785,7 @@ index 0000000..a1a0873
 +  void setIsOwner(boolean isOwner);
 +
 +}
-diff --git a/java/social-api/src/main/java/org/apache/shindig/social/opensocial/model/ListField.java b/java/social-api/src/main/java/org/apache/shindig/social/opensocial/model/ListField.java
-index cd25160..151a8b0 100644
---- a/java/social-api/src/main/java/org/apache/shindig/social/opensocial/model/ListField.java
-+++ b/java/social-api/src/main/java/org/apache/shindig/social/opensocial/model/ListField.java
-@@ -18,7 +18,7 @@
- package org.apache.shindig.social.opensocial.model;
- 
- import org.apache.shindig.protocol.model.Exportablebean;
--import org.apache.shindig.social.core.model.ListFieldImpl;
-+import org.apache.shindig.social.core.model.EmailDb;
- 
- import com.google.inject.ImplementedBy;
- 
-@@ -32,7 +32,7 @@ import com.google.inject.ImplementedBy;
-  * Introduced in v0.8.1
-  * </p>
-  */
--@ImplementedBy(ListFieldImpl.class)
-+@ImplementedBy(EmailDb.class)
- @Exportablebean
- public interface ListField {
- 
-@@ -118,4 +118,6 @@ public interface ListField {
-    * @param primary set to true if a primary or preferred value
-    */
-   void setPrimary(Boolean primary);
-+  
-+  void setPerson(Person person);
- }
-diff --git a/java/social-api/src/main/java/org/apache/shindig/social/opensocial/model/Name.java b/java/social-api/src/main/java/org/apache/shindig/social/opensocial/model/Name.java
-index e402cff..f1730e9 100644
---- a/java/social-api/src/main/java/org/apache/shindig/social/opensocial/model/Name.java
-+++ b/java/social-api/src/main/java/org/apache/shindig/social/opensocial/model/Name.java
-@@ -18,7 +18,7 @@
- package org.apache.shindig.social.opensocial.model;
- 
- import org.apache.shindig.protocol.model.Exportablebean;
--import org.apache.shindig.social.core.model.NameImpl;
-+import org.apache.shindig.social.core.model.NameDb;
- 
- import com.google.inject.ImplementedBy;
- 
-@@ -29,7 +29,7 @@ import com.google.inject.ImplementedBy;
-  * http://www.opensocial.org/Technical-Resources/opensocial-spec-v081/opensocial-reference#opensocial.Name</a>
-  */
- 
--@ImplementedBy(NameImpl.class)
-+@ImplementedBy(NameDb.class)
- @Exportablebean
- public interface Name {
- 
-diff --git a/java/social-api/src/main/java/org/apache/shindig/social/opensocial/model/Person.java b/java/social-api/src/main/java/org/apache/shindig/social/opensocial/model/Person.java
-index ad08df8..b3be246 100644
---- a/java/social-api/src/main/java/org/apache/shindig/social/opensocial/model/Person.java
-+++ b/java/social-api/src/main/java/org/apache/shindig/social/opensocial/model/Person.java
-@@ -19,7 +19,7 @@ package org.apache.shindig.social.opensocial.model;
- 
- import org.apache.shindig.protocol.model.Enum;
- import org.apache.shindig.protocol.model.Exportablebean;
--import org.apache.shindig.social.core.model.PersonImpl;
-+import org.apache.shindig.social.core.model.UserDb;
- 
- import com.google.common.base.Functions;
- import com.google.common.collect.ImmutableSet;
-@@ -39,7 +39,7 @@ import java.util.Set;
-  * This field is currently only in the RESTful spec.
-  *
-  */
--@ImplementedBy(PersonImpl.class)
-+@ImplementedBy(UserDb.class)
- @Exportablebean
- public interface Person {
-   /**
-@@ -1217,4 +1217,20 @@ public interface Person {
-    * @param thumbnailUrl the person's photo thumbnail URL
-    */
-   void setThumbnailUrl(String thumbnailUrl);
-+  
-+  /**
-+   * Get addresses associated with the person, specified as an List of Address objects. Container
-+   * support for this field is OPTIONAL.
-+   *
-+   * @return a List of address objects
-+   */
-+  List<Competence> getCompetences();
-+
-+  /**
-+   * Set addresses associated with the person, specified as an List of Address objects. Container
-+   * support for this field is OPTIONAL.
-+   *
-+   * @param addresses a list of address objects
-+   */
-+  void setCompetences(List<Competence> competences);
- }
+
 diff --git a/java/social-api/src/main/java/org/apache/shindig/social/opensocial/model/Recommender.java b/java/social-api/src/main/java/org/apache/shindig/social/opensocial/model/Recommender.java
 new file mode 100644
 index 0000000..9147461
@@ -19517,31 +19396,7 @@ index 0000000..0cb0335
 +   */
 +  void setThumbnailUrl(String thumbnailUrl);
 +}
-diff --git a/java/social-api/src/main/java/org/apache/shindig/social/opensocial/service/AppDataHandler.java b/java/social-api/src/main/java/org/apache/shindig/social/opensocial/service/AppDataHandler.java
-index 9549801..4459a16 100644
---- a/java/social-api/src/main/java/org/apache/shindig/social/opensocial/service/AppDataHandler.java
-+++ b/java/social-api/src/main/java/org/apache/shindig/social/opensocial/service/AppDataHandler.java
-@@ -26,6 +26,7 @@ import org.apache.shindig.social.opensocial.spi.UserId;
- 
- import java.util.Map;
- import java.util.Set;
-+import java.util.HashSet;
- import java.util.concurrent.Future;
- 
- import javax.servlet.http.HttpServletResponse;
-@@ -62,9 +63,11 @@ public class AppDataHandler {
- 
-     HandlerPreconditions.requireNotEmpty(userIds, "No userId specified");
-     HandlerPreconditions.requireSingular(userIds, "Multiple userIds not supported");
-+    
-+    Set<String> fields = new HashSet(request.getListParameter("keys"));
- 
-     return service.deletePersonData(userIds.iterator().next(), request.getGroup(),
--        request.getAppId(), request.getFields(), request.getToken());
-+        request.getAppId(), fields, request.getToken());
-   }
- 
-   /**
+
 diff --git a/java/social-api/src/main/java/org/apache/shindig/social/opensocial/service/AppHandler.java b/java/social-api/src/main/java/org/apache/shindig/social/opensocial/service/AppHandler.java
 new file mode 100644
 index 0000000..ce11b75
@@ -20651,48 +20506,7 @@ index 0000000..1f5530c
 +  Future<Document> getDocument(DocumentId documentId, Set<String> fields, SecurityToken token)
 +      throws ProtocolException;
 +}
-diff --git a/java/social-api/src/main/java/org/apache/shindig/social/opensocial/spi/PersonService.java b/java/social-api/src/main/java/org/apache/shindig/social/opensocial/spi/PersonService.java
-index 37f37bb..edfbca5 100644
---- a/java/social-api/src/main/java/org/apache/shindig/social/opensocial/spi/PersonService.java
-+++ b/java/social-api/src/main/java/org/apache/shindig/social/opensocial/spi/PersonService.java
-@@ -57,6 +57,19 @@ public interface PersonService {
-   public static String IS_WITH_FRIENDS_FILTER = "isFriendsWith";
- 
-   /**
-+   * Returns a list of people for the context.
-+   *
-+   * @param contexts A context for which spaces to be returned
-+   * @param collectionOptions How to filter, sort and paginate the collection being fetched
-+   * @param fields The profile details to fetch. Empty set implies all
-+   * @param token The gadget token @return a list of people.
-+   * @return Future that returns a RestfulCollection of Person
-+   */
-+  Future<RestfulCollection<Person>> getPeopleForContext(Context context,
-+      CollectionOptions collectionOptions, Set<String> fields, SecurityToken token)
-+      throws ProtocolException;
-+
-+  /**
-    * Returns a list of people that correspond to the passed in person ids.
-    *
-    * @param userIds A set of users
-@@ -80,4 +93,17 @@ public interface PersonService {
-    */
-   Future<Person> getPerson(UserId id, Set<String> fields, SecurityToken token)
-       throws ProtocolException;
-+      
-+  /**
-+   * Updates person that corresponds to the passed in person id and updates him
-+   * IMPORTANT: only viewer can update himself!!
-+   *
-+   * @param id The id of the person to fetch.
-+   * @param request The request object
-+   * @param fields The fields to fetch.
-+   * @param token The gadget token
-+   * @return a list of people.
-+   */
-+  Future<Person> updatePerson(UserId id, Person person, Set<String> fields, SecurityToken token)
-+      throws ProtocolException;
- }
+
 diff --git a/java/social-api/src/main/java/org/apache/shindig/social/opensocial/spi/RecommenderService.java b/java/social-api/src/main/java/org/apache/shindig/social/opensocial/spi/RecommenderService.java
 new file mode 100644
 index 0000000..90d3ba2
