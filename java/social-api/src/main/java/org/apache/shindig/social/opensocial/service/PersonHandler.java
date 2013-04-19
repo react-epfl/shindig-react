@@ -138,6 +138,7 @@ public class PersonHandler {
               optionalUserIds, new GroupId(GroupId.Type.self, null),
               options, fields, request.getToken());
           return FutureUtil.getFirstFromCollection(people);
+        }
       } else {
         ImmutableSet.Builder<UserId> personIds = ImmutableSet.builder();
         for (String pid : optionalPersonId) {
