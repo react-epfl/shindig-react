@@ -59,7 +59,7 @@ public interface AppService {
   /**
    * Returns a list of apps for the context.
    *
-   * @param contexts A context for which apps to be returned
+   * @param context A context for which apps to be returned
    * @param collectionOptions How to filter, sort and paginate the collection being fetched
    * @param fields The profile details to fetch. Empty set implies all
    * @param token The gadget token @return a list of people.
@@ -73,7 +73,7 @@ public interface AppService {
   /**
    * Returns a list of apps that correspond to the passed in appsIds.
    *
-   * @param appsIds A set of app ids
+   * @param AppIds A set of app ids
    * @param collectionOptions How to filter, sort and paginate the collection being fetched
    * @param fields The profile details to fetch. Empty set implies all
    * @param token The gadget token @return a list of people.
