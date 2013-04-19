@@ -495,7 +495,7 @@ public class JsonDbOpensocialService implements ActivityService, PersonService, 
     // db wait times.
     RestfulCollection<Person> restCollection = new RestfulCollection<Person>(
         plist, collectionOptions.getFirst(), totalResults.intValue(), collectionOptions.getMax());
-    return ImmediateFuture.newInstance(restCollection);
+    return  Futures.immediateFuture(restCollection);
   }
 
   /** Check if a viewer is allowed to update the given person record. **/

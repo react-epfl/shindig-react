@@ -22,8 +22,6 @@ import java.util.Set;
 import java.util.concurrent.Future;
 
 import org.apache.shindig.auth.SecurityToken;
-import org.apache.shindig.common.util.FutureUtil;
-import org.apache.shindig.common.util.ImmediateFuture;
 import org.apache.shindig.config.ContainerConfig;
 import org.apache.shindig.protocol.HandlerPreconditions;
 import org.apache.shindig.protocol.Operation;
@@ -41,6 +39,7 @@ import org.apache.shindig.social.opensocial.spi.Context;
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
+import com.google.common.util.concurrent.Futures;
 
 /**
  * RPC/REST handler for all /contexts requests
@@ -75,7 +74,7 @@ public class ContextHandler {
 
     Context context = new Context(id,type);
     context.setContainerUrl(containerUrl);
-    return ImmediateFuture.newInstance(context);
+    return Futures.immediateFuture(context);
   }
 
 }

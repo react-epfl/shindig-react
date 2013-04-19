@@ -23,9 +23,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Future;
 import java.io.File;
-import org.apache.commons.lang.StringUtils;
 
-import org.apache.shindig.common.util.ImmediateFuture;
 import org.apache.shindig.config.ContainerConfig;
 import org.apache.shindig.protocol.HandlerPreconditions;
 import org.apache.shindig.protocol.Operation;
@@ -64,7 +62,7 @@ public class PersonHandler {
   // Return a future for the first item of a collection
   private static <T> Future<T> firstItem(Future<RestfulCollection<T>> collection) {
     Function<RestfulCollection<T>, T> firstItem = new Function<RestfulCollection<T>, T>() {
-      @Override
+//      @Override
       public T apply(RestfulCollection<T> c) {
         if (c != null && c.getTotalResults() > 0) {
           return c.getList().get(0);
@@ -137,7 +135,7 @@ public class PersonHandler {
           Future<RestfulCollection<Person>> people = personService.getPeople(
               optionalUserIds, new GroupId(GroupId.Type.self, null),
               options, fields, request.getToken());
-          return FutureUtil.getFirstFromCollection(people);
+          return firstItem(people);
         }
       } else {
         ImmutableSet.Builder<UserId> personIds = ImmutableSet.builder();
@@ -215,7 +213,7 @@ public class PersonHandler {
 
     for (String t : tokens) {
       Map<String, String> str = Maps.newHashMap();
-      String[] s = StringUtils.split(t, ':');
+      String[] s = t.split(":");
       str.put("o", s[0]); // owner
       str.put("v", s[1]); // viewer
       str.put("g", s[2]); // appId = appUrl
@@ -223,6 +221,6 @@ public class PersonHandler {
       output.add("default:" + crypter.wrap(str)); // security token requires "default:" before
     }
 
-    return ImmediateFuture.newInstance(output);
+    return Futures.immediateFuture(output);
   }
 }
