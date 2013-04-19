@@ -59,7 +59,7 @@ public interface DocumentService {
   /**
    * Returns a list of documents for the context.
    *
-   * @param contexts A context for which documents to be returned
+   * @param context A context for which documents to be returned
    * @param collectionOptions How to filter, sort and paginate the collection being fetched
    * @param fields The profile details to fetch. Empty set implies all
    * @param token The gadget token @return a list of people.
@@ -72,7 +72,7 @@ public interface DocumentService {
   /**
    * Returns a list of documents that correspond to the passed in documentsIds.
    *
-   * @param documentsIds A set of document ids
+   * @param documentIds A set of document ids
    * @param collectionOptions How to filter, sort and paginate the collection being fetched
    * @param fields The profile details to fetch. Empty set implies all
    * @param token The gadget token @return a list of people.
@@ -85,7 +85,7 @@ public interface DocumentService {
   /**
    * Returns an document that corresponds to the passed in document id.
    *
-   * @param id The document id for which document info to be fetched.
+   * @param documentId The document id for which document info to be fetched.
    * @param fields The fields to fetch.
    * @param token The gadget token
    * @return an document.

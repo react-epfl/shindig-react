@@ -60,7 +60,7 @@ public interface PersonService {
   /**
    * Returns a list of people for the context.
    *
-   * @param contexts A context for which spaces to be returned
+   * @param context A context for which spaces to be returned
    * @param collectionOptions How to filter, sort and paginate the collection being fetched
    * @param fields The profile details to fetch. Empty set implies all
    * @param token The gadget token @return a list of people.
@@ -99,8 +99,7 @@ public interface PersonService {
    * Updates person that corresponds to the passed in person id and updates him
    *
    * @param id The id of the person to fetch.
-   * @param request The request object
-   * @param fields The fields to fetch.
+   * @param person The request object
    * @param token The gadget token
    * @return a list of people.
    */

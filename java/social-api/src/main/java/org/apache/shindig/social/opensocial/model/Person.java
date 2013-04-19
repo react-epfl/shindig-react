@@ -1231,7 +1231,7 @@ public interface Person {
    * Set addresses associated with the person, specified as an List of Address objects. Container
    * support for this field is OPTIONAL.
    *
-   * @param addresses a list of address objects
+   * @param competences a list of competences
    */
   void setCompetences(List<Competence> competences);
 }
