@@ -26,16 +26,18 @@
   <parent>
     <groupId>org.apache.shindig</groupId>
     <artifactId>shindig-project</artifactId>
-    <version>2.0.0</version>
+    <version>2.5.0-SNAPSHOT</version>
     <relativePath>../../pom.xml</relativePath>
   </parent>
 
   <artifactId>shindig-graaasp</artifactId>
+  <version>2.5.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>Graaasp SPI and API Implementations for Shindig</name>
   <description>Provides implementations of the SPI and API for Graaasp inside the core of Shindig.</description>
 
+<!-- TODO: change repository to shindig-react -->
   <scm>
       <connection>scm:svn:http://svn.apache.org/repos/asf/shindig/tags/shindig-project-2.0.0/java/samples</connection>
       <developerConnection>scm:svn:https://svn.apache.org/repos/asf/shindig/tags/shindig-project-2.0.0/java/samples</developerConnection>
@@ -83,6 +85,9 @@
       </plugin>
     </plugins>
   </build>
+
+<!-- TODO: check versions dependencies, see which template for this file was used in the previous shindig
+and use this template from new shindig to create new file -->
   <dependencies>
     <!-- add a driver for mysql -->
     <dependency>
