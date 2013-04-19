@@ -59,8 +59,6 @@ import org.apache.shindig.social.opensocial.model.Person;
 import org.apache.shindig.social.opensocial.model.Smoker;
 import org.apache.shindig.social.opensocial.model.Url;
 
-import org.apache.commons.beanutils.BeanUtils;
-
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;

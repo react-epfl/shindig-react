@@ -22,7 +22,6 @@ import java.util.Set;
 import java.util.concurrent.Future;
 
 import org.apache.shindig.auth.SecurityToken;
-import org.apache.shindig.common.util.FutureUtil;
 import org.apache.shindig.config.ContainerConfig;
 import org.apache.shindig.protocol.HandlerPreconditions;
 import org.apache.shindig.protocol.Operation;
@@ -37,11 +36,11 @@ import org.apache.shindig.social.opensocial.spi.DocumentId;
 import org.apache.shindig.social.opensocial.spi.DocumentService;
 import org.apache.shindig.social.opensocial.spi.UserId;
 import org.apache.shindig.social.opensocial.spi.Context;
-import org.apache.shindig.common.util.ImmediateFuture;
 
 import com.google.common.base.Objects;
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Inject;
+import com.google.common.util.concurrent.Futures;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -104,7 +103,7 @@ public class DocumentHandler {
     // return documentService.deleteActivities(Iterables.getOnlyElement(userIds), request.getGroup(),
     //     request.getAppId(), documentIds, request.getToken());
         
-    return ImmediateFuture.newInstance(null);
+    return  Futures.immediateFuture(null);
   }
 
   /**
@@ -116,7 +115,7 @@ public class DocumentHandler {
   public Future<?> update(SocialRequestItem request) throws ProtocolException {
     // return create(request);
     
-    return ImmediateFuture.newInstance(null);
+    return  Futures.immediateFuture(null);
   }
 
   /**
@@ -172,9 +171,10 @@ public class DocumentHandler {
         file.delete();
       }
       JSONObject jsonOutput = new JSONObject(output);
-      return ImmediateFuture.newInstance(jsonOutput);
+      return  Futures.immediateFuture(jsonOutput);
+
     } catch (Exception e) {
-      return ImmediateFuture.newInstance(e);
+      return  Futures.immediateFuture(e);
     }
   }
 
@@ -216,9 +216,10 @@ public class DocumentHandler {
     				output = line;
     			}          
           JSONObject jsonOutput = new JSONObject(output);
-          return ImmediateFuture.newInstance(jsonOutput);
+          return  Futures.immediateFuture(jsonOutput);
+
         } catch (Exception e) {
-          return ImmediateFuture.newInstance(e);
+          return  Futures.immediateFuture(e);
         }
         
         // return documentService.getDocument(new DocumentId(contextIds.iterator().next()), fields, request.getToken());
