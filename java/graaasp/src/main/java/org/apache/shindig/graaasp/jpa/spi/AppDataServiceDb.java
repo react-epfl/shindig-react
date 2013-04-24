@@ -19,12 +19,12 @@ package org.apache.shindig.graaasp.jpa.spi;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.util.concurrent.Futures;
 import com.google.inject.Inject;
 import com.google.common.collect.MapMaker;
 
 
 import org.apache.shindig.auth.SecurityToken;
-import org.apache.shindig.common.util.ImmediateFuture;
 import org.apache.shindig.protocol.DataCollection;
 import org.apache.shindig.protocol.ProtocolException;
 import org.apache.shindig.graaasp.jpa.spi.JPQLUtils;
@@ -102,7 +102,7 @@ public class AppDataServiceDb implements AppDataService {
 
     entityManager.getTransaction().commit();
 
-    return ImmediateFuture.newInstance(null);
+    return Futures.immediateFuture(null);
   }
 
   /**
@@ -272,7 +272,7 @@ public class AppDataServiceDb implements AppDataService {
     }
     
     DataCollection dc = new DataCollection(results);
-    return ImmediateFuture.newInstance(dc);
+    return Futures.immediateFuture(dc);
   }
 
   /**
@@ -330,7 +330,7 @@ public class AppDataServiceDb implements AppDataService {
     
     entityManager.getTransaction().commit();
 
-    return ImmediateFuture.newInstance(null);
+    return Futures.immediateFuture(null);
   }
 
 }

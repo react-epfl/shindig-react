@@ -19,9 +19,10 @@ package org.apache.shindig.graaasp.jpa.spi;
 
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
+import com.google.common.util.concurrent.Futures;
 
 import org.apache.shindig.auth.SecurityToken;
-import org.apache.shindig.common.util.ImmediateFuture;
+
 import org.apache.shindig.protocol.ProtocolException;
 import org.apache.shindig.protocol.RestfulCollection;
 import org.apache.shindig.graaasp.jpa.spi.JPQLUtils;
@@ -201,7 +202,7 @@ public class ActivityServiceDb implements ActivityService {
     // db wait times.
     RestfulCollection<Activity> restCollection = new RestfulCollection<Activity>(
         plist, options.getFirst(), totalResults.intValue(), options.getMax());
-    return ImmediateFuture.newInstance(restCollection);
+    return  Futures.immediateFuture(restCollection);
   }
   
   /* (non-Javadoc)
@@ -211,7 +212,7 @@ public class ActivityServiceDb implements ActivityService {
       GroupId groupId, String appId, Set<String> fields,
       CollectionOptions options, Set<String> activityIds, SecurityToken token)
       throws ProtocolException {
-    return ImmediateFuture.newInstance(new RestfulCollection<Activity>(getActivities(userId, activityIds, token)));
+    return Futures.immediateFuture(new RestfulCollection<Activity>(getActivities(userId, activityIds, token)));
   }
 
   /* (non-Javadoc)
@@ -221,7 +222,7 @@ public class ActivityServiceDb implements ActivityService {
       Set<String> fields, String activityId, SecurityToken token) throws ProtocolException {
     Activity activity = getActivities(userId, activityId,  token);
     if ( activity != null  ) {
-      return ImmediateFuture.newInstance(activity);
+      return Futures.immediateFuture(activity);
     }
     throw new ProtocolException(HttpServletResponse.SC_BAD_REQUEST,"Cant find activity");
   }

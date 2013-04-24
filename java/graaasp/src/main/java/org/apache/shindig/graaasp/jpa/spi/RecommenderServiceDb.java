@@ -18,10 +18,10 @@
 package org.apache.shindig.graaasp.jpa.spi;
 
 import com.google.common.collect.Lists;
+import com.google.common.util.concurrent.Futures;
 import com.google.inject.Inject;
 
 import org.apache.shindig.auth.SecurityToken;
-import org.apache.shindig.common.util.ImmediateFuture;
 import org.apache.shindig.protocol.ProtocolException;
 import org.apache.shindig.protocol.RestfulCollection;
 import org.apache.shindig.graaasp.jpa.spi.JPQLUtils;
@@ -158,7 +158,7 @@ public class RecommenderServiceDb implements RecommenderService {
     Recommender r = new Recommender(documents, apps, spaces, people);
     
     // return ImmediateFuture.newInstance(restCollection);
-    return ImmediateFuture.newInstance(r);
+    return Futures.immediateFuture(r);
   }
   
   private RestfulCollection<Space> getSpaces(Set<SpaceId> spaceIds, 

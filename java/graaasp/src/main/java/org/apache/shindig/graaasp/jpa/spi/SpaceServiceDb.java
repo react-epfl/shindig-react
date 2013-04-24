@@ -18,10 +18,10 @@
 package org.apache.shindig.graaasp.jpa.spi;
 
 import com.google.common.collect.Lists;
+import com.google.common.util.concurrent.Futures;
 import com.google.inject.Inject;
 
 import org.apache.shindig.auth.SecurityToken;
-import org.apache.shindig.common.util.ImmediateFuture;
 import org.apache.shindig.protocol.ProtocolException;
 import org.apache.shindig.protocol.RestfulCollection;
 import org.apache.shindig.graaasp.jpa.spi.JPQLUtils;
@@ -123,7 +123,7 @@ public class SpaceServiceDb implements SpaceService {
     // db wait times.
     RestfulCollection<Space> restCollection = new RestfulCollection<Space>(
         plist, collectionOptions.getFirst(), totalResults.intValue(), collectionOptions.getMax());
-    return ImmediateFuture.newInstance(restCollection);
+    return Futures.immediateFuture(restCollection);
 
   }
   
@@ -144,7 +144,7 @@ public class SpaceServiceDb implements SpaceService {
     // all of the above could equally have been placed into a thread to overlay the
     // db wait times.
     RestfulCollection<Space> restCollection = new RestfulCollection<Space>(plist);
-    return ImmediateFuture.newInstance(restCollection);
+    return Futures.immediateFuture(restCollection);
   }
   
 
@@ -191,7 +191,7 @@ public class SpaceServiceDb implements SpaceService {
     // db wait times.
     RestfulCollection<Space> restCollection = new RestfulCollection<Space>(
         plist, collectionOptions.getFirst(), totalResults.intValue(), collectionOptions.getMax());
-    return ImmediateFuture.newInstance(restCollection);
+    return Futures.immediateFuture(restCollection);
 
   }
 
@@ -253,7 +253,7 @@ public class SpaceServiceDb implements SpaceService {
       
       // filter out hidden spaces and filter out params of closed spaces
       if (vis.equals("Myself")) {
-        return ImmediateFuture.newInstance(null);
+        return Futures.immediateFuture(null);
       }
       if (vis.equals("Space members")) {
         SpaceDb s = new SpaceDb();
@@ -263,11 +263,11 @@ public class SpaceServiceDb implements SpaceService {
         s.setParentType(spaceDb.getParentType());
         s.setProfileUrl(spaceDb.getProfileUrl());
         s.setVisibilityLevel(spaceDb.getVisibilityLevel());
-        return ImmediateFuture.newInstance((Space) s);
+        return Futures.immediateFuture((Space) s);
       }
       
     }
-    return ImmediateFuture.newInstance(space);
+    return Futures.immediateFuture(space);
   }
 
 

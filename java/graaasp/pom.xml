@@ -16,10 +16,6 @@
  * specific language governing permissions and limitations
  * under the License.
 -->
-
-<!--TODO: update everything for Shindig 2.5-->
-
-
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
@@ -39,9 +35,9 @@
 
 <!-- TODO: change repository to shindig-react -->
   <scm>
-      <connection>scm:svn:http://svn.apache.org/repos/asf/shindig/tags/shindig-project-2.0.0/java/samples</connection>
-      <developerConnection>scm:svn:https://svn.apache.org/repos/asf/shindig/tags/shindig-project-2.0.0/java/samples</developerConnection>
-      <url>http://svn.apache.org/viewvc/shindig/tags/shindig-project-2.0.0/java/samples</url>
+    <connection>scm:svn:http://svn.apache.org/repos/asf/shindig/trunk/java/samples</connection>
+    <developerConnection>scm:svn:https://svn.apache.org/repos/asf/shindig/trunk/java/samples</developerConnection>
+    <url>http://svn.apache.org/viewvc/shindig/trunk/java/samples</url>
   </scm>
 
   <repositories>
@@ -86,8 +82,7 @@
     </plugins>
   </build>
 
-<!-- TODO: check versions dependencies, see which template for this file was used in the previous shindig
-and use this template from new shindig to create new file -->
+  <!-- project dependencies -->
   <dependencies>
     <!-- add a driver for mysql -->
     <dependency>
@@ -95,18 +90,21 @@ and use this template from new shindig to create new file -->
       <artifactId>mysql-connector-java</artifactId>
       <version>5.1.6</version>
     </dependency>
-    <!-- project dependencies -->
+
     <dependency>
       <groupId>org.apache.shindig</groupId>
       <artifactId>shindig-common</artifactId>
+      <classifier>${shindig.jdk.classifier}</classifier>
     </dependency>
     <dependency>
       <groupId>org.apache.shindig</groupId>
       <artifactId>shindig-gadgets</artifactId>
+      <classifier>${shindig.jdk.classifier}</classifier>
     </dependency>
     <dependency>
       <groupId>org.apache.shindig</groupId>
       <artifactId>shindig-social-api</artifactId>
+      <classifier>${shindig.jdk.classifier}</classifier>
     </dependency>
     <!-- external depenencies -->
     <dependency>
@@ -121,30 +119,22 @@ and use this template from new shindig to create new file -->
      <dependency>
       <groupId>org.eclipse.persistence</groupId>
       <artifactId>eclipselink</artifactId>
-      <version>1.0</version>
+      <version>2.1.1</version>
     </dependency>
     <dependency>
       <groupId>org.apache.derby</groupId>
       <artifactId>derby</artifactId>
-      <version>10.4.2.0</version>
+      <version>10.7.1.1</version>
     </dependency>
     <dependency>
       <groupId>commons-dbcp</groupId>
       <artifactId>commons-dbcp</artifactId>
-      <version>1.2.2</version>
+      <version>1.4</version>
     </dependency>
-    <!-- <dependency>
-      <artifactId>com.google.guava</artifactId>
-      <groupId>guava</groupId>
-    </dependency> -->
     <dependency>
       <artifactId>commons-io</artifactId>
       <groupId>commons-io</groupId>
     </dependency>
-    <!-- <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
-    </dependency> -->
     <dependency>
       <groupId>net.oauth.core</groupId>
       <artifactId>oauth-httpclient4</artifactId>
@@ -155,6 +145,13 @@ and use this template from new shindig to create new file -->
       <groupId>org.hibernate</groupId>
       <artifactId>hibernate</artifactId>
       <version>3.2.6.ga</version>
+      <exclusions>
+        <!-- ehcache vs ehcache-core blow up -->
+        <exclusion>
+          <groupId>net.sf.ehcache</groupId>
+          <artifactId>ehcache</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.hibernate</groupId>
@@ -174,7 +171,7 @@ and use this template from new shindig to create new file -->
     <dependency>
       <groupId>org.hibernate</groupId>
       <artifactId>ejb3-persistence</artifactId>
-      <version>1.0.1.GA</version>
+      <version>1.0.2.GA</version>
     </dependency>
 
     <!-- test -->
