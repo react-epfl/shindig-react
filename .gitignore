@@ -323,6 +323,8 @@
 /java/social-api/derby.log
 /java/social-api/maven-eclipse.xml
 
+/java/sample-maven-archetype/target/
+
 # /java/social-api/src/main/java/
 /java/social-api/src/main/java/META-INF
 
