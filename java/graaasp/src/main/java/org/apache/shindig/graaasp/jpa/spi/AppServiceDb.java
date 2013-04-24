@@ -18,10 +18,10 @@
 package org.apache.shindig.graaasp.jpa.spi;
 
 import com.google.common.collect.Lists;
+import com.google.common.util.concurrent.Futures;
 import com.google.inject.Inject;
 
 import org.apache.shindig.auth.SecurityToken;
-import org.apache.shindig.common.util.ImmediateFuture;
 import org.apache.shindig.protocol.ProtocolException;
 import org.apache.shindig.protocol.RestfulCollection;
 import org.apache.shindig.graaasp.jpa.spi.JPQLUtils;
@@ -124,7 +124,7 @@ public class AppServiceDb implements AppService {
     // db wait times.
     RestfulCollection<App> restCollection = new RestfulCollection<App>(
         plist, collectionOptions.getFirst(), totalResults.intValue(), collectionOptions.getMax());
-    return ImmediateFuture.newInstance(restCollection);
+    return Futures.immediateFuture(restCollection);
 
   }
 
@@ -152,7 +152,7 @@ public class AppServiceDb implements AppService {
     
     String viewerId = token.getViewerId();
     if (!viewerCanSee(context.getContextId(),viewerId)) {
-      return ImmediateFuture.newInstance(null);
+      return Futures.immediateFuture(null);
     }
     
     // Get total results, that is count the total number of rows for this query
@@ -176,7 +176,7 @@ public class AppServiceDb implements AppService {
     // db wait times.
     RestfulCollection<App> restCollection = new RestfulCollection<App>(
         plist, collectionOptions.getFirst(), totalResults.intValue(), collectionOptions.getMax());
-    return ImmediateFuture.newInstance(restCollection);
+    return Futures.immediateFuture(restCollection);
 
   }
 
@@ -247,10 +247,10 @@ public class AppServiceDb implements AppService {
     
     String viewerId = token.getViewerId();
     if (!viewerCanSee(widgetDb.getParentId(),viewerId)) {
-      return ImmediateFuture.newInstance(null);
+      return Futures.immediateFuture(null);
     }
     
-    return ImmediateFuture.newInstance(app);
+    return Futures.immediateFuture(app);
   }
 
 

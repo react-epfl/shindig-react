@@ -18,10 +18,10 @@
 package org.apache.shindig.graaasp.jpa.spi;
 
 import com.google.common.collect.Lists;
+import com.google.common.util.concurrent.Futures;
 import com.google.inject.Inject;
 
 import org.apache.shindig.auth.SecurityToken;
-import org.apache.shindig.common.util.ImmediateFuture;
 import org.apache.shindig.protocol.ProtocolException;
 import org.apache.shindig.protocol.RestfulCollection;
 import org.apache.shindig.protocol.DataCollection;
@@ -46,8 +46,6 @@ import org.apache.shindig.social.opensocial.model.Address;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Future;
-import java.util.regex.*;
-
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -182,10 +180,9 @@ public class PersonServiceDb implements PersonService {
     // db wait times.
     RestfulCollection<Person> restCollection = new RestfulCollection<Person>(
         plist, collectionOptions.getFirst(), totalResults.intValue(), collectionOptions.getMax());
-    return ImmediateFuture.newInstance(restCollection);
-
+    return Futures.immediateFuture(restCollection);
   }
-  
+
   /**
    * Get all public people in the system
    */
@@ -203,7 +200,7 @@ public class PersonServiceDb implements PersonService {
     // all of the above could equally have been placed into a thread to overlay the
     // db wait times.
     RestfulCollection<Person> restCollection = new RestfulCollection<Person>(plist);
-    return ImmediateFuture.newInstance(restCollection);
+    return Futures.immediateFuture(restCollection);
   }
 
   /**
@@ -254,7 +251,7 @@ public class PersonServiceDb implements PersonService {
     if (plist != null && !plist.isEmpty()) {
       person = (Person) plist.get(0);
     }
-    return ImmediateFuture.newInstance(person);
+    return Futures.immediateFuture(person);
   }
 
   public Future<RestfulCollection<Person>> getPeopleForContext(Context context, 
@@ -302,9 +299,9 @@ public class PersonServiceDb implements PersonService {
     // db wait times.
     RestfulCollection<Person> restCollection = new RestfulCollection<Person>(
         plist, collectionOptions.getFirst(), totalResults.intValue(), collectionOptions.getMax());
-    return ImmediateFuture.newInstance(restCollection);
+    return Futures.immediateFuture(restCollection);
   }
-  
+
   /**
    * {@inheritDoc}
    */
@@ -382,7 +379,7 @@ public class PersonServiceDb implements PersonService {
     entityManager.getTransaction().commit();
     
     // send user data back 
-    return ImmediateFuture.newInstance((Person) user);
+    return Futures.immediateFuture((Person) user);
   }
   
   
