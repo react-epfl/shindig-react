@@ -17,101 +17,98 @@
  */
 package org.apache.shindig.graaasp.jpa.spi;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.util.concurrent.Futures;
-import com.google.inject.Inject;
-import com.google.common.collect.MapMaker;
-
-
-import org.apache.shindig.auth.SecurityToken;
-import org.apache.shindig.protocol.DataCollection;
-import org.apache.shindig.protocol.ProtocolException;
-import org.apache.shindig.graaasp.jpa.spi.JPQLUtils;
-import org.apache.shindig.graaasp.jpa.spi.SPIUtils;
-import org.apache.shindig.social.core.model.AppdataDb;
-import org.apache.shindig.social.opensocial.spi.AppDataService;
-import org.apache.shindig.social.opensocial.spi.GroupId;
-import org.apache.shindig.social.opensocial.spi.UserId;
-
 import java.util.HashMap;
 import java.util.List;
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Future;
 
 import javax.persistence.EntityManager;
-import javax.servlet.http.HttpServletResponse;
+
+import org.apache.shindig.auth.SecurityToken;
+import org.apache.shindig.protocol.DataCollection;
+import org.apache.shindig.protocol.ProtocolException;
+import org.apache.shindig.social.opensocial.spi.AppDataService;
+import org.apache.shindig.social.opensocial.spi.GroupId;
+import org.apache.shindig.social.opensocial.spi.UserId;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.util.concurrent.Futures;
+import com.google.inject.Inject;
+
+import org.apache.shindig.social.core.model.AppdataDb;
 
 /**
  *
  */
 public class AppDataServiceDb implements AppDataService {
 
-    private EntityManager entityManager;
+  private EntityManager entityManager;
 
-    @Inject
-    public AppDataServiceDb(EntityManager entityManager) {
-        this.entityManager = entityManager;
+  @Inject
+  public AppDataServiceDb(EntityManager entityManager) {
+    this.entityManager = entityManager;
+  }
+
+  /**
+   * {@inheritDoc}
+   * TODO: there is a difference in this method compared to the one in samples. Doublecheck and test it
+   */
+  public Future<Void> deletePersonData(UserId userId, GroupId groupId, String appId,
+      Set<String> fields, SecurityToken token) throws ProtocolException {
+
+    if (appId == null) {
+        appId = token.getAppId();
+    }
+    String uid = SPIUtils.getUserList(userId, token);
+    String contextType = "User";
+    long contextId = 0;
+
+    if (uid.startsWith("s_")) { // for space
+        // appdata for a space
+        contextId = Long.parseLong(uid.replaceFirst("s_",""));
+        contextType = "Space";
+    } else { // for person
+        contextId = Long.parseLong(uid);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public Future<Void> deletePersonData(UserId userId, GroupId groupId, String appId,
-                                         Set<String> fields, SecurityToken token) throws ProtocolException {
+    Map<String,AppdataDb> dataMaps = getDataMap(contextId, contextType, groupId, appId);
 
-        if (appId == null) {
-            appId = token.getAppId();
+     // TODO How should transactions be managed? Should samples be using warp-persist instead?
+     if (!entityManager.getTransaction().isActive()) {
+       entityManager.getTransaction().begin();
+     }
+
+    // only add in the fields
+    if (fields == null || fields.isEmpty()) {
+        // no keys, then remove all appdata
+        for (AppdataDb ad : dataMaps.values()) {
+            entityManager.remove(ad);
         }
-        String uid = SPIUtils.getUserList(userId, token);
-        String contextType = "User";
-        long contextId = 0;
-
-        if (uid.startsWith("s_")) { // for space
-            // appdata for a space
-            contextId = Long.parseLong(uid.replaceFirst("s_",""));
-            contextType = "Space";
-        } else { // for person
-            contextId = Long.parseLong(uid);
-        }
-
-        Map<String,AppdataDb> dataMaps = getDataMap(contextId, contextType, groupId, appId);
-
-        // TODO How should transactions be managed? Should samples be using warp-persist instead?
-        if (!entityManager.getTransaction().isActive()) {
-            entityManager.getTransaction().begin();
-        }
-
-        // only add in the fields
-        if (fields == null || fields.isEmpty()) {
-            // no keys, then remove all appdata
-            for (AppdataDb ad : dataMaps.values()) {
+    } else {
+        // remove found keys
+        for (String f : fields) {
+            if (dataMaps.containsKey(f)) {
+                AppdataDb ad = dataMaps.get(f);
                 entityManager.remove(ad);
             }
-        } else {
-            // remove found keys
-            for (String f : fields) {
-                if (dataMaps.containsKey(f)) {
-                    AppdataDb ad = dataMaps.get(f);
-                    entityManager.remove(ad);
-                }
-            }
         }
-
-        entityManager.getTransaction().commit();
-
-        return Futures.immediateFuture(null);
     }
 
-    /**
-     * @param contextId
-     * @param contextType
-     * @param groupId
-     * @param appId
-     * @return
-     */
+    entityManager.flush();
+    entityManager.getTransaction().commit();
+
+    return Futures.immediateFuture(null);
+  }
+
+  /**
+   * @param userId
+   * @param groupId
+   * @param appId
+   * @param token
+   * @return
+   */
     private Map<String,AppdataDb> getDataMap(long contextId, String contextType, GroupId groupId, String appId) {
         List<Long> paramList = Lists.newArrayList();
         paramList.add(contextId);
