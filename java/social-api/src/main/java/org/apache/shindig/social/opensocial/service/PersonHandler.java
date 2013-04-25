@@ -205,7 +205,7 @@ public class PersonHandler {
   @Operation(httpMethods = "GET", path="/crypted_security_token")
   public Future<?> cryptedSecurityToken(RequestItem request) throws Exception {
     // get key file used for token encryption
-    String keyFile = config.getString("default", "gadgets.securityTokenKeyFile");
+    String keyFile = config.getString("default", "gadgets.securityTokenKey");
     BasicBlobCrypter crypter = new BasicBlobCrypter(new File(keyFile));
     // get a list of tokens from request params
     List<String> tokens = request.getListParameter("tokens");
