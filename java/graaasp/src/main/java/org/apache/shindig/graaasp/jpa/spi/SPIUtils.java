@@ -58,7 +58,7 @@ public class SPIUtils {
     }
     return paramList;
   }
-  
+
   /**
    * @param spaceIds
    * @return
@@ -78,7 +78,7 @@ public class SPIUtils {
     }
     return paramList;
   }
-  
+
   /**
    * @param AppIds
    * @return
@@ -117,7 +117,8 @@ public class SPIUtils {
       }
     }
     return paramList;
-  }   
+  }
+
   /**
    * @param userId
    * @param token
