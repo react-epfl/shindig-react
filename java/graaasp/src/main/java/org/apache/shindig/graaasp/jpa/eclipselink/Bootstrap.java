@@ -35,10 +35,12 @@ import com.google.common.collect.Maps;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
+import org.apache.shindig.common.logging.i18n.MessageKeys;
 import org.eclipse.persistence.config.PersistenceUnitProperties;
 import org.eclipse.persistence.config.TargetServer;
 
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.persistence.EntityManager;
@@ -57,7 +59,10 @@ public class Bootstrap {
   private static final String DB_PASSWORD = "db.password";
   private static final String DB_MIN_WRITE = "db.write.min";
   private static final String DB_MIN_NUM_READ = "db.read.min";
-  private static final Logger LOG = Logger.getLogger(Boolean.class.getName());
+  //class name for logging purpose
+  private static final String classname = Bootstrap.class.getName();
+  private static final Logger LOG = Logger.getLogger(classname,MessageKeys.MESSAGES);
+
   private String minWrite;
   private String minRead;
   private String dbPassword;
@@ -107,12 +112,13 @@ public class Bootstrap {
     // Ensure that no server-platform is configured
     properties.put(TARGET_SERVER, TargetServer.None);
 
-	// TODO: this should be taken from persistence.xml
+    // TODO: this should be taken from persistence.xml
     properties.put(PersistenceUnitProperties.DDL_GENERATION, "none");
     properties.put(PersistenceUnitProperties.DROP_JDBC_DDL_FILE, "drop.sql");
     properties.put(PersistenceUnitProperties.CREATE_JDBC_DDL_FILE, "create.sql");
     properties.put(PersistenceUnitProperties.DDL_GENERATION_MODE,"database");
 
+    // The part below is from the original file
     // properties.put(PersistenceUnitProperties.DDL_GENERATION, PersistenceUnitProperties.CREATE_ONLY);
     // properties.put(PersistenceUnitProperties.DROP_JDBC_DDL_FILE, "drop.sql");
     // properties.put(PersistenceUnitProperties.CREATE_JDBC_DDL_FILE, "create.sql");
@@ -122,8 +128,9 @@ public class Bootstrap {
     // properties.put(PersistenceUnitProperties.SESSION_CUSTOMIZER,
     // EnableIntegrityChecker.class.getName());
 
-    LOG.info("Starting connection manager with properties " + properties);
-
+    if (LOG.isLoggable(Level.INFO)) {
+      LOG.logp(Level.INFO, classname, "init", MessageKeys.STARTING_CONN_MANAGER_WITH, new Object[] {properties});
+    }
     EntityManagerFactory emFactory = Persistence.createEntityManagerFactory(unitName, properties);
     entityManager = emFactory.createEntityManager();
   }
