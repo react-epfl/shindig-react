@@ -63,7 +63,7 @@ public class AppHandler {
   @Operation(httpMethods = "GET")
   public Future<?> get(SocialRequestItem request) throws ProtocolException {
     // get key file used for token encryption
-    String keyFile = config.getString("default", "gadgets.securityTokenKeyFile");
+    String keyFile = config.getString("default", "gadgets.securityTokenKey");
 
     Set<String> fields = request.getFields(App.Field.DEFAULT_FIELDS);
     Set<String> contextIds = request.getContextIds();
