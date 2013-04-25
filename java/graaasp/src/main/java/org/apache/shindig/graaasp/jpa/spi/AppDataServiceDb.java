@@ -108,43 +108,44 @@ public class AppDataServiceDb implements AppDataService {
    * @param appId
    * @param token
    * @return
+   * TODO: there is a difference in this method compared to the one in samples. Doublecheck and test it
    */
-    private Map<String,AppdataDb> getDataMap(long contextId, String contextType, GroupId groupId, String appId) {
-        List<Long> paramList = Lists.newArrayList();
-        paramList.add(contextId);
+  private Map<String,AppdataDb> getDataMap(long contextId, String contextType, GroupId groupId, String appId) {
+    List<Long> paramList = Lists.newArrayList();
+    paramList.add(contextId);
 
-        int lastParam = 1;
-        StringBuilder sb = new StringBuilder();
+    int lastParam = 1;
+    StringBuilder sb = new StringBuilder();
 
-        switch (groupId.getType()) {
-            case all:
-                // userId translates into all contacts
-                sb.append(AppdataDb.FINDBY_ALL_GROUP);
-                sb.append(" and ad.contextId = ?").append(lastParam);
-                lastParam++;
-                break;
-            case friends:
-                sb.append(AppdataDb.FINDBY_FRIENDS_GROUP);
-                sb.append(" and ad.contextId = ?").append(lastParam);
-                lastParam++;
-                // userId translates into all friends
-                break;
-            case objectId:
-                sb.append(AppdataDb.FINDBY_GROUP_GROUP);
-                sb.append(" and ad.contextId = ?").append(lastParam);
-                lastParam++;
-                sb.append(" and g.id = ?").append(lastParam);
-                paramList.add(Long.parseLong(groupId.getObjectId().toString()));
-                lastParam++;
-                // userId translates into friends within a group
-                break;
-            default: // including self
-                // userId is the user Id
-                sb.append(AppdataDb.FINDBY_SELF_GROUP);
-                sb.append(" ad.contextId = ?").append(lastParam);
-                sb.append(" and ad.contextType = '").append(contextType).append("'");
-                lastParam++;
-                break;
+    switch (groupId.getType()) {
+        case all:
+            // userId translates into all contacts
+            sb.append(AppdataDb.FINDBY_ALL_GROUP);
+            sb.append(" and ad.contextId = ?").append(lastParam);
+            lastParam++;
+            break;
+        case friends:
+            sb.append(AppdataDb.FINDBY_FRIENDS_GROUP);
+            sb.append(" and ad.contextId = ?").append(lastParam);
+            lastParam++;
+            // userId translates into all friends
+            break;
+        case objectId:
+            sb.append(AppdataDb.FINDBY_GROUP_GROUP);
+            sb.append(" and ad.contextId = ?").append(lastParam);
+            lastParam++;
+            sb.append(" and g.id = ?").append(lastParam);
+            paramList.add(Long.parseLong(groupId.getObjectId().toString()));
+            lastParam++;
+            // userId translates into friends within a group
+            break;
+        default: // including self
+            // userId is the user Id
+            sb.append(AppdataDb.FINDBY_SELF_GROUP);
+            sb.append(" ad.contextId = ?").append(lastParam);
+            sb.append(" and ad.contextType = '").append(contextType).append("'");
+            lastParam++;
+            break;
 
         }
         sb.append(" and ad.AppId = ?").append(lastParam);
@@ -158,7 +159,6 @@ public class AppDataServiceDb implements AppDataService {
             // build the hash "key" => Appdata for the key
             results.put(ad.getName(),ad);
         }
-
         return results;
 
     }
@@ -176,14 +176,17 @@ public class AppDataServiceDb implements AppDataService {
 
     /**
      * {@inheritDoc}
+     * TODO: there is a difference in this method compared to the one in samples. Doublecheck and test it
      */
     public Future<DataCollection> getPersonData(Set<UserId> userIds, GroupId groupId, String appId,
-                                                Set<String> fields, SecurityToken token) throws ProtocolException {
+        Set<String> fields, SecurityToken token) throws ProtocolException {
 
         if (appId == null) {
             appId = token.getAppId();
         }
+
         List<String> contextList = SPIUtils.getUserList(userIds, token);
+
         // for now all context are defined by the first context in the list
         String firstContext = contextList.get(0);
         String contextType = "User";
@@ -224,8 +227,8 @@ public class AppDataServiceDb implements AppDataService {
                 lastParam = JPQLUtils.addInClause(sb, "ad", "contextId", lastParam, paramList.size());
                 sb.append(" and ad.contextType = '").append(contextType).append("'");
                 break;
-
         }
+
         sb.append(" and ad.AppId = ?").append(lastParam);
         lastParam++;
         paramList.add(Long.parseLong(appId));
@@ -262,19 +265,22 @@ public class AppDataServiceDb implements AppDataService {
             }
         }
 
-        DataCollection dc = new DataCollection(results);
-        return Futures.immediateFuture(dc);
-    }
+    DataCollection dc = new DataCollection(results);
+    return Futures.immediateFuture(dc);
+  }
 
     /**
      * {@inheritDoc}
+     * TODO: there is a difference in this method compared to the one in samples. Doublecheck and test it
      */
     public Future<Void> updatePersonData(UserId userId, GroupId groupId, String appId,
-                                         Set<String> fields, Map<String, String> values, SecurityToken token) throws ProtocolException {
+        Set<String> fields, Map<String, String> values, SecurityToken token)
+        throws ProtocolException {
 
         if (appId == null) {
             appId = token.getAppId();
         }
+
         String uid = SPIUtils.getUserList(userId, token);
         String contextType = "User";
         long contextId = 0;
@@ -311,8 +317,6 @@ public class AppDataServiceDb implements AppDataService {
                 entityManager.persist(ad);
             }
         }
-
-
 
         // for (AppdataDb adm : dataMaps) {
         //   entityManager.persist(adm);

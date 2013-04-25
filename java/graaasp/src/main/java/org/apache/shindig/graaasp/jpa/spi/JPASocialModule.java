@@ -24,14 +24,7 @@ import com.google.inject.name.Names;
 import com.google.inject.spi.Message;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.shindig.graaasp.jpa.eclipselink.EclipseEntityManagerProvider;
-import org.apache.shindig.graaasp.jpa.spi.ActivityServiceDb;
-import org.apache.shindig.graaasp.jpa.spi.AppDataServiceDb;
-import org.apache.shindig.graaasp.jpa.spi.PersonServiceDb;    
-import org.apache.shindig.graaasp.jpa.spi.SpaceServiceDb;    
-import org.apache.shindig.graaasp.jpa.spi.AppServiceDb;    
-import org.apache.shindig.graaasp.jpa.spi.DocumentServiceDb;  
-import org.apache.shindig.graaasp.jpa.spi.RecommenderServiceDb;    
+
 import org.apache.shindig.social.opensocial.spi.ActivityService;
 import org.apache.shindig.social.opensocial.spi.AlbumService;
 import org.apache.shindig.social.opensocial.spi.AppDataService;
@@ -42,6 +35,14 @@ import org.apache.shindig.social.opensocial.spi.SpaceService;
 import org.apache.shindig.social.opensocial.spi.AppService;
 import org.apache.shindig.social.opensocial.spi.DocumentService;
 import org.apache.shindig.social.opensocial.spi.RecommenderService;
+import org.apache.shindig.graaasp.jpa.eclipselink.EclipseEntityManagerProvider;
+import org.apache.shindig.graaasp.jpa.spi.ActivityServiceDb;
+import org.apache.shindig.graaasp.jpa.spi.AppDataServiceDb;
+import org.apache.shindig.graaasp.jpa.spi.PersonServiceDb;
+import org.apache.shindig.graaasp.jpa.spi.SpaceServiceDb;
+import org.apache.shindig.graaasp.jpa.spi.AppServiceDb;
+import org.apache.shindig.graaasp.jpa.spi.DocumentServiceDb;
+import org.apache.shindig.graaasp.jpa.spi.RecommenderServiceDb;
 import org.apache.shindig.social.sample.spi.JsonDbOpensocialService;
 
 import java.io.IOException;
@@ -103,21 +104,18 @@ public class JPASocialModule extends AbstractModule {
     } else {
       bind(EntityManager.class).toInstance(this.entityManager);
     }
-    bind(ActivityService.class).to(ActivityServiceDb.class)
-        .in(Scopes.SINGLETON);
-    bind(PersonService.class).to(PersonServiceDb.class).in(Scopes.SINGLETON);  
-    bind(SpaceService.class).to(SpaceServiceDb.class).in(Scopes.SINGLETON);  
+
+    bind(ActivityService.class).to(ActivityServiceDb.class).in(Scopes.SINGLETON);
+    bind(PersonService.class).to(PersonServiceDb.class).in(Scopes.SINGLETON);
     bind(AppDataService.class).to(AppDataServiceDb.class).in(Scopes.SINGLETON);
+    bind(SpaceService.class).to(SpaceServiceDb.class).in(Scopes.SINGLETON);
     bind(AppService.class).to(AppServiceDb.class).in(Scopes.SINGLETON);
     bind(DocumentService.class).to(DocumentServiceDb.class).in(Scopes.SINGLETON);
     bind(RecommenderService.class).to(RecommenderServiceDb.class).in(Scopes.SINGLETON);
-    
-    //Temporal
+
+    //Temporary
     bind(AlbumService.class).to(JsonDbOpensocialService.class);
     bind(MediaItemService.class).to(JsonDbOpensocialService.class);
     bind(MessageService.class).to(JsonDbOpensocialService.class);
-    
-    // static injection to have @Named 
-    //requestStaticInjection(SpaceDb.class);
   }
 }
