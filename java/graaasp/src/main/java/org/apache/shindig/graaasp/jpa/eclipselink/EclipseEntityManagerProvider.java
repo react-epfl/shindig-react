@@ -23,8 +23,6 @@ import com.google.inject.name.Named;
 
 import javax.persistence.EntityManager;
 
-import org.apache.shindig.graaasp.jpa.eclipselink.Bootstrap;
-
 /**
  * Creates an Eclipse Entity Manager.
  */
@@ -34,7 +32,7 @@ public class EclipseEntityManagerProvider implements Provider<EntityManager> {
   private String unitName;
 
   /**
-   * 
+   *
    */
   @Inject
   public EclipseEntityManagerProvider(Bootstrap bootstrap,
@@ -45,7 +43,7 @@ public class EclipseEntityManagerProvider implements Provider<EntityManager> {
 
   /**
    * {@inheritDoc}
-   * 
+   *
    * @see com.google.inject.Provider#get()
    */
   public EntityManager get() {
