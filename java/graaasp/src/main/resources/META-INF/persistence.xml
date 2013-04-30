@@ -60,10 +60,10 @@
  
   <!--  properties are set in Bootstrap no here  -->
   <properties>
-     <property name="eclipselink.jdbc.driver" value="org.apache.derby.jdbc.EmbeddedDriver"/>
-     <property name="eclipselink.jdbc.url" value="jdbc:derby:target/eclipselinkdb;create=true"/>
-     <property name="eclipselink.jdbc.user" value="sa"/>
-     <property name="eclipselink.jdbc.password" value=" "/>
+     <property name="eclipselink.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+     <property name="eclipselink.jdbc.url" value="jdbc:mysql://localhost:3306/graaasp_development"/>
+     <property name="eclipselink.jdbc.user" value="graaasp"/>
+     <property name="eclipselink.jdbc.password" value="graaasp"/>
      <property name="eclipselink.target-server" value="None"/>
      
      <property name="eclipselink.jdbc.write-connections.min" value="1"/>
