@@ -51,6 +51,10 @@ import org.apache.shindig.social.opensocial.service.ContextHandler;
 
 import org.apache.shindig.social.opensocial.oauth.OAuthDataStore;
 import org.apache.shindig.social.sample.oauth.SampleOAuthDataStore;
+import org.apache.shindig.social.core.oauth2.OAuth2Service;
+import org.apache.shindig.social.core.oauth2.OAuth2ServiceImpl;
+import org.apache.shindig.social.core.oauth2.OAuth2DataService;
+import org.apache.shindig.social.core.oauth2.OAuth2DataServiceImpl;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.AbstractModule;
@@ -82,6 +86,8 @@ public class SocialApiGuiceModule extends AbstractModule {
         BeanXStreamAtomConverter.class);
 
     bind(OAuthDataStore.class).to(SampleOAuthDataStore.class);
+    bind(OAuth2Service.class).to(OAuth2ServiceImpl.class);
+    bind(OAuth2DataService.class).to(OAuth2DataServiceImpl.class);
 
     bind(new TypeLiteral<List<AuthenticationHandler>>(){}).toProvider(
         AuthenticationHandlerProvider.class);
