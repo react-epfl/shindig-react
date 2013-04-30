@@ -108,10 +108,5 @@ public class SocialApiGuiceModule extends AbstractModule {
             MediaItemHandler.class, ActivityStreamHandler.class, GroupHandler.class,
             SpaceHandler.class, AppHandler.class, DocumentHandler.class, ContextHandler.class,
             RecommenderHandler.class);
-
-    // return ImmutableSet.<Class<?>>of(ActivityHandler.class, AppDataHandler.class,
-    //    PersonHandler.class, MessageHandler.class, AlbumHandler.class, MediaItemHandler.class, 
-    //    SpaceHandler.class, AppHandler.class, DocumentHandler.class, ContextHandler.class,
-    //    RecommenderHandler.class);
   }
 }
