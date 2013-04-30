@@ -26,7 +26,9 @@ import com.google.inject.spi.Message;
 import org.apache.commons.io.IOUtils;
 
 import org.apache.shindig.social.opensocial.spi.ActivityService;
+import org.apache.shindig.social.opensocial.spi.ActivityStreamService;
 import org.apache.shindig.social.opensocial.spi.AlbumService;
+import org.apache.shindig.social.opensocial.spi.GroupService;
 import org.apache.shindig.social.opensocial.spi.AppDataService;
 import org.apache.shindig.social.opensocial.spi.MediaItemService;
 import org.apache.shindig.social.opensocial.spi.MessageService;
@@ -117,5 +119,8 @@ public class JPASocialModule extends AbstractModule {
     bind(AlbumService.class).to(JsonDbOpensocialService.class);
     bind(MediaItemService.class).to(JsonDbOpensocialService.class);
     bind(MessageService.class).to(JsonDbOpensocialService.class);
+    bind(ActivityStreamService.class).to(JsonDbOpensocialService.class);
+    bind(GroupService.class).to(JsonDbOpensocialService.class);
+
   }
 }
