@@ -60,22 +60,22 @@
  
   <!--  properties are set in Bootstrap no here  -->
   <properties>
-     <property name="eclipselink.jdbc.driver" value="com.mysql.jdbc.Driver"/>
-     <property name="eclipselink.jdbc.url" value="jdbc:mysql://localhost:3306/graaasp_development"/>
-     <property name="eclipselink.jdbc.user" value="graaasp"/>
-     <property name="eclipselink.jdbc.password" value="graaasp"/>
-     <property name="eclipselink.target-server" value="None"/>
+     <!--  <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/> -->
+     <!--  <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/graaasp_development"/> -->
+     <!--  <property name="javax.persistence.jdbc.user" value="graaasp"/> -->
+     <!--  <property name="javax.persistence.jdbc.password" value="graaasp"/> -->
+     <property name="javax.persistence.target-server" value="None"/>
      
-     <property name="eclipselink.jdbc.write-connections.min" value="1"/>
-     <property name="eclipselink.jdbc.read-connections.min" value="1"/>
-     <property name="eclipselink.logging.level" value="INFO" />
-     <property name="eclipselink.logging.logger" value="JavaLogger"/>
-     <property name="eclipselink.logging.timestamp" value="false" />
-     <property name="eclipselink.logging.session" value="false" />
-     <property name="eclipselink.logging.thread" value="false" />
-     <property name="eclipselink.logging.exceptions" value="false" />
-     <property name="eclipselink.ddl-generation" value="none"/>
-     <property name="eclipselink.ddl-generation.output-mode" value="database"/>
+     <property name="javax.persistence.jdbc.write-connections.min" value="1"/>
+     <property name="javax.persistence.jdbc.read-connections.min" value="1"/>
+     <property name="javax.persistence.logging.level" value="INFO" />
+     <property name="javax.persistence.logging.logger" value="JavaLogger"/>
+     <property name="javax.persistence.logging.timestamp" value="false" />
+     <property name="javax.persistence.logging.session" value="false" />
+     <property name="javax.persistence.logging.thread" value="false" />
+     <property name="javax.persistence.logging.exceptions" value="false" />
+     <property name="javax.persistence.ddl-generation" value="none"/>
+     <property name="javax.persistence.ddl-generation.output-mode" value="database"/>
   </properties>
 </persistence-unit>
 
