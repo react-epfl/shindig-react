@@ -206,7 +206,7 @@ public class PersonHandler {
   public Future<?> cryptedSecurityToken(RequestItem request) throws Exception {
     // get key file used for token encryption
     String keyFile = config.getString("default", "gadgets.securityTokenKey");
-    BasicBlobCrypter crypter = new BasicBlobCrypter(new File(keyFile));
+    BasicBlobCrypter crypter = new BasicBlobCrypter(keyFile);
     // get a list of tokens from request params
     List<String> tokens = request.getListParameter("tokens");
     List<String> output = Lists.newArrayList();
@@ -216,7 +216,7 @@ public class PersonHandler {
       String[] s = t.split(":");
       str.put("o", s[0]); // owner
       str.put("v", s[1]); // viewer
-      str.put("g", s[2]); // appId = appUrl
+      str.put("i", s[2]); // appId = appUrl
 
       output.add("default:" + crypter.wrap(str)); // security token requires "default:" before
     }

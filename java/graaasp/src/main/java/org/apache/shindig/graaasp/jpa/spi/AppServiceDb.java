@@ -184,7 +184,7 @@ public class AppServiceDb implements AppService {
   // based on ownerId, viewerId and appId
   private String buildEncryptedToken(String keyFile, SecurityToken token, App app) {
     try {
-    BasicBlobCrypter crypter = new BasicBlobCrypter(new File(keyFile));
+    BasicBlobCrypter crypter = new BasicBlobCrypter(keyFile);
 
     String ownerId = token.getOwnerId();
     String viewerId = token.getViewerId();
@@ -193,7 +193,7 @@ public class AppServiceDb implements AppService {
     Map<String, String> str = Maps.newHashMap();
     str.put("o", ownerId); // owner
     str.put("v", viewerId); // viewer
-    str.put("g", appId); // appId = appUrl
+    str.put("i", appId); // appId = appUrl
 
     return "default:" + crypter.wrap(str); // security token requires "default:" before
     } catch (Exception e) {
