@@ -22,8 +22,6 @@ features/globals/feature.xml
 features/actions/feature.xml
 features/auth-refresh/feature.xml
 features/caja/feature.xml
-# features/com.google.gadgets.analytics/feature.xml
-features/globals/feature.xml
 features/caja/caja-debug.xml
 features/caja/es53-guest-frame.xml
 features/caja/es53-guest-frame.opt.xml
