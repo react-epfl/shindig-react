@@ -86,7 +86,7 @@
 // dd if=/dev/random bs=32 count=1 | openssl base64
 //
 "gadgets.securityTokenType" : "secure",
-"gadgets.securityTokenKey" : "/Graaasp/current/config/security_token.txt",
+"gadgets.securityTokenKey" : "file:///Graaasp/current/config/security_token.txt",
 //"gadgets.securityTokenKey" : "file:///path/to/key/file.txt",
 //"gadgets.securityTokenKey" : "res://some-file-on-the-classpath.txt",
 

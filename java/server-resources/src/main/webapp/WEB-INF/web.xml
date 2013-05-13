@@ -33,16 +33,16 @@
       org.apache.shindig.common.PropertiesModule:
       org.apache.shindig.gadgets.DefaultGuiceModule:
       org.apache.shindig.social.core.config.SocialApiGuiceModule:
-      org.apache.shindig.social.sample.SampleModule:
+      org.apache.shindig.graaasp.jpa.spi.JPASocialModule:
       org.apache.shindig.gadgets.oauth.OAuthModule:
       org.apache.shindig.gadgets.oauth2.OAuth2Module:
       org.apache.shindig.gadgets.oauth2.OAuth2MessageModule:
       org.apache.shindig.gadgets.oauth2.handler.OAuth2HandlerModule: 
       org.apache.shindig.gadgets.oauth2.persistence.sample.OAuth2PersistenceModule:
-      org.apache.shindig.common.cache.ehcache.EhCacheModule:
+      <!-- org.apache.shindig.common.cache.ehcache.EhCacheModule:
       org.apache.shindig.sample.shiro.ShiroGuiceModule:
       org.apache.shindig.sample.container.SampleContainerGuiceModule:
-      org.apache.shindig.extras.ShindigExtrasGuiceModule:
+      org.apache.shindig.extras.ShindigExtrasGuiceModule: -->
       org.apache.shindig.gadgets.admin.GadgetAdminModule
     </param-value>
   </context-param>
@@ -64,8 +64,12 @@
      <param-name>system.properties</param-name>
      <param-value>
      <![CDATA[
-        shindig.host=
-        shindig.port=
+       shindig.host=localhost
+       shindig.port=8080
+       shindig.container_url=http://localhost:3000
+       graasp.token=sdfdsfafa232424,-sdf.,saf@111
+
+
         aKey=/shindig/gadgets/proxy?container=default&url=
      ]]>
      </param-value>
