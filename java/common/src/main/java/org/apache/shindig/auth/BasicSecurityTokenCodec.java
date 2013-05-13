@@ -117,8 +117,6 @@ public class BasicSecurityTokenCodec implements SecurityTokenCodec, ContainerCon
       String[] tokens = StringUtils.split(token, ':');
       if (tokens.length < TOKEN_COUNT) {
         throw new SecurityTokenException("Malformed security token");
-      } else {
-        tokens = this.parseToken(tokens);
       }
 
       Long expires = null;
@@ -161,39 +159,12 @@ public class BasicSecurityTokenCodec implements SecurityTokenCodec, ContainerCon
    */
   public BasicSecurityTokenCodec() {}
 
-
   /**
    * Creates a basic signer that can observe container configuration changes
    * @param config the container config to observe
    */
   public BasicSecurityTokenCodec(ContainerConfig config) {
     config.addConfigObserver(this, true);
-  }
-
-  /**
-   * Parses the security token
-   */
-  public String[] parseToken(String[] tokens) {
-    int url_number = tokens.length-6;
-    String[] output = new String[TOKEN_COUNT];
-
-    //get array elements corresponding to broken url - http://host:port/gadget.xml -> ["http","//host","port/gadget.xml"]
-    String[] url_array = new String[url_number];
-
-    //copy first part (before url)
-    System.arraycopy(tokens,0,output,0,4);
-
-    //build url
-    System.arraycopy(tokens, 4, url_array, 0, url_number);
-    String url = Joiner.on(":").join(url_array);
-
-    //copy url
-    output[4] = url;
-
-    //copy last part (after url)
-    System.arraycopy(tokens,(4+url_number),output,5,2);
-
-    return output;
   }
 
   /**

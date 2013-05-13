@@ -8,6 +8,10 @@ WAR = java/server/target/shindig-server-2.5.0-SNAPSHOT.war
 TOMCAT = /Library/Tomcat
 
 default:
+	@echo "Compiling shindig"
+	@mvn -Dmaven.test.skip
+
+compile:
 	@echo "Cleaning and compiling shindig"
 	@mvn clean && mvn -Dmaven.test.skip
 
