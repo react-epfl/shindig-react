@@ -1218,20 +1218,4 @@ public interface Person {
    * @param thumbnailUrl the person's photo thumbnail URL
    */
   void setThumbnailUrl(String thumbnailUrl);
-
-  /**
-   * Get addresses associated with the person, specified as an List of Address objects. Container
-   * support for this field is OPTIONAL.
-   *
-   * @return a List of address objects
-   */
-  List<Competence> getCompetences();
-
-  /**
-   * Set addresses associated with the person, specified as an List of Address objects. Container
-   * support for this field is OPTIONAL.
-   *
-   * @param competences a list of competences
-   */
-  void setCompetences(List<Competence> competences);
 }
