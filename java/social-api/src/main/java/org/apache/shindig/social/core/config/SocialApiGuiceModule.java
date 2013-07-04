@@ -46,7 +46,6 @@ import org.apache.shindig.social.opensocial.service.PersonHandler;
 import org.apache.shindig.social.opensocial.service.SpaceHandler;
 import org.apache.shindig.social.opensocial.service.AppHandler;
 import org.apache.shindig.social.opensocial.service.DocumentHandler;
-import org.apache.shindig.social.opensocial.service.RecommenderHandler;
 import org.apache.shindig.social.opensocial.service.ContextHandler;
 
 import org.apache.shindig.social.opensocial.oauth.OAuthDataStore;

@@ -47,7 +47,6 @@ import org.apache.shindig.social.core.model.UrlDb;
 import org.apache.shindig.social.core.model.UserDb;
 import org.apache.shindig.social.opensocial.model.Account;
 import org.apache.shindig.social.opensocial.model.Address;
-import org.apache.shindig.social.opensocial.model.Competence;
 import org.apache.shindig.social.opensocial.model.BodyType;
 import org.apache.shindig.social.opensocial.model.Drinker;
 import org.apache.shindig.social.opensocial.model.ListField;
@@ -258,12 +257,6 @@ public class UserDb implements Person, DbObject {
   @OneToMany(targetEntity = PersonAddressDb.class, mappedBy = "person", cascade = ALL)
   protected List<Address> addresses;
     
-  // @Basic
-  // @Column(name = "competences")
-  // @Transient
-  @OneToMany(targetEntity = CompetenceDb.class, mappedBy = "person", cascade = ALL)
-  protected List<Competence> competences;
-  
   // @Basic
   // @Column(name = "age")
   @Transient
@@ -744,18 +737,7 @@ public class UserDb implements Person, DbObject {
   public void setAddresses(List<Address> addresses) {
     this.addresses = addresses;
   }
-    
-  // @Basic
-  // @Column(name = "competences")
-  // protected String competences;
-  public List<Competence> getCompetences() {
-    return competences;
-  }
 
-  public void setCompetences(List<Competence> competences) {
-    this.competences = competences;
-  }
-  
   public Integer getAge() {
     return age;
   }

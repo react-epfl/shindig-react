@@ -43,7 +43,6 @@ import org.apache.shindig.social.opensocial.spi.PersonService;
 import org.apache.shindig.social.opensocial.spi.UserId;
 import org.apache.shindig.social.opensocial.spi.Context;
 
-import org.apache.shindig.social.opensocial.model.Competence;
 import org.apache.shindig.social.opensocial.model.ListField;
 import org.apache.shindig.social.opensocial.model.Address;
 
@@ -356,17 +355,6 @@ public class PersonServiceDb implements PersonService {
                 emails.add(c);
             }
             user.setEmails(emails);
-        }
-        if (person.getCompetences() != null) {
-            for (Object e : user.getCompetences()) {
-                entityManager.remove(e);
-            }
-            List<Competence> competences = Lists.newArrayList();
-            for (Competence c : person.getCompetences()) {
-                c.setPerson(user);
-                competences.add(c);
-            }
-            user.setCompetences(competences);
         }
         if (person.getAddresses() != null) {
             for (Object e : user.getAddresses()) {
