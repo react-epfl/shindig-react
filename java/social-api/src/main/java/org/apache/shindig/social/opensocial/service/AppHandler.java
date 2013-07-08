@@ -56,7 +56,7 @@ public class AppHandler {
   }
 
   /**
-   * Allowed end-points /apps/{contextId}/{contextType} /apps/{AppId}+ 
+   * Allowed end-points /apps/{contextId}/{contextType} /apps/{AppId}+
    *
    * examples: /apps/john.doe/@person /apps/tex.group/@space /apps/mywidget
    */
@@ -71,36 +71,36 @@ public class AppHandler {
 
     // Preconditions
     HandlerPreconditions.requireNotEmpty(contextIds, "No contextId is specified");
-    
+
     CollectionOptions options = new CollectionOptions(request);
     if(contextType == null){
-    	// when contextType is not specified, get list of apps specified by ids
-    	if(contextIds.size() == 1){
+      // when contextType is not specified, get list of apps specified by ids
+      if(contextIds.size() == 1){
         String contextId = contextIds.iterator().next();
         if (contextId.equals("@self")) {
           // get app id from the token
           contextId = request.getToken().getAppId();
         }
-    		return appService.getApp(new AppId(contextId), fields, request.getToken(), keyFile);
-    	}else{
-    	    ImmutableSet.Builder<AppId> ids = ImmutableSet.builder();
-    	    for (String id : contextIds) {
-    	    	ids.add(new AppId(id));
-    	    }
-    	    Set<AppId> AppIds = ids.build();
-    		
-    		return appService.getApps(AppIds, options, fields, request.getToken(), keyFile);
-    	}
+        return appService.getApp(new AppId(contextId), fields, request.getToken(), keyFile);
+      }else{
+          ImmutableSet.Builder<AppId> ids = ImmutableSet.builder();
+          for (String id : contextIds) {
+            ids.add(new AppId(id));
+          }
+          Set<AppId> AppIds = ids.build();
+
+        return appService.getApps(AppIds, options, fields, request.getToken(), keyFile);
+      }
     }else{
-    	// contextType is specified, get a list of apps for this context
-    	if(contextIds.size() == 1){
-    		Context context = new Context(contextIds.iterator().next(),contextType);
-    		return appService.getAppsForContext(context, options, fields, request.getToken(), keyFile);
-    	}else{
-    		throw new IllegalArgumentException("Cannot fetch apps for multiple contexts");
-    	}
+      // contextType is specified, get a list of apps for this context
+      if(contextIds.size() == 1){
+        Context context = new Context(contextIds.iterator().next(),contextType);
+        return appService.getAppsForContext(context, options, fields, request.getToken(), keyFile);
+      }else{
+        throw new IllegalArgumentException("Cannot fetch apps for multiple contexts");
+      }
     }
-    
+
   }
 
   @Operation(httpMethods = "GET", path="/@supportedFields")
