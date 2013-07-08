@@ -216,7 +216,8 @@ public class PersonHandler {
       String[] s = t.split(":");
       str.put("o", s[0]); // owner
       str.put("v", s[1]); // viewer
-      str.put("i", s[2]); // appId = appUrl
+      str.put("i", s[2]); // appId
+      str.put("u", s[2]); // appUrl
 
       output.add("default:" + crypter.wrap(str)); // security token requires "default:" before
     }
