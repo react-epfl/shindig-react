@@ -25,6 +25,8 @@
   </entity>
   <entity class="org.apache.shindig.social.core.model.ActivityDb">
   </entity>
+  <entity class="org.apache.shindig.social.core.model.ActivityEntryDb">
+  </entity>
   <entity class="org.apache.shindig.social.core.model.AddressDb">
   </entity>
   <entity class="org.apache.shindig.social.core.model.BodyTypeDb">
@@ -93,6 +95,8 @@
   <entity class="org.apache.shindig.social.core.model.PermissionDb">
   </entity>
   <entity class="org.apache.shindig.social.core.model.AppdataDb">
+  </entity>
+  <entity class="org.apache.shindig.social.core.model.CompetenceDb">
   </entity>
   
 </entity-mappings>
