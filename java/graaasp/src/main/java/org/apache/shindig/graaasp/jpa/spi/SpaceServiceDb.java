@@ -74,15 +74,15 @@ public class SpaceServiceDb implements SpaceService {
   /**
    * {@inheritDoc}
    */
-  public Future<RestfulCollection<Space>> getSpaces(Set<SpaceId> spaceIds, 
-		  CollectionOptions collectionOptions, Set<String> fields,
+  public Future<RestfulCollection<Space>> getSpaces(Set<SpaceId> spaceIds,
+      CollectionOptions collectionOptions, Set<String> fields,
        SecurityToken token) throws ProtocolException {
-         
+
      // Hack to get all people in the system
      if (spaceIds.iterator().next().getSpaceId().equals("@all")) {
        return getAllPublicSpaces();
      }
-         
+
     // for each user id get the filtered userid using the token and then, get the users identified
     // by the group id, the final set is filtered
     // using the collectionOptions and return the fields requested.
@@ -96,26 +96,26 @@ public class SpaceServiceDb implements SpaceService {
     StringBuilder sb = new StringBuilder();
     // sanitize the list to get the uid's and remove duplicates
     List<String> paramList = SPIUtils.getSpaceList(spaceIds);
-    
+
     sb.append(SpaceDb.JPQL_FINDSPACE);
     lastPos = JPQLUtils.addInClause(sb, "s", "id", lastPos, paramList.size());
 
-    
+
     // Get total results, that is count the total number of rows for this query
     // totalResults = JPQLUtils.getTotalResults(entityManager, sb.toString(), paramList);
 
-    
+
     // Execute ordered and paginated query
     //if (totalResults > 0) {
-    	//addOrderClause(sb, collectionOptions);
-    	dblist = JPQLUtils.getListQuery(entityManager, sb.toString(), paramList, collectionOptions);
+      //addOrderClause(sb, collectionOptions);
+      dblist = JPQLUtils.getListQuery(entityManager, sb.toString(), paramList, collectionOptions);
     //}
 
     String viewerId = token.getViewerId();
     List<Space> plist = filterSpaces(dblist,viewerId);
-    
+
     if (plist == null) {
-    	plist = Lists.newArrayList();
+      plist = Lists.newArrayList();
     }
     // FIXME: use JPQLUtils.getTotalResults for it
     totalResults = new Long(plist.size());
@@ -126,7 +126,7 @@ public class SpaceServiceDb implements SpaceService {
     return Futures.immediateFuture(restCollection);
 
   }
-  
+
   /**
    * Get all public spaces in the system
    */
@@ -146,9 +146,9 @@ public class SpaceServiceDb implements SpaceService {
     RestfulCollection<Space> restCollection = new RestfulCollection<Space>(plist);
     return Futures.immediateFuture(restCollection);
   }
-  
 
-  public Future<RestfulCollection<Space>> getSpacesForContext(Context context, 
+
+  public Future<RestfulCollection<Space>> getSpacesForContext(Context context,
       CollectionOptions collectionOptions, Set<String> fields,
        SecurityToken token) throws ProtocolException {
     // list of spaces is retrieved for a context
@@ -162,28 +162,28 @@ public class SpaceServiceDb implements SpaceService {
     StringBuilder sb = new StringBuilder();
     // sanitize the list to get the uid's and remove duplicates
     List<String> paramList = Lists.newArrayList();
-    
+
     sb.append(SpaceDb.JPQL_FINDSPACES);
     if(context.getContextType().equals("@person")){
-    	sb.append("s.parentId = "+context.getContextId()+" and s.parentType = 'User'");
+      sb.append("s.parentId = "+context.getContextId()+" and s.parentType = 'User'");
     }else if (context.getContextType().equals("@space")){
-    	sb.append("s.parentId = "+context.getContextId()+" and s.parentType = 'Space'");
+      sb.append("s.parentId = "+context.getContextId()+" and s.parentType = 'Space'");
     }
-    
+
     // Get total results, that is count the total number of rows for this query
     // totalResults = JPQLUtils.getTotalResults(entityManager, sb.toString(), paramList);
-    
+
     // Execute ordered and paginated query
     //if (totalResults > 0) {
-    	//addOrderClause(sb, collectionOptions);
-    	dblist = JPQLUtils.getListQuery(entityManager, sb.toString(), paramList, collectionOptions);
+      //addOrderClause(sb, collectionOptions);
+      dblist = JPQLUtils.getListQuery(entityManager, sb.toString(), paramList, collectionOptions);
     //}
-    
+
     String viewerId = token.getViewerId();
     List<Space> plist = filterSpaces(dblist,viewerId);
 
     if (plist == null) {
-    	plist = Lists.newArrayList();
+      plist = Lists.newArrayList();
     }
     // FIXME: use JPQLUtils.getTotalResults for it
     totalResults = new Long(plist.size());
@@ -197,7 +197,7 @@ public class SpaceServiceDb implements SpaceService {
 
   // hack: for direct rest request filter space and don't do it if viewer id is specified
   // later a check if viewerId has enough rights should be done
-  // 
+  //
   // removes the spaces that are not allowed to be seen
   private List<Space> filterSpaces(List<SpaceDb> list, String viewerId) {
     List<Space> plist = Lists.newArrayList();
@@ -226,7 +226,7 @@ public class SpaceServiceDb implements SpaceService {
         plist.add((Space) spaceDb);
       }
     }
-    
+
     return plist;
   }
   /**
@@ -234,14 +234,14 @@ public class SpaceServiceDb implements SpaceService {
    */
   public Future<Space> getSpace(SpaceId spaceId, Set<String> fields, SecurityToken token)
       throws ProtocolException {
- 
+
     Query q = null;
     // gets space for spaceId from the database
     q = entityManager.createNamedQuery(SpaceDb.FINDBY_SPACEID);
     q.setParameter(SpaceDb.PARAM_SPACEID, spaceId.getSpaceId());
     q.setFirstResult(0);
     q.setMaxResults(1);
- 
+
 
     List<?> plist = q.getResultList();
     Space space = null;
@@ -250,7 +250,7 @@ public class SpaceServiceDb implements SpaceService {
       spaceDb = (SpaceDb) plist.get(0);
       space = (Space) plist.get(0);
       String vis = spaceDb.getVisibilityLevel();
-      
+
       // filter out hidden spaces and filter out params of closed spaces
       if (vis.equals("Myself")) {
         return Futures.immediateFuture(null);
@@ -265,7 +265,7 @@ public class SpaceServiceDb implements SpaceService {
         s.setVisibilityLevel(spaceDb.getVisibilityLevel());
         return Futures.immediateFuture((Space) s);
       }
-      
+
     }
     return Futures.immediateFuture(space);
   }
