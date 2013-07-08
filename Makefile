@@ -2,8 +2,8 @@ SOCIALCONF = java/graaasp/src/main/resources/
 SOCIALJPA = java/graaasp/src/main/resources/socialjpa.properties
 SHINDIGCONF = java/common/conf/
 SHINDIG = java/common/conf/shindig.properties
-WEBCONF = java/server/src/main/webapp/WEB-INF/
-WEBXML = java/server/src/main/webapp/WEB-INF/web.xml
+WEBCONF = java/server-resources/src/main/webapp/WEB-INF/
+WEBXML = java/server-resources/src/main/webapp/WEB-INF/web.xml
 WAR = java/server/target/shindig-server-2.5.0-SNAPSHOT.war
 TOMCAT = /Library/Tomcat
 
