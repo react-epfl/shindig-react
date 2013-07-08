@@ -29,7 +29,7 @@ import java.util.Map;
  */
 public class BlobCrypterSecurityToken extends AbstractSecurityToken {
   private static final EnumSet<Keys> MAP_KEYS = EnumSet.of(
-    Keys.OWNER, Keys.VIEWER, Keys.APP_URL, Keys.MODULE_ID, Keys.EXPIRES, Keys.TRUSTED_JSON
+    Keys.OWNER, Keys.VIEWER, Keys.APP_ID, Keys.APP_URL, Keys.MODULE_ID, Keys.EXPIRES, Keys.TRUSTED_JSON
   );
 
   /**
