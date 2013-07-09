@@ -174,7 +174,7 @@ public class DocumentHandler {
       return  Futures.immediateFuture(jsonOutput);
 
     } catch (Exception e) {
-      return  Futures.immediateFuture(e);
+      return Futures.immediateFuture(e);
     }
   }
 
