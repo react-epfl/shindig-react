@@ -96,13 +96,13 @@ public class DocumentHandler {
 
     // Set<UserId> userIds = request.getUsers();
     // Set<String> documentIds = ImmutableSet.copyOf(request.getListParameter("documentId"));
-    // 
+    //
     // HandlerPreconditions.requireNotEmpty(userIds, "No userId specified");
     // HandlerPreconditions.requireSingular(userIds, "Multiple userIds not supported");
     // // Throws exceptions if userIds contains more than one element or zero elements
     // return documentService.deleteActivities(Iterables.getOnlyElement(userIds), request.getGroup(),
     //     request.getAppId(), documentIds, request.getToken());
-        
+
     return  Futures.immediateFuture(null);
   }
 
@@ -114,7 +114,7 @@ public class DocumentHandler {
   @Operation(httpMethods="PUT", bodyParam = "document")
   public Future<?> update(SocialRequestItem request) throws ProtocolException {
     // return create(request);
-    
+
     return  Futures.immediateFuture(null);
   }
 
@@ -125,47 +125,47 @@ public class DocumentHandler {
    */
   @Operation(httpMethods="POST", bodyParam = "document")
   public Future<?> create(SocialRequestItem request) throws ProtocolException {
-    
-		try {
+
+    try {
       String data = request.getParameter("document");
       JSONObject test = new JSONObject(data);
       data = test.toString();
       String viewerId = request.getToken().getViewerId();
-    
+
       // HandlerPreconditions.requireNotEmpty(viewerId, "No viewerId is specified");
-    
+
       String output = "";
-  		HttpClient client = new DefaultHttpClient();
-  		HttpPost post = new HttpPost(GRAASP_URL+"/rest/documents?token="+GRAASP_TOKEN+"&user="+viewerId);
+      HttpClient client = new DefaultHttpClient();
+      HttpPost post = new HttpPost(GRAASP_URL+"/rest/documents?token="+GRAASP_TOKEN+"&user="+viewerId);
       post.getParams().setParameter("http.protocol.expect-continue", false);
 
       // POST /rest/documents/23 to Graasp
-		  MultipartEntity entity = new MultipartEntity();
+      MultipartEntity entity = new MultipartEntity();
       entity.addPart("data", new StringBody(data,"application/json", Charset.forName("UTF-8")));
       // send file body
       if (request.getFormMimePart("file") != null) {
         InputStream inputStream = request.getFormMimePart("file").getInputStream();
         File file = new File(request.getFormMimePart("file").getName());
-  		  byte buf[]=new byte[1024];
+        byte buf[]=new byte[1024];
         int len;
         OutputStream out=new FileOutputStream(file);
         while((len=inputStream.read(buf))>0)
           out.write(buf,0,len);
         out.close();
         inputStream.close();
-  		  ContentBody cbFile = new FileBody(file, request.getFormMimePart("file").getContentType());		  
+        ContentBody cbFile = new FileBody(file, request.getFormMimePart("file").getContentType());
         entity.addPart("file", cbFile);
       }
       post.setEntity(entity);
-      
+
       // return back the response
-  		HttpResponse response = client.execute(post);
-			BufferedReader rd = new BufferedReader(new InputStreamReader(
-					response.getEntity().getContent()));
-			String line = "";
-			while ((line = rd.readLine()) != null) {
-				output = line;
-			}          
+      HttpResponse response = client.execute(post);
+      BufferedReader rd = new BufferedReader(new InputStreamReader(
+          response.getEntity().getContent()));
+      String line = "";
+      while ((line = rd.readLine()) != null) {
+        output = line;
+      }
       if (request.getFormMimePart("file") != null) {
         File file = new File(request.getFormMimePart("file").getName());
         file.delete();
@@ -179,7 +179,7 @@ public class DocumentHandler {
   }
 
   /**
-   * Allowed end-points /documents/{contextId}/{contextType} /documents/{documentId}+ 
+   * Allowed end-points /documents/{contextId}/{contextType} /documents/{documentId}+
    *
    * examples: /documents/john.doe/@person /documents/tex.group/@space /documents/mywidget
    */
@@ -193,57 +193,57 @@ public class DocumentHandler {
 
     // Preconditions
     HandlerPreconditions.requireNotEmpty(contextIds, "No contextId is specified");
-    
+
     CollectionOptions options = new CollectionOptions(request);
     if(contextType == null){
-    	// when contextType is not specified, get list of documents specified by ids
-    	if(contextIds.size() == 1){
+      // when contextType is not specified, get list of documents specified by ids
+      if(contextIds.size() == 1){
         // GET /rest/documents/23 from Graasp
         String output = "";
-    		HttpClient client = new DefaultHttpClient();
-    		String url = GRAASP_URL+"/rest/documents/"+contextIds.iterator().next()+"?token="+GRAASP_TOKEN+"&user="+viewerId;
-    		if (size != null && !size.equals("")) {
-    		  url += "&size="+size;
-    		}
-    		HttpGet get = new HttpGet(url);
+        HttpClient client = new DefaultHttpClient();
+        String url = GRAASP_URL+"/rest/documents/"+contextIds.iterator().next()+"?token="+GRAASP_TOKEN+"&user="+viewerId;
+        if (size != null && !size.equals("")) {
+          url += "&size="+size;
+        }
+        HttpGet get = new HttpGet(url);
         get.getParams().setParameter("http.protocol.expect-continue", false);
-    		try {
-      		HttpResponse response = client.execute(get);
-    			BufferedReader rd = new BufferedReader(new InputStreamReader(
-    					response.getEntity().getContent()));
-    			String line = "";
-    			while ((line = rd.readLine()) != null) {
-    				output = line;
-    			}          
+        try {
+          HttpResponse response = client.execute(get);
+          BufferedReader rd = new BufferedReader(new InputStreamReader(
+              response.getEntity().getContent()));
+          String line = "";
+          while ((line = rd.readLine()) != null) {
+            output = line;
+          }
           JSONObject jsonOutput = new JSONObject(output);
           return  Futures.immediateFuture(jsonOutput);
 
         } catch (Exception e) {
           return  Futures.immediateFuture(e);
         }
-        
+
         // return documentService.getDocument(new DocumentId(contextIds.iterator().next()), fields, request.getToken());
-    	}else{
-    	    ImmutableSet.Builder<DocumentId> ids = ImmutableSet.builder();
-    	    for (String id : contextIds) {
-    	    	ids.add(new DocumentId(id));
-    	    }
-    	    Set<DocumentId> documentIds = ids.build();
-    		
-    		return documentService.getDocuments(documentIds, options, fields, request.getToken());
-    	}
+      }else{
+          ImmutableSet.Builder<DocumentId> ids = ImmutableSet.builder();
+          for (String id : contextIds) {
+            ids.add(new DocumentId(id));
+          }
+          Set<DocumentId> documentIds = ids.build();
+
+        return documentService.getDocuments(documentIds, options, fields, request.getToken());
+      }
     }else{
-    	// contextType is specified, get a list of documents for this context
-    	if(contextIds.size() == 1){
-    	  
+      // contextType is specified, get a list of documents for this context
+      if(contextIds.size() == 1){
+
         Context context = new Context(contextIds.iterator().next(),contextType);
         return documentService.getDocumentsForContext(context, options, fields, request.getToken());
-        
-    	}else{
-    		throw new IllegalArgumentException("Cannot fetch documents for multiple contexts");
-    	}
+
+      }else{
+        throw new IllegalArgumentException("Cannot fetch documents for multiple contexts");
+      }
     }
-    
+
   }
 
   @Operation(httpMethods = "GET", path="/@supportedFields")
