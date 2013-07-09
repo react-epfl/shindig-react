@@ -97,9 +97,10 @@ public class DocumentHandlerTest extends EasyMockTestCase {
     activityService = mock(ActivityService.class);
 
     JSONObject config = new JSONObject('{' + ContainerConfig.DEFAULT_CONTAINER + ':' +
-            "{'gadgets.features':{opensocial:" +
-               "{supportedFields: {activity: ['id', 'title']}}" +
-             "}}}");
+        "{'gadgets.container': ['default']," +
+         "'gadgets.features':{opensocial:" +
+           "{supportedFields: {activity: ['id', 'title']}}" +
+         "}}}");
 
     containerConfig = new JsonContainerConfig(config, Expressions.forTesting());
     handler = new ActivityHandler(activityService, containerConfig);
