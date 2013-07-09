@@ -82,7 +82,7 @@ public class DocumentHandlerTest extends EasyMockTestCase {
 
   private FakeGadgetToken token;
 
-  private static final Set<UserId> JOHN_DOE = 
+  private static final Set<UserId> JOHN_DOE =
       ImmutableSet.of(new UserId(UserId.Type.userId, "john.doe"));
 
   protected HandlerRegistry registry;
@@ -133,38 +133,38 @@ public class DocumentHandlerTest extends EasyMockTestCase {
 
     // JSONArray people = db.getDb().getJSONArray("people");
     JSONObject jsonPerson = new JSONObject();
-    jsonPerson.put("id", "updatePerson");    
+    jsonPerson.put("id", "updatePerson");
     // people.put(people.length(),jsonPerson);
-    
+
     JSONObject test = new JSONObject("{aboutMe:\"test\",displayName:\"Evgeny\",thumbnailUrl:\"httpaboutme\"}");
     System.out.println(test.toString());
-    
-    
+
+
     System.out.println(jsonPerson);
-    
+
     // URL oracle = new URL("http://localhost:8080/rest/spaces/6");
     //   BufferedReader in = new BufferedReader(
     //         new InputStreamReader(
     //         oracle.openStream()));
-    // 
+    //
     //   String inputLine;
     //   String s = "";
     //   while ((inputLine = in.readLine()) != null)
     //       s += inputLine;
-    // 
+    //
     //   in.close();
-    // 
+    //
     // System.out.println(s);
-    // 
+    //
     // Future f = Futures.immediateFuture(s);
-    // System.out.println(f); 
-    
+    // System.out.println(f);
+
     String data = "";
-		HttpClient client = new DefaultHttpClient();
+    HttpClient client = new DefaultHttpClient();
     HttpPost post = new HttpPost("http://reacttest.epfl.ch/rest/documents/23");
     // HttpPost post = new HttpPost("http://localhost:3000/rest/documents/23?test=hey");
-		try {
-		  post.getParams().setParameter("http.protocol.expect-continue", false);
+    try {
+      post.getParams().setParameter("http.protocol.expect-continue", false);
       // post.setHeader("Accept", "application/json");
       // post.removeHeaders("Expect");
       // post.removeHeaders("expect");
@@ -173,14 +173,14 @@ public class DocumentHandlerTest extends EasyMockTestCase {
        // nameValuePairs.add(new BasicNameValuePair("registrationid",
        //    "123456789"));
        // post.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-       
+
       // File file = new File("c:/TRASH/zaba_1.jpg");
-      // 
+      //
       // MultipartEntity mpEntity = new MultipartEntity();
       // ContentBody cbFile = new FileBody(file, "image/jpeg");
       // mpEntity.addPart("userfile", cbFile);
-      // 
-      // 
+      //
+      //
       // post.setEntity(mpEntity);
       MultipartEntity entity = new MultipartEntity();
       entity.addPart("title", new StringBody("mytitle","text/plain", Charset.forName("UTF-8")));
@@ -189,24 +189,24 @@ public class DocumentHandlerTest extends EasyMockTestCase {
       // if(!f.exists()){
       //   f.createNewFile();
       // }
-      // 
+      //
       // FileBody fileBody = new FileBody(f);
       // entity.addPart("file", fileBody);
       post.setEntity(entity);
- 
-			HttpResponse response = client.execute(post);
-			BufferedReader rd = new BufferedReader(new InputStreamReader(
-					response.getEntity().getContent()));
-			String line = "";
-			while ((line = rd.readLine()) != null) {
-				System.out.println(line);
-			}
 
-		} catch (IOException e) {
-			e.printStackTrace();
-		}    
+      HttpResponse response = client.execute(post);
+      BufferedReader rd = new BufferedReader(new InputStreamReader(
+          response.getEntity().getContent()));
+      String line = "";
+      while ((line = rd.readLine()) != null) {
+        System.out.println(line);
+      }
+
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
     System.out.println(data);
-    
+
     // List<Activity> activities = ImmutableList.of();
     // RestfulCollection<Activity> data = new RestfulCollection<Activity>(activities);
     // Set<UserId> userIdSet = Sets.newLinkedHashSet(JOHN_DOE);
