@@ -20,7 +20,7 @@ package org.apache.shindig.social.opensocial.model;
 
 import org.apache.shindig.protocol.model.Exportablebean;
 import org.apache.shindig.protocol.model.ExtendableBean;
-import org.apache.shindig.social.core.model.ActivityEntryDb;
+import org.apache.shindig.social.core.model.ActivityEntryImpl;
 
 import com.google.inject.ImplementedBy;
 
@@ -28,9 +28,9 @@ import com.google.inject.ImplementedBy;
  * <p>Represents an 'Activity' within the Activity Streams JSON 1.0
  * specification.  Refer to http://activitystrea.ms/head/json-activity.html</p>
  */
-@ImplementedBy(ActivityEntryDb.class)
+@ImplementedBy(ActivityEntryImpl.class)
 @Exportablebean
-public interface ActivityEntry extends Comparable<ActivityEntry>{
+public interface ActivityEntry extends Comparable<ActivityEntry>, ExtendableBean {
 
   /**
    * Fields that represent the JSON elements.
@@ -48,7 +48,9 @@ public interface ActivityEntry extends Comparable<ActivityEntry>{
     TITLE("title"),
     UPDATED("updated"),
     URL("url"),
-    VERB("verb");
+    VERB("verb"),
+    OPENSOCIAL("openSocial"),
+    EXTENSIONS("extensions");
 
     // The name of the JSON element
     private final String jsonString;
@@ -254,4 +256,31 @@ public interface ActivityEntry extends Comparable<ActivityEntry>{
    */
   void setVerb(String verb);
 
+  /**
+   * <p>getOpenSocial</p>
+   *
+   * @return a {@link org.apache.shindig.protocol.model.ExtendableBean} object
+   */
+  ExtendableBean getOpenSocial();
+
+  /**
+   * <p>setOpenSocial</p>
+   *
+   * @return a {@link org.apache.shindig.protocol.model.ExtendableBean} object
+   */
+  void setOpenSocial(ExtendableBean opensocial);
+
+  /**
+   * <p>getExtensions</p>
+   *
+   * @return a {@link org.apache.shindig.protocol.model.ExtendableBean} object
+   */
+  ExtendableBean getExtensions();
+
+  /**
+   * <p>setOpenSocial</p>
+   *
+   * @return a {@link org.apache.shindig.protocol.model.ExtendableBean} object
+   */
+  void setExtensions(ExtendableBean extensions);
 }

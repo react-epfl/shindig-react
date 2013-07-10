@@ -36,6 +36,7 @@ import org.apache.shindig.social.opensocial.spi.PersonService;
 import org.apache.shindig.social.opensocial.spi.SpaceService;
 import org.apache.shindig.social.opensocial.spi.AppService;
 import org.apache.shindig.social.opensocial.spi.DocumentService;
+import org.apache.shindig.social.opensocial.spi.RecommenderService;
 import org.apache.shindig.graaasp.jpa.eclipselink.EclipseEntityManagerProvider;
 import org.apache.shindig.graaasp.jpa.spi.ActivityServiceDb;
 import org.apache.shindig.graaasp.jpa.spi.AppDataServiceDb;
@@ -43,6 +44,7 @@ import org.apache.shindig.graaasp.jpa.spi.PersonServiceDb;
 import org.apache.shindig.graaasp.jpa.spi.SpaceServiceDb;
 import org.apache.shindig.graaasp.jpa.spi.AppServiceDb;
 import org.apache.shindig.graaasp.jpa.spi.DocumentServiceDb;
+import org.apache.shindig.graaasp.jpa.spi.RecommenderServiceDb;
 import org.apache.shindig.social.sample.spi.JsonDbOpensocialService;
 
 import java.io.IOException;
@@ -111,6 +113,7 @@ public class JPASocialModule extends AbstractModule {
     bind(SpaceService.class).to(SpaceServiceDb.class).in(Scopes.SINGLETON);
     bind(AppService.class).to(AppServiceDb.class).in(Scopes.SINGLETON);
     bind(DocumentService.class).to(DocumentServiceDb.class).in(Scopes.SINGLETON);
+    bind(RecommenderService.class).to(RecommenderServiceDb.class).in(Scopes.SINGLETON);
 
     //Temporary
     bind(AlbumService.class).to(JsonDbOpensocialService.class);
