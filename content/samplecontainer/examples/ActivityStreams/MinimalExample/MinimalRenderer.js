@@ -5,28 +5,30 @@ function MinimalRenderer(){
 	this.renderWelcome = function(div, callback) {
 		social.loadViewer(function(response) {
 			viewer = response.viewer;
-			var html = '<h1 />Hello ' + viewer.displayName +' !</h1>';
+			var html = '<h2>' + viewer.displayName +' dashboard </h2>';
 			document.getElementById(div).innerHTML = html;
 			callback();
 		});
 	}
 
-	this.renderActivities = function(div, callback) {
+	this.renderActivities = function(div, callback, verb, quantity) {
 	social.loadActivityStream(function(response) {
 		act = response.acts;
 		var html = 'Your activities : ';
-		html +=  '<table>' + processActivities(act) +'</table>';
+		html +=  '<table>' + processActivities(act, verb, quantity) +'</table>';
 		document.getElementById(div).innerHTML = html;
 		callback();
 	});
 	}
 
-	function processActivities(activities) {
+	function processActivities(activities, verb, quantity) {
 		var html = '';
-		for (idx = 0; idx < 150; idx++) {
-			html += '<tr>';
-			html += '<td>' + activities[idx].published + ' : ' + activities[idx].object.displayName + ' ' + displayVerb(activities[idx].verb) + ' ' + ((typeof activities[idx].target !== 'undefined') ? activities[idx].target.displayName  : '') + '</td>';
-			html += '</tr>';
+		for (idx = 0; idx < quantity; idx++) {
+			if (verb == "all" || verb == activities[idx].verb) {
+				html += '<tr>';
+				html += '<td>' + activities[idx].published + ' : ' + activities[idx].object.displayName + ' ' + displayVerb(activities[idx].verb) + ' ' + ((typeof(activities[idx].target.id) != 'undefined') ? activities[idx].target.displayName  : '') + '</td>';
+				html += '</tr>';
+			}
 		}
 		return html;
 	}
