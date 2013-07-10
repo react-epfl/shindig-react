@@ -94,5 +94,7 @@
   </entity>
   <entity class="org.apache.shindig.social.core.model.AppdataDb">
   </entity>
+  <entity class="org.apache.shindig.social.core.model.CompetenceDb">
+  </entity>
   
 </entity-mappings>
