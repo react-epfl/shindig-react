@@ -12,15 +12,16 @@ function MinimalRenderer(){
 		});
 	}
 
-	this.renderActivities = function(div, callback, verb, quantity) {
-		social.loadActivityStream(function(response) {
+	this.renderActivities = function(id, type, callback, verb, quantity) {
+		social.loadActivityStream(id, type, function(response) {
 			activities = response.acts;
 			var html = '<p>Your activities : </p>';
 			html +=  '<table>' + processActivities(activities, verb, quantity) +'</table>';
-			document.getElementById(div).innerHTML = html;
+			document.getElementById('activities').innerHTML = html;
 			callback();
-		}, 1411);
+		});
 	}
+
 
 	function processActivities(activities, verb, quantity) {
 		var html = '';
@@ -38,10 +39,10 @@ function MinimalRenderer(){
 		return html;
 	}
 
-	this.updateActivities = function(div, callback, verb, quantity) {
+	this.updateActivities = function(callback, verb, quantity) {
 		var html = '<p>Your activities : </p>';
 		html +=  '<table>' + processActivities(activities, verb, quantity) +'</table>';
-		document.getElementById(div).innerHTML = html;
+		document.getElementById('activities').innerHTML = html;
 		callback();
 	}
 
