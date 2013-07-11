@@ -6,9 +6,9 @@ function GraaaspOpenSocialWrapper() {
 		batch.execute(callback);
 	}
 
-	this.loadActivityStream = function(callback, userId) {
+	this.loadActivityStream = function(id, type, callback) {
 		var batch = osapi.newBatch();
-		batch.add('acts', osapi.activitystreams.get({contextId: userId}));
+		batch.add('acts', osapi.activitystreams.get({contextId: id, contextType: type}));
 		batch.execute(callback);
 	}
 }

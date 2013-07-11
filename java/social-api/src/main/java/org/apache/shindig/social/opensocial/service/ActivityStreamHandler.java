@@ -161,13 +161,12 @@ public class ActivityStreamHandler {
   }
 
   /**
-   * Allowed end-points:
-   *   /activitystreams/{userId}/{groupId}/{optionalActvityId}+
-   *   /activitystreams/{userId}+/{groupId}
+   * ADAPTED FOR GRAASP
    *
-   * Examples:
-   *   /activitystreams/john.doe/@self/1
-   *   /activitystreams/john.doe,jane.doe/@friends
+   * Allowed end-points:
+   *   /activitystreams/{userId}/{groupId}/
+   *   /activitystreams/{userId}/{groupId}/{appId}/{contextType}
+   *
    *
    * @param request a {@link org.apache.shindig.social.opensocial.service.SocialRequestItem} object.
    * @return a {@link java.util.concurrent.Future} object.
@@ -176,36 +175,7 @@ public class ActivityStreamHandler {
   @Operation(httpMethods="GET")
   public Future<?> get(SocialRequestItem request)
       throws ProtocolException {
-        System.out.println("Get activity stream");
-        /*
-    Set<UserId> userIds = request.getUsers();
-    Set<String> optionalActivityIds = ImmutableSet.copyOf(request.getListParameter("activityId"));
-
-    CollectionOptions options = new CollectionOptions(request);
-
-    // Preconditions
-    HandlerPreconditions.requireNotEmpty(userIds, "No userId specified");
-    if (userIds.size() > 1 && !optionalActivityIds.isEmpty()) {
-      throw new IllegalArgumentException("Cannot fetch activities by ID for multiple users");
-    }
-
-    if (!optionalActivityIds.isEmpty()) {
-      if (optionalActivityIds.size() == 1) {
-        return service.getActivityEntry(userIds.iterator().next(), request.getGroup(),
-            request.getAppId(), request.getFields(), optionalActivityIds.iterator().next(),
-            request.getToken());
-      } else {
-        return service.getActivityEntries(userIds.iterator().next(), request.getGroup(),
-            request.getAppId(), request.getFields(), options, optionalActivityIds, request.getToken());
-      }
-    }
-
-    return service.getActivityEntries(userIds, request.getGroup(),
-        request.getAppId(),
-        // TODO: add pagination and sorting support
-        // getSortBy(params), getFilterBy(params), getStartIndex(params), getCount(params),
-        request.getFields(), options, request.getToken());
-        */
+      
     //Set<String> fields = request.getFields(ActivityEntry.Field.DEFAULT_FIELDS);
     Set<String> contextIds = request.getContextIds();
     String contextType = request.getContextType();
@@ -216,35 +186,40 @@ public class ActivityStreamHandler {
     HandlerPreconditions.requireNotEmpty(contextIds, "No contextId is specified");
     
     CollectionOptions options = new CollectionOptions(request);
-    if(contextType == null){
-      // when contextType is not specified, consider it is a User. TODO : implement this correctly
-      if(contextIds.size() == 1){
-        String output = "";
-        HttpClient client = new DefaultHttpClient();
-        String url = GRAASP_URL+"/rest/activitystreams/"+contextIds.iterator().next()+"/@self/?token="+GRAASP_TOKEN;//+"&user="+viewerId;
-        System.out.println(url);
-        HttpGet get = new HttpGet(url);
-        get.getParams().setParameter("http.protocol.expect-continue", false);
-        try {
-          HttpResponse response = client.execute(get);
-          BufferedReader rd = new BufferedReader(new InputStreamReader(
-              response.getEntity().getContent()));
-          String line = "";
-          while ((line = rd.readLine()) != null) {
-            output = line;
-          }   
-          System.out.println(output);
-          JSONObject jsonOutput = new JSONObject(output);
-          return  Futures.immediateFuture(jsonOutput);
-        } catch (Exception e) {
-          return  Futures.immediateFuture(e);
-        }
-      }else{
-        throw new IllegalArgumentException("Cannot fetch activities for multiple contexts");
+
+    if(contextIds.size() == 1){
+
+      String output = "";
+      HttpClient client = new DefaultHttpClient();
+
+      String url = GRAASP_URL+"/rest/activitystreams/"+contextIds.iterator().next()+"/@self/@app/"; // TODO : manage groups and apps 
+      if(contextType == null || contextType.equals("@user")){
+        url+="@user";
+      } else if(contextType.equals("@space")) {
+        url+="@space";
+      } else throw new  IllegalArgumentException("Invalid context type");
+
+      url += "/?token="+GRAASP_TOKEN+"&user="+viewerId;
+
+      HttpGet get = new HttpGet(url);
+      get.getParams().setParameter("http.protocol.expect-continue", false);
+
+      try {
+        HttpResponse response = client.execute(get);
+        BufferedReader rd = new BufferedReader(new InputStreamReader(
+            response.getEntity().getContent()));
+        String line = "";
+        while ((line = rd.readLine()) != null) {
+          output = line;
+        }   
+        JSONObject jsonOutput = new JSONObject(output);
+        return  Futures.immediateFuture(jsonOutput);
+      } catch (Exception e) {
+        return  Futures.immediateFuture(e);
       }
     }else{
-        throw new IllegalArgumentException("Context type is not null");
-      }
+      throw new IllegalArgumentException("Cannot fetch activities for multiple contexts");
+    }
   }
 
   /**
