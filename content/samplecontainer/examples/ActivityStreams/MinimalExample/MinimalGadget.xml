@@ -7,6 +7,7 @@
 	</ModulePrefs>
 	<Content type="html">
 		<![CDATA[
+			<style> body {background-color: transparent;} </style>
 			<script type="text/javascript" src="GraaaspOpenSocialWrapper.js"></script>
 			<script type="text/javascript" src="MinimalRenderer.js"></script>
 
@@ -14,38 +15,39 @@
 			social = new GraaaspOpenSocialWrapper();
 			render = new MinimalRenderer();
 
-			// Adjusts the window height
 			function refresh() {
 				gadgets.window.adjustHeight();
 			}
 		
-			// Initializes the gadget
 			function init() {
-				render.renderWelcome('welcome', refresh);
-				render.renderActivities('activities', refresh, "all", 50);
+				render.renderTitle('title', refresh);
+				render.renderActivities('activities', refresh, "all", 1000);
 			}
+
 			gadgets.util.registerOnLoadHandler(init);
 			</script>
-			<style> body {background-color: transparent;} </style>
-			<div id='welcome'></div>
+			
+			<div id='title'></div>
 			<div id='form'>
-			<form name='activities' action='' method='get'>
-				Action : 
-				<select name="verb">
-  					<option value="all">all</option>
-  					<option value="update">update</option>
-  					<option value="invite_remind">invite_remind</option>
-  					<option value="invite">invite</option>
-  					<option value="request-join">request-join</option>
-  					<option value="join">join</option>
-  					<option value="remove">remove</option>
-  					<option value="delete">delete</option>
-  					<option value="access">access</option>
-				</select>
-
-				Number of results : <input type="number" name="quantity" min="1" max="1000" value="50">
-				   <input type="button" name="button" value="Get activities" onClick="render.renderActivities('activities', refresh, this.form.verb.value, this.form.quantity.value)">
-			</form></div>
+				<form name='activities' action='' method='get'>
+					<label for="verb">Action :</label> 
+					<select name="verb">
+  						<option value="all">All</option>
+  						<option value="update">Update</option>
+  						<option value="invite_remind">Invite remind</option>
+  						<option value="invite">Invite</option>
+  						<option value="request-join">Request-join</option>
+  						<option value="join">Join</option>
+  						<option value="remove">Remove</option>
+  						<option value="delete">Delete</option>
+  						<option value="access">Access</option>
+  						<option value="add">Add</option>
+					</select>
+					<label for="quantity">Number of results : </label>
+					<input type="number" name="quantity" min="1" max="1000" value="50">
+					<input type="button" name="button" value="Get activities" onClick="render.updateActivities('activities', refresh, this.form.verb.value, this.form.quantity.value)">
+				</form>
+			</div>
 			<div id='activities'></div>
 		]]>
 	</Content>
