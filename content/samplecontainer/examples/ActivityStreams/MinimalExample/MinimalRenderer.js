@@ -1,8 +1,9 @@
 function MinimalRenderer(){
 
 	var social = new GraaaspOpenSocialWrapper();
+	var activities;
 
-	this.renderWelcome = function(div, callback) {
+	this.renderTitle = function(div, callback) {
 		social.loadViewer(function(response) {
 			viewer = response.viewer;
 			var html = '<h2>' + viewer.displayName +' dashboard </h2>';
@@ -12,30 +13,40 @@ function MinimalRenderer(){
 	}
 
 	this.renderActivities = function(div, callback, verb, quantity) {
-	social.loadActivityStream(function(response) {
-		act = response.acts;
-		var html = 'Your activities : ';
-		html +=  '<table>' + processActivities(act, verb, quantity) +'</table>';
-		document.getElementById(div).innerHTML = html;
-		callback();
-	});
+		social.loadActivityStream(function(response) {
+			activities = response.acts;
+			var html = '<p>Your activities : </p>';
+			html +=  '<table>' + processActivities(activities, verb, quantity) +'</table>';
+			document.getElementById(div).innerHTML = html;
+			callback();
+		}, 1411);
 	}
 
 	function processActivities(activities, verb, quantity) {
 		var html = '';
-		for (idx = 0; idx < quantity; idx++) {
+		nbRes = 0;
+		idx = 0;
+		while(idx < Object.keys(activities).length && nbRes < quantity) {
 			if (verb == "all" || verb == activities[idx].verb) {
 				html += '<tr>';
-				html += '<td>' + activities[idx].published + ' : ' + activities[idx].object.displayName + ' ' + displayVerb(activities[idx].verb) + ' ' + ((typeof(activities[idx].target.id) != 'undefined') ? activities[idx].target.displayName  : '') + '</td>';
+				html += '<td>' + activities[idx].published + ' : ' + activities[idx].object.displayName + ' ' + conjugateVerb(activities[idx].verb) + ' ' + ((typeof(activities[idx].target.id) != 'undefined') ? activities[idx].target.displayName  : '') + '</td>';
 				html += '</tr>';
+				nbRes++;
 			}
+			idx++;
 		}
 		return html;
 	}
 
-	function displayVerb(verb) {
-		var d = "e";
-		if (d.indexOf(verb.charAt(verb.length-1).toString) === -1) verb+="ed";
+	this.updateActivities = function(div, callback, verb, quantity) {
+		var html = '<p>Your activities : </p>';
+		html +=  '<table>' + processActivities(activities, verb, quantity) +'</table>';
+		document.getElementById(div).innerHTML = html;
+		callback();
+	}
+
+	function conjugateVerb(verb) {
+		if (verb.charAt(verb.length-1) != 'e') verb+="ed";
 		else verb+="d";
 		return verb;
 	}
