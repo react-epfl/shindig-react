@@ -210,19 +210,19 @@ public class DocumentHandler {
       MultipartEntity entity = new MultipartEntity();
       entity.addPart("data", new StringBody(data,"application/json", Charset.forName("UTF-8")));
       // send file body
-      //if (request.getFormMimePart("file") != null) {
-        //InputStream inputStream = request.getFormMimePart("file").getInputStream();
-        //File file = new File(request.getFormMimePart("file").getName());
-        //byte buf[]=new byte[1024];
-        //int len;
-        //OutputStream out=new FileOutputStream(file);
-        //while((len=inputStream.read(buf))>0)
-          //out.write(buf,0,len);
-        //out.close();
-        //inputStream.close();
-        //ContentBody cbFile = new FileBody(file, request.getFormMimePart("file").getContentType());
-        //entity.addPart("file", cbFile);
-      //}
+      if (request.getFormMimePart("file") != null) {
+        InputStream inputStream = request.getFormMimePart("file").getInputStream();
+        File file = new File(request.getFormMimePart("file").getName());
+        byte buf[]=new byte[1024];
+        int len;
+        OutputStream out=new FileOutputStream(file);
+        while((len=inputStream.read(buf))>0)
+          out.write(buf,0,len);
+        out.close();
+        inputStream.close();
+        ContentBody cbFile = new FileBody(file, request.getFormMimePart("file").getContentType());
+        entity.addPart("file", cbFile);
+      }
       post.setEntity(entity);
 
       // return back the response
