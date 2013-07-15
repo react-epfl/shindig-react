@@ -19,17 +19,23 @@
 
 
 <script type="text/javascript">
-
 function onActivitiesLoaded(response){
   var date = new Date;
-  var counter = [["Sunday", 0],["Monday", 0],["Tuesday", 0],["Wednesday", 0],["Thursday", 0],["Friday", 0],["Saturday", 0]];
+  var counter_day = [["Sunday", 0],["Monday", 0],["Tuesday", 0],["Wednesday", 0],["Thursday", 0],["Friday", 0],["Saturday", 0]];
+  var counter_hour = Array(24);
+  for (var i=0; i<counter_hour.length; i++) {
+    counter_hour[i] = [(i+1)+"h", 0];
+  }
+
   $.each(response.activities, function(i, activity) {
     if (activity.verb == 'access') {
       date = new Date(activity.published);
-      counter[date.getDay()][1] += 1;
+      counter_day[date.getDay()][1] += 1;
+      counter_hour[date.getHours()][1] += 1;
     }
   });
-  var plot1 = $.jqplot('graph', [counter], {
+
+  var plot1 = $.jqplot('graph_day', [counter_day], {
     title: 'Total number of visits per day',
     series:[{renderer:$.jqplot.BarRenderer}],
     axesDefaults: {
@@ -42,6 +48,30 @@ function onActivitiesLoaded(response){
       xaxis: {
         renderer: $.jqplot.CategoryAxisRenderer,
         label: "Day of the week",
+        tickOptions: {
+          angle: -30,
+        }
+      },
+      yaxis: {
+        label:'Number of visits',
+        labelRenderer: $.jqplot.CanvasAxisLabelRenderer
+      }
+    }
+  });
+
+  var plot2 = $.jqplot('graph_hour', [counter_hour], {
+    title: 'Total number of visits per hour',
+    series:[{renderer:$.jqplot.BarRenderer}],
+    axesDefaults: {
+      tickRenderer: $.jqplot.CanvasAxisTickRenderer ,
+      tickOptions: {
+        fontSize: '10pt'
+      }
+    },
+    axes: {
+      xaxis: {
+        renderer: $.jqplot.CategoryAxisRenderer,
+        label: "Hour",
         tickOptions: {
           angle: -30,
         }
@@ -83,13 +113,13 @@ gadgets.util.registerOnLoadHandler(init);
 <div id="form">
   <form id="time" action="">
     <label for="time_scale">Time scale :</label>
-    <select name="verb" id="verb">
+    <select name="time_scale" id="time_scale">
       <option value="day">Day</option>
       <option value="hour">Hour</option>
-      <input type="button" name="button" value="Filter" onClick="">
     </select>
   </form>
 </div>
-<div id="graph"></div>
+<div id="graph_day"></div>
+<div id="graph_hour"></div>
 ]]></Content>
 </Module>
