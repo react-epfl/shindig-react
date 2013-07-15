@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+<ModulePrefs title="Activity Streams">
+    <Require feature="opensocial-0.9"/>
+    <Require feature="osapi"/>
+    <Require feature="dynamic-height"/>
+</ModulePrefs>
+<Content type="html"><![CDATA[
+<style> body {background-color: transparent;} </style>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script language="javascript" type="text/javascript" src="libs/jquery.jqplot.min.js"></script>
+<script class="include" language="javascript" type="text/javascript" src="libs/jqplot.dateAxisRenderer.min.js"></script>
+<script class="include" language="javascript" type="text/javascript" src="libs/jqplot.canvasTextRenderer.min.js"></script>
+<script class="include" language="javascript" type="text/javascript" src="libs/jqplot.canvasAxisTickRenderer.min.js"></script>
+<script class="include" language="javascript" type="text/javascript" src="libs/jqplot.categoryAxisRenderer.min.js"></script>
+<script class="include" language="javascript" type="text/javascript" src="libs/jqplot.barRenderer.min.js"></script>
+
+
+<script type="text/javascript">
+
+function onActivitiesLoaded(response){
+  var people = [];
+  var counter = [];
+  
+
+  $.each(response.activities, function(i, activity) {
+    if (activity.verb == 'access') {
+      id = $.inArray(activity.actor.id, people);
+      if (id == -1) {
+        people.push(activity.actor.id);
+        id = counter.push([activity.actor.displayName, 0]) - 1;
+      }
+      counter[id][1] += 1;
+      
+    }
+
+  });
+
+  counter.sort();
+
+  var plot1 = $.jqplot('graph', [counter], {
+    title: 'Total number of visits per user',
+    series:[{renderer:$.jqplot.BarRenderer}],
+    axesDefaults: {
+      tickRenderer: $.jqplot.CanvasAxisTickRenderer ,
+      tickOptions: {
+        angle: -30,
+        fontSize: '10pt'
+      }
+    },
+    axes: {
+      xaxis: {
+        renderer: $.jqplot.CategoryAxisRenderer
+      }
+    }
+  });
+
+  gadgets.window.adjustHeight();
+}
+
+function onContextFound(response){
+  loadActivities(response.context.contextId, response.context.contextType);
+}
+
+function loadActivities(id, type){
+  var batch = osapi.newBatch();
+  batch.add('activities', osapi.activitystreams.get({contextId: id, contextType: type}));
+  batch.execute(onActivitiesLoaded);
+}
+
+function findContext(){
+  var batch = osapi.newBatch();
+  batch.add('context', osapi.context.get());
+  batch.execute(onContextFound);    
+}
+
+function init()
+{
+  findContext(); 
+}
+
+gadgets.util.registerOnLoadHandler(init);
+
+</script>
+<div id="graph"></div>
+<div id="debug"></div>
+]]></Content>
+</Module>
