@@ -7,6 +7,7 @@
 </ModulePrefs>
 <Content type="html"><![CDATA[
 <style> body {background-color: transparent;} </style>
+<link rel="stylesheet" type="text/css" href="libs/jquery.jqplot.min.css" />
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 <script language="javascript" type="text/javascript" src="libs/jquery.jqplot.min.js"></script>
 <script class="include" language="javascript" type="text/javascript" src="libs/jqplot.dateAxisRenderer.min.js"></script>
@@ -14,6 +15,7 @@
 <script class="include" language="javascript" type="text/javascript" src="libs/jqplot.canvasAxisTickRenderer.min.js"></script>
 <script class="include" language="javascript" type="text/javascript" src="libs/jqplot.categoryAxisRenderer.min.js"></script>
 <script class="include" language="javascript" type="text/javascript" src="libs/jqplot.barRenderer.min.js"></script>
+<script class="include" language="javascript" type="text/javascript" src="libs/jqplot.canvasAxisLabelRenderer.min.js"></script>
 
 
 <script type="text/javascript">
@@ -22,7 +24,6 @@ function onActivitiesLoaded(response){
   var people = [];
   var counter = [];
   
-
   $.each(response.activities, function(i, activity) {
     if (activity.verb == 'access') {
       id = $.inArray(activity.actor.id, people);
@@ -31,9 +32,7 @@ function onActivitiesLoaded(response){
         id = counter.push([activity.actor.displayName, 0]) - 1;
       }
       counter[id][1] += 1;
-      
     }
-
   });
 
   counter.sort();
@@ -44,14 +43,22 @@ function onActivitiesLoaded(response){
     axesDefaults: {
       tickRenderer: $.jqplot.CanvasAxisTickRenderer ,
       tickOptions: {
-        angle: -30,
         fontSize: '10pt'
       }
     },
     axes: {
       xaxis: {
-        renderer: $.jqplot.CategoryAxisRenderer
+        renderer: $.jqplot.CategoryAxisRenderer ,
+        label: 'Username',
+        tickOptions: {
+          angle: -40
+        }
+      },
+      yaxis:{
+        label:'Number of visits',
+        labelRenderer: $.jqplot.CanvasAxisLabelRenderer
       }
+
     }
   });
 
@@ -83,6 +90,5 @@ gadgets.util.registerOnLoadHandler(init);
 
 </script>
 <div id="graph"></div>
-<div id="debug"></div>
 ]]></Content>
 </Module>

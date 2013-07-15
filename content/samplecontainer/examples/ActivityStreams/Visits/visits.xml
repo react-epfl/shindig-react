@@ -7,6 +7,7 @@
 </ModulePrefs>
 <Content type="html"><![CDATA[
 <style> body {background-color: transparent;} </style>
+<link rel="stylesheet" type="text/css" href="libs/jquery.jqplot.min.css" />
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 <script language="javascript" type="text/javascript" src="libs/jquery.jqplot.min.js"></script>
 <script class="include" language="javascript" type="text/javascript" src="libs/jqplot.dateAxisRenderer.min.js"></script>
@@ -14,6 +15,7 @@
 <script class="include" language="javascript" type="text/javascript" src="libs/jqplot.canvasAxisTickRenderer.min.js"></script>
 <script class="include" language="javascript" type="text/javascript" src="libs/jqplot.categoryAxisRenderer.min.js"></script>
 <script class="include" language="javascript" type="text/javascript" src="libs/jqplot.barRenderer.min.js"></script>
+<script class="include" language="javascript" type="text/javascript" src="libs/jqplot.canvasAxisLabelRenderer.min.js"></script>
 
 
 <script type="text/javascript">
@@ -33,13 +35,20 @@ function onActivitiesLoaded(response){
     axesDefaults: {
       tickRenderer: $.jqplot.CanvasAxisTickRenderer ,
       tickOptions: {
-        angle: -30,
         fontSize: '10pt'
       }
     },
     axes: {
       xaxis: {
-        renderer: $.jqplot.CategoryAxisRenderer
+        renderer: $.jqplot.CategoryAxisRenderer,
+        label: "Day of the week",
+        tickOptions: {
+          angle: -30,
+        }
+      },
+      yaxis: {
+        label:'Number of visits',
+        labelRenderer: $.jqplot.CanvasAxisLabelRenderer
       }
     }
   });
@@ -71,6 +80,16 @@ function init()
 gadgets.util.registerOnLoadHandler(init);
 
 </script>
+<div id="form">
+  <form id="time" action="">
+    <label for="time_scale">Time scale :</label>
+    <select name="verb" id="verb">
+      <option value="day">Day</option>
+      <option value="hour">Hour</option>
+      <input type="button" name="button" value="Filter" onClick="">
+    </select>
+  </form>
+</div>
 <div id="graph"></div>
 ]]></Content>
 </Module>
