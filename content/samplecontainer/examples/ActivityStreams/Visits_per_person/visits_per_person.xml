@@ -6,9 +6,21 @@
     <Require feature="dynamic-height"/>
 </ModulePrefs>
 <Content type="html"><![CDATA[
-<style> body {background-color: transparent;} </style>
+<style> 
+body {
+  background-color: transparent;
+  color:#666;
+  font-family:"Trebuchet MS",Arial,Helvetica,sans-serif;
+  margin-top:10px
+} 
+
+
+</style>
 <link rel="stylesheet" type="text/css" href="libs/jquery.jqplot.min.css" />
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 <script language="javascript" type="text/javascript" src="libs/jquery.jqplot.min.js"></script>
 <script class="include" language="javascript" type="text/javascript" src="libs/jqplot.dateAxisRenderer.min.js"></script>
 <script class="include" language="javascript" type="text/javascript" src="libs/jqplot.canvasTextRenderer.min.js"></script>
@@ -19,50 +31,108 @@
 
 
 <script type="text/javascript">
-
 function onActivitiesLoaded(response){
+  $("#to").datepicker();
+  $("#from").datepicker();
+  var today = new Date();
+  $('#to').val(today.toJSON().slice(0,10));
+  today.setDate(today.getDate()-365);
+  $('#from').val(today.toJSON().slice(0,10));
+
+  updateGraph(response);
+
+  gadgets.window.adjustHeight();
+
+  $("#time_scale").change(function(){updateGraph(response);});
+  $("#actions").change(function(){updateGraph(response);});
+  $("#from").change(function(){updateGraph(response);});
+  $("#to").change(function(){updateGraph(response);});
+
+}
+
+function updateGraph(response) {
+  $("#graph").empty();
+  counter = format_data(response, $("#actions").val(), new Date($("#from").val()), new Date($("#to").val()));
+  renderGraph(counter, $("#actions").val());
+}
+
+function format_data(response, actions, from, to) {
+  var date = new Date();
   var people = [];
   var counter = [];
   
   $.each(response.activities, function(i, activity) {
-    if (activity.verb == 'access') {
-      id = $.inArray(activity.actor.id, people);
-      if (id == -1) {
-        people.push(activity.actor.id);
-        id = counter.push([activity.actor.displayName, 0]) - 1;
+    if ($.inArray(activity.verb, actions) != -1) {
+      date = new Date(activity.published);
+      if(date >= from && date <= to) {
+        id = $.inArray(activity.actor.id, people);
+        if (id == -1) {
+          people.push(activity.actor.id);
+          id = counter.push([activity.actor.displayName, 0]) - 1;
+        }
+        counter[id][1] += 1;
       }
-      counter[id][1] += 1;
     }
   });
 
   counter.sort();
 
-  var plot1 = $.jqplot('graph', [counter], {
-    title: 'Total number of visits per user',
+  return counter;
+}
+function renderGraph(data, actions) {
+  $.jqplot('graph', [data], {
+    title: 'Number of '+ displayActions(actions, 4) +' per user',
     series:[{renderer:$.jqplot.BarRenderer}],
     axesDefaults: {
       tickRenderer: $.jqplot.CanvasAxisTickRenderer ,
       tickOptions: {
         fontSize: '10pt'
-      }
+      },
+      labelRenderer: $.jqplot.CanvasAxisLabelRenderer
     },
     axes: {
       xaxis: {
-        renderer: $.jqplot.CategoryAxisRenderer ,
-        label: 'Username',
+        renderer: $.jqplot.CategoryAxisRenderer,
+        label: 'User',
         tickOptions: {
-          angle: -40
+          angle: -30,
         }
       },
-      yaxis:{
-        label:'Number of visits',
-        labelRenderer: $.jqplot.CanvasAxisLabelRenderer
+      yaxis: {
+        label:'Number of '+ displayActions(actions, 2)
       }
-
     }
   });
+}
 
-  gadgets.window.adjustHeight();
+function displayActions(actions, max_length){
+  if (actions == null) return "nothing";
+  var actionToDisplay = new Array(9);
+  actionToDisplay["access"] = "visits";
+  actionToDisplay["add"] = "additions";
+  actionToDisplay["update"] = "updates";
+  actionToDisplay["invite"] = "invitations";
+  actionToDisplay["invite-remind"] = "invitation reminders";
+  actionToDisplay["request-join"] = "join requests";
+  actionToDisplay["join"] = "joins";
+  actionToDisplay["remove"] = "removals";
+  actionToDisplay["delete"] = "deletions";
+
+  var output = "";
+  var length = Math.min(max_length, actions.length);
+  for(var i=0; i<length; i++) {
+    output += actionToDisplay[actions[i]];
+    if (i<(length-2))
+      output += ", ";
+    if (i == (length-2)) {
+      if (max_length>=actions.length)
+        output += " and ";
+      else output += ", ";
+    }
+  }
+  if(max_length<actions.length) output += "...";
+
+  return output;
 }
 
 function onContextFound(response){
@@ -89,6 +159,32 @@ function init()
 gadgets.util.registerOnLoadHandler(init);
 
 </script>
+<div id="form">
+  <form id="time" action="">
+    <fieldset id="parameters">
+      <legend>Parameters</legend>
+      <label for="actions">Actions :</label>
+      <select name="actions" id="actions" multiple="multiple">
+        <option value="access" selected="selected">Visit</option>
+        <option value="add">Add</option>
+        <option value="update">Update</option>
+        <option value="invite">Invite</option>
+        <option value="invite-remind">Send invitation reminder</option>
+        <option value="request-join">Join request</option>
+        <option value="join">Join</option>
+        <option value="remove">Remove</option>
+        <option value="delete">Delete</option>
+      </select>
+    </fieldset>
+    <fieldset id="time_window">
+      <legend>Time window </legend>
+      <label for="from"> from </label>
+      <input type="text" name="from" id="from" >
+      <label for="to"> to </label>
+      <input type="text" name="to" id="to" >
+    </fieldset>
+  </form>
+</div>
 <div id="graph"></div>
 ]]></Content>
 </Module>
