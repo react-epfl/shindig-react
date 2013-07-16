@@ -20,19 +20,25 @@
 
 <script type="text/javascript">
 function onActivitiesLoaded(response){
-  
+  var today = new Date();
+  $('#to').val(today.toJSON().slice(0,10));
+  today.setDate(today.getDate()-365);
+  $('#from').val(today.toJSON().slice(0,10));
+
   updateGraph(response);
 
   gadgets.window.adjustHeight();
 
   $("#time_scale").change(function(){updateGraph(response);});
   $("#actions").change(function(){updateGraph(response);});
+  $("#from").change(function(){updateGraph(response);});
+  $("#to").change(function(){updateGraph(response);});
 
 }
 
 function updateGraph(response) {
   $("#graph").empty();
-  counter = format_data(response, $("#time_scale").val(), $("#actions").val(), 0, 0);
+  counter = format_data(response, $("#time_scale").val(), $("#actions").val(), new Date($("#from").val()), new Date($("#to").val()));
   renderGraph(counter, $("#time_scale").val(), $("#actions").val());
 }
 
@@ -50,10 +56,12 @@ function format_data(response, type, actions, from, to) {
   $.each(response.activities, function(i, activity) {
     if ($.inArray(activity.verb, actions) != -1) {
       date = new Date(activity.published);
-      if (type == "day") {
-        counter[date.getDay()][1] += 1;
-      } else {
-        counter[date.getHours()][1] += 1;
+      if(date >= from && date <= to) {
+        if (type == "day") {
+          counter[date.getDay()][1] += 1;
+        } else {
+          counter[date.getHours()][1] += 1;
+        }
       }
     }
   });
@@ -154,9 +162,9 @@ gadgets.util.registerOnLoadHandler(init);
       <option value="hour">Hour</option>
     </select>
     <label for="from">Time window from </label>
-    <input type="date" name="from">
+    <input type="date" name="from" id="from" >
     <label for="to"> to </label>
-    <input type="date" name="to">
+    <input type="date" name="to" id="to" >
   </form>
 </div>
 <div id="graph"></div>
