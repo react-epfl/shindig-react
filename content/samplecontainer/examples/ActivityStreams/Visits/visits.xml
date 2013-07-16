@@ -6,7 +6,16 @@
     <Require feature="dynamic-height"/>
 </ModulePrefs>
 <Content type="html"><![CDATA[
-<style> body {background-color: transparent;} </style>
+<style> 
+body {
+  background-color: transparent;
+  color:#666;
+  font-family:"Trebuchet MS",Arial,Helvetica,sans-serif;
+  margin-top:10px
+} 
+
+
+</style>
 <link rel="stylesheet" type="text/css" href="libs/jquery.jqplot.min.css" />
 <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
 
@@ -75,7 +84,7 @@ function format_data(response, type, actions, from, to) {
 }
 function renderGraph(data, type, actions) {
   $.jqplot('graph', [data], {
-    title: 'Number of '+ displayActions(actions) +' per '+ type,
+    title: 'Number of '+ displayActions(actions, 4) +' per '+ type,
     series:[{renderer:$.jqplot.BarRenderer}],
     axesDefaults: {
       tickRenderer: $.jqplot.CanvasAxisTickRenderer ,
@@ -93,13 +102,14 @@ function renderGraph(data, type, actions) {
         }
       },
       yaxis: {
-        label:'Number of '+ displayActions(actions)
+        label:'Number of '+ displayActions(actions, 2)
       }
     }
   });
 }
 
-function displayActions(actions){
+function displayActions(actions, max_length){
+  if (actions == null) return "nothing";
   var actionToDisplay = new Array(9);
   actionToDisplay["access"] = "visits";
   actionToDisplay["add"] = "additions";
@@ -112,13 +122,18 @@ function displayActions(actions){
   actionToDisplay["delete"] = "deletions";
 
   var output = "";
-  for(var i=0; i<actions.length; i++) {
+  var length = Math.min(max_length, actions.length);
+  for(var i=0; i<length; i++) {
     output += actionToDisplay[actions[i]];
-    if (i<(actions.length-2))
+    if (i<(length-2))
       output += ", ";
-    if (i == (actions.length-2))
-      output += " and ";
+    if (i == (length-2)) {
+      if (max_length>=actions.length)
+        output += " and ";
+      else output += ", ";
+    }
   }
+  if(max_length<actions.length) output += "...";
 
   return output;
 }
@@ -149,27 +164,34 @@ gadgets.util.registerOnLoadHandler(init);
 </script>
 <div id="form">
   <form id="time" action="">
-    <label for="actions">Actions :</label>
-    <select name="actions" id="actions" multiple="multiple">
-      <option value="access" selected="selected">Visit</option>
-      <option value="add">Add</option>
-      <option value="update">Update</option>
-      <option value="invite">Invite</option>
-      <option value="invite-remind">Send invitation reminder</option>
-      <option value="request-join">Join request</option>
-      <option value="join">Join</option>
-      <option value="remove">Remove</option>
-      <option value="delete">Delete</option>
-    </select>
-    <label for="time_scale">Time scale :</label>
-    <select name="time_scale" id="time_scale">
-      <option value="day" selected="selected">Day</option>
-      <option value="hour">Hour</option>
-    </select>
-    <label for="from">Time window from </label>
-    <input type="text" name="from" id="from" >
-    <label for="to"> to </label>
-    <input type="text" name="to" id="to" >
+    <fieldset id="parameters">
+      <legend>Parameters</legend>
+      <label for="actions">Actions :</label>
+      <select name="actions" id="actions" multiple="multiple">
+        <option value="access" selected="selected">Visit</option>
+        <option value="add">Add</option>
+        <option value="update">Update</option>
+        <option value="invite">Invite</option>
+        <option value="invite-remind">Send invitation reminder</option>
+        <option value="request-join">Join request</option>
+        <option value="join">Join</option>
+        <option value="remove">Remove</option>
+        <option value="delete">Delete</option>
+      </select>
+      <br />
+      <label for="time_scale">Time scale :</label>
+      <select name="time_scale" id="time_scale">
+        <option value="day" selected="selected">Day</option>
+        <option value="hour">Hour</option>
+      </select>
+    </fieldset>
+    <fieldset id="time_window">
+      <legend>Time window </legend>
+      <label for="from"> from </label>
+      <input type="text" name="from" id="from" >
+      <label for="to"> to </label>
+      <input type="text" name="to" id="to" >
+    </fieldset>
   </form>
 </div>
 <div id="graph"></div>
