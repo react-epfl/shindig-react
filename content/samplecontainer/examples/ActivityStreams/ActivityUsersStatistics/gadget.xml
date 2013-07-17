@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Module>
-<ModulePrefs title="Activity Streams">
+<ModulePrefs title="Per user activity statistics"
+                author_email="aubry.cholleton@epfl.ch"
+                author="Aubry Cholleton"
+                description="Displays activity statistics (number of actions per user) in a graph.">
     <Require feature="opensocial-0.9"/>
     <Require feature="osapi"/>
     <Require feature="dynamic-height"/>
@@ -17,11 +20,11 @@ body {
 
 </style>
 <link rel="stylesheet" type="text/css" href="libs/jquery.jqplot.min.css" />
-<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+<link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
 
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
-<script language="javascript" type="text/javascript" src="libs/jquery.jqplot.min.js"></script>
+<script class="include" language="javascript" type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script class="include" language="javascript" type="text/javascript" src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+<script class="include" language="javascript" type="text/javascript" src="libs/jquery.jqplot.min.js"></script>
 <script class="include" language="javascript" type="text/javascript" src="libs/jqplot.dateAxisRenderer.min.js"></script>
 <script class="include" language="javascript" type="text/javascript" src="libs/jqplot.canvasTextRenderer.min.js"></script>
 <script class="include" language="javascript" type="text/javascript" src="libs/jqplot.canvasAxisTickRenderer.min.js"></script>
