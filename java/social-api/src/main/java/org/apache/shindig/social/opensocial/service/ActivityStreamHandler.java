@@ -180,7 +180,14 @@ public class ActivityStreamHandler {
     Set<String> contextIds = request.getContextIds();
     String contextType = request.getContextType();
     String viewerId = request.getToken().getViewerId();
-    String size = request.getParameter("size");
+    String count = request.getParameter("count");
+    System.out.println("Count parameter : "+count);
+    String filterBy = request.getParameter("filterBy");
+    String filterOp = request.getParameter("filterOp");
+    String filterValue = request.getParameter("filterValue");
+    String sortOrder = request.getParameter("sortOrder");
+    String startIndex = request.getParameter("startIndex");
+    String updatedSince = request.getParameter("updatedSince");
 
     // Preconditions
     HandlerPreconditions.requireNotEmpty(contextIds, "No contextId is specified");
@@ -201,6 +208,17 @@ public class ActivityStreamHandler {
 
       url += "/?token="+GRAASP_TOKEN+"&user="+viewerId;
 
+      //Append parameters to the URL
+      url = appendParam(url, "count", count);
+      url = appendParam(url, "filterBy", filterBy);
+      url = appendParam(url, "filterOp", filterOp);
+      url = appendParam(url, "filterValue", filterValue);
+      url = appendParam(url, "sortOrder", sortOrder);
+      url = appendParam(url, "startIndex", startIndex);
+      url = appendParam(url, "updatedSince", updatedSince);
+
+      System.out.println("FINAL URL : "+url);
+
       HttpGet get = new HttpGet(url);
       get.getParams().setParameter("http.protocol.expect-continue", false);
 
@@ -211,7 +229,8 @@ public class ActivityStreamHandler {
         String line = "";
         while ((line = rd.readLine()) != null) {
           output = line;
-        }   
+        } 
+        System.out.println("Answer : "+output);
         JSONObject jsonOutput = new JSONObject(output);
         return  Futures.immediateFuture(jsonOutput);
       } catch (Exception e) {
@@ -234,5 +253,13 @@ public class ActivityStreamHandler {
     String container = Objects.firstNonNull(request.getToken().getContainer(), ContainerConfig.DEFAULT_CONTAINER);
     return config.getList(container,
         "${Cur['gadgets.features'].opensocial.supportedFields.activityEntry}");
+  }
+
+  private String appendParam(String url, String paramName, String paramValue){
+    String newUrl = url;
+    if (paramValue != null && !paramValue.equals("")) {
+        newUrl += "&"+paramName+"="+paramValue;
+    }
+    return newUrl;
   }
 }
