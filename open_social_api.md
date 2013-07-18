@@ -93,7 +93,6 @@ Retrieve the name of user with id 3253 :
 osapi.people.get({userId: "3253"}).execute(function(response){
     response.displayName; // Jean Dupont
 });
-}
 ```
 
 Retrieve the names of users with ids 3253, 3254 and 3255 :
@@ -105,7 +104,6 @@ osapi.people.get({userId: "3253,3254,3255"}).execute(function(response){
     spaces[i].displayName;
   }
 });
-}
 ```
 
 ### OTHER
@@ -180,7 +178,6 @@ Retrieve the name of space with id 3437 :
 osapi.spaces.get({contextId: "3437"}).execute(function(response){
     response.displayName; // Jean Dupont's Home Space
 });
-}
 ```
 
 Retrieve the names of spaces with ids 3255, 3256 and 3258 :
@@ -192,7 +189,6 @@ osapi.spaces.get({contextId: "3255,3256,3258"}).execute(function(response){
     spaces[i].displayName;
   }
 });
-}
 ```
 
 ### GET ALL PUBLIC SPACES OF GRAASP
