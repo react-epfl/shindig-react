@@ -31,7 +31,7 @@ The following fields are implemented in Graasp:
 | id             | Id of the user in Graasp                                                      |
 | displayName    | Name of the user                                                              |
 | aboutMe        | Description of the user                                                       |
-| visibilityLevel| **public**/**closed**/**hidden**                                                          |
+| visibilityLevel| **public**/ **closed**/ **hidden**                                                          |
 | thumbnailUrl   | Url to the thumbnail picture of the user (default thumbnail if not specified) |
 | updated        | Date of the last update (format ISO8601)                                      |
 
@@ -60,7 +60,7 @@ Get the name of everyone that has join the space with id 3253 :
 
 ```javascript
 osapi.people.get({userId: "3253", personId: "@space"}).execute(function(response){
-  members = response.list;…
+  members = response.list;
   for(var i=0; i<members.length; i++) {
     members[i].displayName;
   }
@@ -118,9 +118,9 @@ The following fields are implemented in Graasp
 | id             | Id of the space in Graasp                                                     |
 | displayName    | Name of the space                                                             |
 | description    | Description of the space                                                      |
-| visibilityLevel| **Everyone**/**Space members**/**Myslef**                                     |
+| visibilityLevel| **Everyone**/ **Space members**/ **Myslef**                                     |
 | thumbnailUrl   | Url to the thumbnail picture of the space (default thumbnail if not specified)|
-| parentType     | Type of the parent of this space (**@person** or **@space**)                  |
+| parentType     | Type of the parent of this space ( **@person** or **@space**)                  |
 | parentId       | Id of the parent of this space                                                |
 | updated        | Date of the last update (format ISO8601)                                      |
 
@@ -215,7 +215,7 @@ osapi.spaces.get({contextId: "@all"}).execute(function(response){
 | actor          | User that is the initiator of this activity. This is as an **ActivityObject**.                                                                                              |
 | object         | Primary object of the activity (Ex : **Space** has been visited, **User** has been invited to this space). This is as an **ActivityObject**                                 |
 | target         | Target of the activity (Ex : User has been invited to **this space**). May not be undefined (Ex: Space has been visited : no target here). This is as an **ActivityObject**.|
-| verb           | Identifies the action that the activity describes. (*add, update, invite-remind, invite, request-join, join, remove, delete, access*)                                       |
+| verb           | Identifies the action that the activity describes. ( *add, update, invite-remind, invite, request-join, join, remove, delete, access*)                                       |
 | published      | When the activity was **created** in Graasp (no published notion in Graasp)                                                                                                 |
 | updated        | Date of the last update                                                                                                                                                     |
 
