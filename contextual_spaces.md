@@ -49,7 +49,7 @@ osapi.people.getViewer().execute(function(viewer){
 ```
 
 ### GET MEMBERS FROM A SPACE
-**Important :** *userId* must contain the contextId (in this case, the id of the space), *optionalPersonId* must contain the contextType (in this case, "@space"). Every other parameter will be ignored.
+**Important :** *userId* must contain the contextId (in this case, the id of the space), *personId* must contain the contextType (in this case, "@space"). Every other parameter will be ignored.
 
 ```javascript
 osapi.people.get({userId: "3253", personId: "@space"}).execute(function(response){
