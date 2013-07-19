@@ -70,7 +70,7 @@ function formatData(response, type, actions, from, to) {
     }
   }
 
-  $.each(response.activities, function(i, activity) {
+  $.each(response.activities.entry, function(i, activity) {
     if ($.inArray(activity.verb, actions) != -1) {
       date = new Date(activity.published);
       if(date >= from && date <= to) {
