@@ -9,7 +9,7 @@ The context of an opensocial gadget is the space or the user it belongs to.
 | Field          | Description                                                                        |
 | -------------- | ---------------------------------------------------------------------------------- |
 | contextId      | Id of the item that contains the gadget in Graasp (not an IRI nor a Global-Id)     |
-| contextType    | **@person** or **@spaces**                                                             |
+| contextType    | **@person** or **@space**                                                             |
 | containerUrl   | Url of the website that contains the gadget (not the url of the space or the user) |
 
 ### GET THE CONTEXT OF THE GADGET
@@ -266,5 +266,23 @@ osapi.activitystreams.get({contextId: 5678, contextType: "@user"}).execute(funct
   }
 });
 ```
+
+#### FILTERING AND PAGINATION
+
+It is possible to filter the activities by specifying the parameters *filterBy* (name of the field you want to filter), *filterOp* ( **contains**, **startsWith**, **equals**, **exists**) and *filterValue* (Value of the filter).
+
+It is also possible to limit the number of answers using the parameter *count*, and to specify an offset with *startIndex*. Note that the total number of results (independently from *count*) will still be available in the field *totalResults*. You can also order the results (by update date) using the parameter *sortOrder*. As defined is the specification, default is **ascending** (oldest activities first), in order to get the last activities first, it is necessary specify it as **descending**.
+
+Example : Retrieve activities corresponding to the last 10 visits of the space with id 1234 :
+
+```javascript
+osapi.activitystreams.get({contextId: 1234, contextType: "@space", count:10, sortOrder:"descending", filterBy:"verb", filterOp:"equals", filterValue:"access"}).execute(function(response){
+  activities = response.entry;
+  for(var i=0; i<response.itemsPerPage; i++) {
+    activities[i].actor.displayName;
+  }
+});
+```
+
 ## APPS
 To be continued ...
