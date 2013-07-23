@@ -224,6 +224,7 @@ An object is a thing, real or imaginary, which participates in an activity. It m
 | Field          | Description                                                                                                                                                                 |
 | -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | id             | Id of the activity object **(This is an IRI)**                                                                                                                              |
+| objectType     | *User, Space, Asset, Rating, Link, Tagging, Comment, Widget, Favorite*                                                                                                      |
 | displayName    | Name of the activity object                                                                                                                                                 |
 | url            | Url of the object in Graasp                                                                                                                                                 |
 | summary         | Description of the object                                                                                                                                                  |
@@ -271,9 +272,9 @@ osapi.activitystreams.get({contextId: 5678, contextType: "@user"}).execute(funct
 
 It is possible to filter the activities by specifying the parameters *filterBy* (name of the field you want to filter), *filterOp* ( **contains**, **startsWith**, **equals**, **exists**) and *filterValue* (Value of the filter).
 
-It is also possible to limit the number of answers using the parameter *count*, and to specify an offset with *startIndex*. Note that the total number of results (independently from *count*) will still be available in the field *totalResults*. You can also order the results (by update date) using the parameter *sortOrder*. As defined is the specification, default is **ascending** (oldest activities first), in order to get the last activities first, it is necessary specify it as **descending**.
+It is also possible to limit the number of answers using the parameter *count*, and to specify an offset with *startIndex*. Note that the total number of results (independently from *count*) will still be available in the field *totalResults*. You can also order the results (by update date) using the parameter *sortOrder*. As defined in the specification, default is **ascending** (oldest activities first), in order to get the last activities first, it is necessary specify it as **descending**.
 
-The *updatedSince* parameter allows to get only the activities that have been updted or created since a certain date. The date have to be provided in the ISO8601 format.
+The *updatedSince* parameter allows to get only the activities that have been updated or created since a certain date. The date have to be provided in the ISO8601 format.
 
 Example : Retrieve activities corresponding to the last 10 visits of the space with id 1234 :
 
