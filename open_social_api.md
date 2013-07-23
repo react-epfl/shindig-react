@@ -213,10 +213,10 @@ osapi.spaces.get({contextId: "@all"}).execute(function(response){
 | id             | Id of the activity **(This is an IRI)**                                                                                                                                     |
 | actor          | User that is the initiator of this activity. This is as an **ActivityObject**.                                                                                              |
 | object         | Primary object of the activity (Ex : **Space** has been visited, **User** has been invited to this space). This is as an **ActivityObject**                                 |
-| target         | Target of the activity (Ex : User has been invited to **this space**). May be undefined (Ex: Space has been visited : no target here). This is as an **ActivityObject**.|
-| verb           | Identifies the action that the activity describes. ( *add, update, invite-remind, invite, request-join, join, remove, delete, access*)                                       |
-| published      | When the activity was **created** in Graasp (no published notion in Graasp)                                                                                                 |
-| updated        | Date of the last update                                                                                                                                                     |
+| target         | Target of the activity (Ex : User has been invited to **this space**). May be undefined (Ex: Space has been visited : no target here). This is as an **ActivityObject**.    |
+| verb           | Identifies the action that the activity describes. ( *add, update, invite-remind, invite, request-join, join, remove, delete, access*)                                      |
+| published      | When the activity was **created** in Graasp (no published notion in Graasp) (ISO8601)                                                                                       |
+| updated        | Date of the last update (ISO8601)                                                                                                                                           |
 
 ### ACTIVITY OBJECTS
 An object is a thing, real or imaginary, which participates in an activity. It may be the entity performing the activity, or the entity on which the activity was performed. In Graasp it can be a User, a Space, an Asset, a Rating, a Link, a Tagging, a Comment, a Widget or a Favorite.
@@ -227,8 +227,8 @@ An object is a thing, real or imaginary, which participates in an activity. It m
 | displayName    | Name of the activity object                                                                                                                                                 |
 | url            | Url of the object in Graasp                                                                                                                                                 |
 | summary         | Description of the object                                                                                                                                                  |
-| published      | When the activity object was **created** in Graasp (no published notion in Graasp)                                                                                          |
-| updated        | Date of the last update                                                                                                                                                     |
+| published      | When the activity object was **created** in Graasp (no published notion in Graasp) (ISO8601)                                                                                |
+| updated        | Date of the last update (ISO8601)                                                                                                                                           |
 
 ### RETRIEVE ACTIVITY STREAM OF A USER OR A SPACE
 #### Get the activity stream of a space
@@ -272,6 +272,8 @@ osapi.activitystreams.get({contextId: 5678, contextType: "@user"}).execute(funct
 It is possible to filter the activities by specifying the parameters *filterBy* (name of the field you want to filter), *filterOp* ( **contains**, **startsWith**, **equals**, **exists**) and *filterValue* (Value of the filter).
 
 It is also possible to limit the number of answers using the parameter *count*, and to specify an offset with *startIndex*. Note that the total number of results (independently from *count*) will still be available in the field *totalResults*. You can also order the results (by update date) using the parameter *sortOrder*. As defined is the specification, default is **ascending** (oldest activities first), in order to get the last activities first, it is necessary specify it as **descending**.
+
+The *updatedSince* parameter allows to get only the activities that have been updted or created since a certain date. The date have to be provided in the ISO8601 format.
 
 Example : Retrieve activities corresponding to the last 10 visits of the space with id 1234 :
 
