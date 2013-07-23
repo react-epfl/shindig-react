@@ -219,7 +219,7 @@ The structure of a Collection of activity streams differs from the one of a clas
 | updatedSince   | Always **true**. The results will allways honor updatedSince param in the request. The default value is 'true' if the field does not exist.                                 |
 | sorted         | Always **true**. The results will allways honor sortOrder param in the request. The default value is 'true' if the field does not exist.                                    |
 | totalResults   | The total number of contacts that would be returned if there were no startIndex or count specified. This value tells the Consumer how many total results to expect, regardless of the current pagination being used, but taking into account the current filtering options in the request.|
-| entry          | An array of objects, one for each item matching the request.                                                                                                                |
+| entry          | An array of activity streams, one for each item matching the request.                                                                                                                |
 
 
 ### ACTIVITY STREAMS
@@ -241,10 +241,12 @@ An object is a thing, real or imaginary, which participates in an activity. It m
 | -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | id             | Id of the activity object **(This is an IRI)**                                                                                                                              |
 | objectType     | *User, Space, Asset, Rating, Link, Tagging, Comment, Widget, Favorite*                                                                                                      |
-| displayName    | Name of the activity object                                                                                                                                                 |
-| image          | Image of the object. This is a **MediaLink**.                                                                                                                                                |
-| url            | Url of the object in Graasp                                                                                                                                                 |
-| summary        | Description of the object                                                                                                                                                  |
+| displayName    | Name of the activity object (not defined for **Rating, Link**)                                                                                                                                                |
+| author          | Author of this object. This is a **ActivityObject**.(not defined for **User, Anonymous Rating**)                                                                                                                                               |
+| image          | Image of the object. This is a **MediaLink**. (not defined for **Rating, Link**)                                                                                                                                                |
+| url            | Url of the object in Graasp (not defined for **Rating, Link**)                                                                                                                                                |
+| summary        | Description of the object (not defined for **Rating, Link**)                                                                                                                                                  |
+| content        | Content of the object (not defined for **User, Space, Link**)                                                                                                                                                 |
 | published      | When the activity object was **created** in Graasp (no published notion in Graasp) (ISO8601)                                                                                |
 | updated        | Date of the last update (ISO8601)                                                                                                                                           |
 
