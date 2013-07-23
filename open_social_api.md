@@ -206,13 +206,29 @@ osapi.spaces.get({contextId: "@all"}).execute(function(response){
 
 
 ## ACTIVITIES (ACTIVITY STREAMS)
+
+### COLLECTION OF ACTIVITY STREAMS
+
+The structure of a Collection of activity streams differs from the one of a classical OpenSocial Collection.
+
+| Field          | Description                                                                                                                                                                 |
+| -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| itemsPerPage   | Number of items per page, corresponds to the *count* request parameter. Default is 1000.                                                                                    |
+| startIndex     | Index of the first item of the page. Corresponds to the *startIndex* requet parameter. Default is 0.                                                                        |
+| filtered       | Always **true** .The results will allways honor filter params in the request. The default value is 'true' if the field does not exist.                                      |
+| updatedSince   | Always **true**. The results will allways honor updatedSince param in the request. The default value is 'true' if the field does not exist.                                 |
+| sorted         | Always **true**. The results will allways honor sortOrder param in the request. The default value is 'true' if the field does not exist.                                    |
+| totalResults   | The total number of contacts that would be returned if there were no startIndex or count specified. This value tells the Consumer how many total results to expect, regardless of the current pagination being used, but taking into account the current filtering options in the request.|
+| entry          | An array of objects, one for each item matching the request.                                                                                                                |
+
+
 ### ACTIVITY STREAMS
 
 | Field          | Description                                                                                                                                                                 |
 | -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | id             | Id of the activity **(This is an IRI)**                                                                                                                                     |
 | actor          | User that is the initiator of this activity. This is as an **ActivityObject**.                                                                                              |
-| object         | Primary object of the activity (Ex : **Space** has been visited, **User** has been invited to this space). This is as an **ActivityObject**                                 |
+| object         | Primary object of the activity (Ex : **Space** has been visited, **User** has been invited to this space). This is as an **ActivityObject**.                                 |
 | target         | Target of the activity (Ex : User has been invited to **this space**). May be undefined (Ex: Space has been visited : no target here). This is as an **ActivityObject**.    |
 | verb           | Identifies the action that the activity describes. ( *add, update, invite-remind, invite, request-join, join, remove, delete, access*)                                      |
 | published      | When the activity was **created** in Graasp (no published notion in Graasp) (ISO8601)                                                                                       |
@@ -226,10 +242,18 @@ An object is a thing, real or imaginary, which participates in an activity. It m
 | id             | Id of the activity object **(This is an IRI)**                                                                                                                              |
 | objectType     | *User, Space, Asset, Rating, Link, Tagging, Comment, Widget, Favorite*                                                                                                      |
 | displayName    | Name of the activity object                                                                                                                                                 |
+| image          | Image of the object. This is a **MediaLink**.                                                                                                                                                |
 | url            | Url of the object in Graasp                                                                                                                                                 |
-| summary         | Description of the object                                                                                                                                                  |
+| summary        | Description of the object                                                                                                                                                  |
 | published      | When the activity object was **created** in Graasp (no published notion in Graasp) (ISO8601)                                                                                |
 | updated        | Date of the last update (ISO8601)                                                                                                                                           |
+
+### MEDIA LINK
+
+| Field          | Description                                                                                                                                                                 |
+| -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| url            | url of the media item.                                                                                                                              |
+
 
 ### RETRIEVE ACTIVITY STREAM OF A USER OR A SPACE
 #### Get the activity stream of a space
@@ -268,7 +292,7 @@ osapi.activitystreams.get({contextId: 5678, contextType: "@user"}).execute(funct
 });
 ```
 
-#### FILTERING AND PAGINATION
+### REQUEST PARAMETERS (FILTERING AND PAGINATION)
 
 It is possible to filter the activities by specifying the parameters *filterBy* (name of the field you want to filter), *filterOp* ( **contains**, **startsWith**, **equals**, **exists**) and *filterValue* (Value of the filter).
 
