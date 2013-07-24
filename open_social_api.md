@@ -207,9 +207,9 @@ osapi.spaces.get({contextId: "@all"}).execute(function(response){
 
 ## ACTIVITIES (ACTIVITY STREAMS)
 
-### COLLECTION OF ACTIVITY STREAMS
+### COLLECTION
 
-The structure of a Collection of activity streams differs from the one of a classical OpenSocial Collection.
+The structure of a Collection for activity streams differs from the one of a classical OpenSocial Collection.
 
 | Field          | Description                                                                                                                                                                 |
 | -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -219,10 +219,10 @@ The structure of a Collection of activity streams differs from the one of a clas
 | updatedSince   | Always **true**. The results will allways honor updatedSince param in the request. The default value is 'true' if the field does not exist.                                 |
 | sorted         | Always **true**. The results will allways honor sortOrder param in the request. The default value is 'true' if the field does not exist.                                    |
 | totalResults   | The total number of contacts that would be returned if there were no startIndex or count specified. This value tells the Consumer how many total results to expect, regardless of the current pagination being used, but taking into account the current filtering options in the request.|
-| entry          | An array of activity streams, one for each item matching the request.                                                                                                                |
+| entry          | An array of activity entries, one for each item matching the request.                                                                                                                |
 
 
-### ACTIVITY STREAMS
+### ACTIVITY ENTRY
 
 | Field          | Description                                                                                                                                                                 |
 | -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -234,7 +234,7 @@ The structure of a Collection of activity streams differs from the one of a clas
 | published      | When the activity was **created** in Graasp (no published notion in Graasp) (ISO8601)                                                                                       |
 | updated        | Date of the last update (ISO8601)                                                                                                                                           |
 
-### ACTIVITY OBJECTS
+### ACTIVITY OBJECT
 An object is a thing, real or imaginary, which participates in an activity. It may be the entity performing the activity, or the entity on which the activity was performed. In Graasp it can be a User, a Space, an Asset, a Rating, a Link, a Tagging, a Comment, a Widget or a Favorite.
 
 | Field          | Description                                                                                                                                                                 |

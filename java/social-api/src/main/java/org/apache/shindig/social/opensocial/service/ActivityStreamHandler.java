@@ -88,52 +88,20 @@ public class ActivityStreamHandler {
   }
 
   /**
-   * Allowed end-points /activitystreams/{userId}/@self/{appId}/{activityId}+
-   *
-   * Examples: /activitystreams/john.doe/@self/1/object1,object2
-   *
-   * @param request a {@link org.apache.shindig.social.opensocial.service.SocialRequestItem} object.
-   * @return a {@link java.util.concurrent.Future} object.
-   * @throws org.apache.shindig.protocol.ProtocolException if any.
+   * Not implemented. No implementation planed for Graasp.
    */
   @Operation(httpMethods="DELETE")
   public Future<?> delete(SocialRequestItem request)
       throws ProtocolException {
-
-    Set<UserId> userIds = request.getUsers();
-    Set<String> activityIds = ImmutableSet.copyOf(request.getListParameter("activityId"));
-
-    HandlerPreconditions.requireNotEmpty(userIds, "No userId specified");
-    HandlerPreconditions.requireSingular(userIds, "Multiple userIds not supported");
-    HandlerPreconditions.requireNotEmpty(activityIds, "At least one activity ID must be specified");
-
-    return service.deleteActivityEntries(Iterables.getOnlyElement(userIds), request.getGroup(),
-        request.getAppId(), activityIds, request.getToken());
+    return Futures.immediateFuture(null);
   }
 
   /**
-   * Allowed end-points /activitystreams/{userId}/@self/{appId}/{activityId}
-   *
-   * Examples: /activitystreams/john.doe/@self/1/object2 - postBody is an activity object
-   *
-   * @param request a {@link org.apache.shindig.social.opensocial.service.SocialRequestItem} object.
-   * @return a {@link java.util.concurrent.Future} object.
-   * @throws org.apache.shindig.protocol.ProtocolException if any.
+   * Not implemented.
    */
   @Operation(httpMethods="PUT", bodyParam = "activity")
   public Future<?> update(SocialRequestItem request) throws ProtocolException {
-    Set<UserId> userIds = request.getUsers();
-    List<String> activityIds = request.getListParameter("activityId");
-
-    HandlerPreconditions.requireNotEmpty(userIds, "No userId specified");
-    HandlerPreconditions.requireSingular(userIds, "Multiple userIds not supported");
-    HandlerPreconditions.requireSingular(activityIds, "Must specify exactly one activity ID");
-
-    return service.updateActivityEntry(Iterables.getOnlyElement(userIds), request.getGroup(),
-        request.getAppId(), request.getFields(),
-        request.getTypedParameter("activity", ActivityEntry.class),
-        activityIds.iterator().next(),
-        request.getToken());
+    return Futures.immediateFuture(null);
   }
 
   /**
@@ -147,17 +115,49 @@ public class ActivityStreamHandler {
    */
   @Operation(httpMethods="POST", bodyParam = "activity")
   public Future<?> create(SocialRequestItem request) throws ProtocolException {
-    Set<UserId> userIds = request.getUsers();
-    List<String> activityIds = request.getListParameter("activityId");
+    try {
+      System.out.println("Creating a new activity...");
+      Set<UserId> userIds = request.getUsers();
+      List<String> activityIds = request.getListParameter("activityId");
 
-    HandlerPreconditions.requireNotEmpty(userIds, "No userId specified");
-    HandlerPreconditions.requireSingular(userIds, "Multiple userIds not supported");
-    HandlerPreconditions.requireEmpty(activityIds, "Cannot specify activity ID in create");
+      HandlerPreconditions.requireNotEmpty(userIds, "No userId specified");
+      HandlerPreconditions.requireSingular(userIds, "Multiple userIds not supported");
+      HandlerPreconditions.requireEmpty(activityIds, "Cannot specify activity ID in create");
 
-    return service.createActivityEntry(Iterables.getOnlyElement(userIds), request.getGroup(),
-        request.getAppId(), request.getFields(),
-        request.getTypedParameter("activity", ActivityEntry.class),
-        request.getToken());
+      String activity = request.getParameter("activityEntry");
+      JSONObject test = new JSONObject(activity);
+      activity = test.toString();
+      String viewerId = request.getToken().getViewerId();
+    
+      // HandlerPreconditions.requireNotEmpty(viewerId, "No viewerId is specified");
+    
+      String output = "";
+      HttpClient client = new DefaultHttpClient();
+      HttpPost post = new HttpPost(GRAASP_URL+"/rest/activitystreams/"+userIds.iterator().next()+"/@self/@app?token="+GRAASP_TOKEN+"&user="+viewerId);
+      post.getParams().setParameter("http.protocol.expect-continue", false);
+
+      MultipartEntity entity = new MultipartEntity();
+      entity.addPart("activity", new StringBody(activity,"application/json", Charset.forName("UTF-8")));
+      post.setEntity(entity);
+      
+      // return back the response
+      HttpResponse response = client.execute(post);
+
+      System.out.println("SUCCESS");
+
+      BufferedReader rd = new BufferedReader(new InputStreamReader(
+          response.getEntity().getContent()));
+      String line = "";
+      while ((line = rd.readLine()) != null) {
+        output = line;
+      }
+      System.out.println("Output : "+output);          
+      JSONObject jsonOutput = new JSONObject(output);
+      return  Futures.immediateFuture(jsonOutput);
+
+    } catch (Exception e) {
+      return  Futures.immediateFuture(e);
+    }
   }
 
   /**
@@ -199,12 +199,12 @@ public class ActivityStreamHandler {
       String output = "";
       HttpClient client = new DefaultHttpClient();
 
-      String url = GRAASP_URL+"/rest/activitystreams/"+contextIds.iterator().next()+"/@self/@app/"; // TODO : manage groups and apps 
-      if(contextType == null || contextType.equals("@user")){
-        url+="@user";
+      String url = GRAASP_URL+"/rest/activitystreams/"+contextIds.iterator().next()+"/@self/"; // TODO : manage groups and apps 
+      if(contextType.equals("@user")){
+        url+="@app/@user";
       } else if(contextType.equals("@space")) {
-        url+="@space";
-      } else throw new  IllegalArgumentException("Invalid context type");
+        url+="@app/@space";
+      } else if(contextType != null) throw new  IllegalArgumentException("Invalid context type");
 
       url += "/?token="+GRAASP_TOKEN+"&user="+viewerId;
 
@@ -242,17 +242,11 @@ public class ActivityStreamHandler {
   }
 
   /**
-   * Return a list of supported fields for the ActivityStreams endpoint
-   *
-   * @param request a {@link org.apache.shindig.protocol.RequestItem} object.
-   * @return a List of supported fields
+   * Not implemented.
    */
   @Operation(httpMethods = "GET", path="/@supportedFields")
   public List<Object> supportedFields(RequestItem request) {
-    // TODO: Would be nice if name in config matched name of service.
-    String container = Objects.firstNonNull(request.getToken().getContainer(), ContainerConfig.DEFAULT_CONTAINER);
-    return config.getList(container,
-        "${Cur['gadgets.features'].opensocial.supportedFields.activityEntry}");
+    return null;
   }
 
   private String appendParam(String url, String paramName, String paramValue){
