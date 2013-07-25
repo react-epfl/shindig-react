@@ -2,17 +2,17 @@ Open Social API implementation in Graasp
 =========================================
 **This document is a draft.**
 
-## CONTEXT
+## CONTEXT OF AN APP
 
-The context of an opensocial gadget is the space or the user it belongs to.
+The context of an opensocial app is the space or the user it belongs to.
 
 | Field          | Description                                                                        |
 | -------------- | ---------------------------------------------------------------------------------- |
-| contextId      | Id of the item that contains the gadget in Graasp (not an IRI nor a Global-Id)     |
+| contextId      | Id of the item that contains the app in Graasp (not an IRI nor a Global-Id)     |
 | contextType    | **@person** or **@space**                                                             |
-| containerUrl   | Url of the website that contains the gadget (not the url of the space or the user) |
+| containerUrl   | Url of the website that contains the app (not the url of the space or the user) |
 
-### GET THE CONTEXT OF THE GADGET
+### GET THE CONTEXT OF THE APP (SPACE IN WHICH THE APP LIVES)
 
 ```javascript
 osapi.context.get().execute(function(context){
@@ -37,9 +37,10 @@ The following fields are implemented in Graasp:
 
 
 
-### GET THE VIEWER OF THE GADGET
+### GET THE VIEWER OF THE APP
 
-Get all informations about the viewer of this gadget :
+Get all informations about the viewer of this app :
+
 ```javascript
 osapi.people.getViewer().execute(function(viewer){
   viewer.id; // 5678
@@ -48,6 +49,18 @@ osapi.people.getViewer().execute(function(viewer){
   viewer.visibilityLevel; // public
   viewer.thumbnailUrl; // http://graasp.epfl.ch/images/pics/user_thumb.png
   viewer.updated; // 2013-07-17T08:06:11.000Z
+});
+```
+
+### GET THE OWNER OF THE SPACE WHICH CONTAINS THE APP
+
+Get all informations about the owner of the space which contains this app :
+
+```javascript
+osapi.people.getOwner().execute(function(owner){
+  owner.id; // 5678
+  owner.displayName; // Jean Dupont
+ // etc...
 });
 ```
 
@@ -74,7 +87,7 @@ osapi.people.get({userId: "3253", personId: "@space"}).execute(function(response
 
 ```javascript
 osapi.people.get({userId: "@all"}).execute(function(response){
-  users = response.list56
+  users = response.list;
   for(var i=0; i<users.length; i++) {
     users[i];
   }
@@ -213,7 +226,7 @@ The structure of a Collection for activity streams differs from the one of a cla
 
 | Field          | Description                                                                                                                                                                 |
 | -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| itemsPerPage   | Number of items per page, corresponds to the *count* request parameter. Default is 1000.                                                                                    |
+| itemsPerPage   | Number of items per page, corresponds to the *count* request parameter. Default is 10 000.                                                                                    |
 | startIndex     | Index of the first item of the page. Corresponds to the *startIndex* requet parameter. Default is 0.                                                                        |
 | filtered       | Always **true** .The results will allways honor filter params in the request. The default value is 'true' if the field does not exist.                                      |
 | updatedSince   | Always **true**. The results will allways honor updatedSince param in the request. The default value is 'true' if the field does not exist.                                 |
@@ -294,15 +307,24 @@ osapi.activitystreams.get({contextId: 5678, contextType: "@user"}).execute(funct
 });
 ```
 
-### REQUEST PARAMETERS (FILTERING AND PAGINATION)
+### FILTER AND PAGINATES ACTIVITIES
 
-It is possible to filter the activities by specifying the parameters *filterBy* (name of the field you want to filter), *filterOp* ( **contains**, **startsWith**, **equals**, **exists**) and *filterValue* (Value of the filter).
+Supported parameters : 
 
-It is also possible to limit the number of answers using the parameter *count*, and to specify an offset with *startIndex*. Note that the total number of results (independently from *count*) will still be available in the field *totalResults*. You can also order the results (by update date) using the parameter *sortOrder*. As defined in the specification, default is **ascending** (oldest activities first), in order to get the last activities first, it is necessary specify it as **descending**.
+| Field          | Description                                                                   |
+| -------------- | ----------------------------------------------------------------------------- |
+| count             | The number of items per page, for a paged collection.                                                   |
+| startIndex    | The index of the first result to be retrieved (for paging).                                                             |
+| sortOrder    | Sort order (by update date) of the results. Default is **ascending** (oldest activities first), in order to get the last activities first, it is necessary specify it as **descending**                                                      |
+| updatedSince| Return only entries updated since the date specified in this parameter (ISO8601)                               |
+| filterBy   | Field to filter.|
+| filterOp     | **contains**, **startsWith**, **equals**, **exists**                |
+| filterValue       | Value of the filter                                                |
+| fields        | Comma separated list of fields to include in the response. The response will contain every field if this parameter is not specified.                                     |
 
-The *updatedSince* parameter allows to get only the activities that have been updated or created since a certain date. The date have to be provided in the ISO8601 format.
 
-Example : Retrieve activities corresponding to the last 10 visits of the space with id 1234 :
+
+**Example :** Retrieve activities corresponding to the last 10 visits of the space with id 1234 :
 
 ```javascript
 osapi.activitystreams.get({contextId: 1234, contextType: "@space", count:10, sortOrder:"descending", filterBy:"verb", filterOp:"equals", filterValue:"access"}).execute(function(response){
@@ -315,7 +337,7 @@ osapi.activitystreams.get({contextId: 1234, contextType: "@space", count:10, sor
 
 ### CREATE AN ACTIVITY ENTRY
 
-It is possible to create a new Activity Entry from a gadget. The *activityEntry* parameter must contain the new activity, described in the JSON format. *userId* and *groupId* must be specified too. 
+It is possible to create a new Activity Entry from an app. The *activityEntry* parameter must contain the new activity, described in the JSON format. *userId* and *groupId* must be specified too. 
 
 ```javascript
     var params = {
