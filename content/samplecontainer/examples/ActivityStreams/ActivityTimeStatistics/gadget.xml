@@ -70,9 +70,11 @@ function formatData(response, type, actions, from, to) {
     }
   }
 
-  $.each(response.activities.entry, function(i, activity) {
-    if ($.inArray(activity.verb, actions) != -1) {
-      date = new Date(activity.published);
+  activities = response.activities.entry;
+
+  for(var i = 0; i < activities.length; i++) {
+    if ($.inArray(activities[i].verb, actions) != -1) {
+      date = new Date(activities[i].published);
       if(date >= from && date <= to) {
         if (type == "day") {
           counter[date.getDay()][1] += 1;
@@ -81,7 +83,7 @@ function formatData(response, type, actions, from, to) {
         }
       }
     }
-  });
+  }
 
   return counter;
 }
