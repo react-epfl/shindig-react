@@ -63,20 +63,22 @@ function formatData(response, actions, from, to) {
   var date = new Date();
   var people = [];
   var counter = [];
-  
-  $.each(response.activities.entry, function(i, activity) {
-    if ($.inArray(activity.verb, actions) != -1) {
-      date = new Date(activity.published);
+
+  activities = response.activities.entry;
+
+  for(var i = 0; i < activities.length; i++) {
+    if ($.inArray(activities[i].verb, actions) != -1) {
+      date = new Date(activities[i].published);
       if(date >= from && date <= to) {
-        id = $.inArray(activity.actor.id, people);
+        id = $.inArray(activities[i].actor.id, people);
         if (id == -1) {
-          people.push(activity.actor.id);
-          id = counter.push([activity.actor.displayName, 0]) - 1;
+          people.push(activities[i].actor.id);
+          id = counter.push([activities[i].actor.displayName, 0]) - 1;
         }
         counter[id][1] += 1;
       }
     }
-  });
+  }
 
   counter.sort();
 
