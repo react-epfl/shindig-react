@@ -313,5 +313,33 @@ osapi.activitystreams.get({contextId: 1234, contextType: "@space", count:10, sor
 });
 ```
 
+### CREATE AN ACTIVITY ENTRY
+
+It is possible to create a new Activity Entry from a gadget. The *activityEntry* parameter must contain the new activity, described in the JSON format. *userId* and *groupId* must be specified too. 
+
+```javascript
+    var params = {
+      userId: '@viewer',
+      groupId: '@self',
+      activityEntry: {
+        actor: {
+          id: "graasp.epfl.ch/User/42",
+        },
+        verb: "add",
+        object: {
+          id: "graasp.epfl.ch/Space/666",
+          objectType: "Space"
+        }
+        target: {
+          id: "graasp.epfl.ch/Space/123"
+          objectType: "Space"
+        }
+      }
+    };
+    osapi.activitystreams.create(params).execute(function(response){
+ 		response.entry.id; //Id of the newly created activity entry
+  });
+```
+
 ## APPS
 To be continued ...
