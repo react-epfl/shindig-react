@@ -188,6 +188,7 @@ public class ActivityStreamHandler {
     String sortOrder = request.getParameter("sortOrder");
     String startIndex = request.getParameter("startIndex");
     String updatedSince = request.getParameter("updatedSince");
+    String fields = request.getParameter("fields");
 
     // Preconditions
     HandlerPreconditions.requireNotEmpty(contextIds, "No contextId is specified");
@@ -216,6 +217,7 @@ public class ActivityStreamHandler {
       url = appendParam(url, "sortOrder", sortOrder);
       url = appendParam(url, "startIndex", startIndex);
       url = appendParam(url, "updatedSince", updatedSince);
+      url = appendParam(url, "fields", fields);
 
       System.out.println("FINAL URL : "+url);
 
