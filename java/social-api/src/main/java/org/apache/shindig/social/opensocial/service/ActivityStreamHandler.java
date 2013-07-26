@@ -175,7 +175,8 @@ public class ActivityStreamHandler {
   @Operation(httpMethods="GET")
   public Future<?> get(SocialRequestItem request)
       throws ProtocolException {
-      
+    System.out.println("GET ACTIVITIES ...: ");
+
     //Set<String> fields = request.getFields(ActivityEntry.Field.DEFAULT_FIELDS);
     Set<String> contextIds = request.getContextIds();
     String contextType = request.getContextType();

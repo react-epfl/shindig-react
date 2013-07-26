@@ -307,7 +307,7 @@ osapi.activitystreams.get({contextId: 5678, contextType: "@user"}).execute(funct
 });
 ```
 
-### FILTER AND PAGINATES ACTIVITIES
+### FILTER AND PAGINATE ACTIVITIES
 
 Supported parameters : 
 
@@ -337,7 +337,7 @@ osapi.activitystreams.get({contextId: 1234, contextType: "@space", count:10, sor
 
 ### CREATE AN ACTIVITY ENTRY
 
-It is possible to create a new Activity Entry from an app. The *activityEntry* parameter must contain the new activity, described in the JSON format. *userId* and *groupId* must be specified too. 
+It is possible to create a new Activity Entry from an app. The *activityEntry* parameter must contain the new activity, described in the JSON format. *userId* and *groupId* must be specified too.
 
 ```javascript
     var params = {
@@ -362,6 +362,8 @@ It is possible to create a new Activity Entry from an app. The *activityEntry* p
  		response.entry.id; //Id of the newly created activity entry
   });
 ```
+
+NOTE : Supported *verb* values are : **add, update, invite, invite-remind, invite, request-join, join, remove, delete, access**
 
 ## APPS
 To be continued ...
