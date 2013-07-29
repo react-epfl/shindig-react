@@ -193,7 +193,8 @@ public class AppServiceDb implements AppService {
     Map<String, String> str = Maps.newHashMap();
     str.put("o", ownerId); // owner
     str.put("v", viewerId); // viewer
-    str.put("i", appId); // appId = appUrl
+    str.put("i", appId); // appId
+    str.put("u", appId); // appUrl
 
     return "default:" + crypter.wrap(str); // security token requires "default:" before
     } catch (Exception e) {
