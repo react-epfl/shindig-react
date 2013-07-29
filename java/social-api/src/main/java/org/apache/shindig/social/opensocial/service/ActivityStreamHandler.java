@@ -19,6 +19,8 @@
 package org.apache.shindig.social.opensocial.service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.Set;
 import java.util.concurrent.Future;
 
@@ -116,7 +118,6 @@ public class ActivityStreamHandler {
   @Operation(httpMethods="POST", bodyParam = "activity")
   public Future<?> create(SocialRequestItem request) throws ProtocolException {
     try {
-      System.out.println("Creating a new activity...");
       Set<UserId> userIds = request.getUsers();
       List<String> activityIds = request.getListParameter("activityId");
 
@@ -129,7 +130,7 @@ public class ActivityStreamHandler {
       activity = test.toString();
       String viewerId = request.getToken().getViewerId();
     
-      // HandlerPreconditions.requireNotEmpty(viewerId, "No viewerId is specified");
+      //HandlerPreconditions.requireNotEmpty(viewerId, "No viewerId is specified");
     
       String output = "";
       HttpClient client = new DefaultHttpClient();
@@ -143,15 +144,12 @@ public class ActivityStreamHandler {
       // return back the response
       HttpResponse response = client.execute(post);
 
-      System.out.println("SUCCESS");
-
       BufferedReader rd = new BufferedReader(new InputStreamReader(
           response.getEntity().getContent()));
       String line = "";
       while ((line = rd.readLine()) != null) {
         output = line;
-      }
-      System.out.println("Output : "+output);          
+      }         
       JSONObject jsonOutput = new JSONObject(output);
       return  Futures.immediateFuture(jsonOutput);
 
@@ -175,21 +173,20 @@ public class ActivityStreamHandler {
   @Operation(httpMethods="GET")
   public Future<?> get(SocialRequestItem request)
       throws ProtocolException {
-    System.out.println("GET ACTIVITIES ...: ");
 
     //Set<String> fields = request.getFields(ActivityEntry.Field.DEFAULT_FIELDS);
     Set<String> contextIds = request.getContextIds();
     String contextType = request.getContextType();
     String viewerId = request.getToken().getViewerId();
-    String count = request.getParameter("count");
-    System.out.println("Count parameter : "+count);
-    String filterBy = request.getParameter("filterBy");
-    String filterOp = request.getParameter("filterOp");
-    String filterValue = request.getParameter("filterValue");
-    String sortOrder = request.getParameter("sortOrder");
-    String startIndex = request.getParameter("startIndex");
-    String updatedSince = request.getParameter("updatedSince");
-    String fields = request.getParameter("fields");
+    Map<String, String> params = new HashMap<String, String>();
+    params.put("count", request.getParameter("count"));
+    params.put("filterBy", request.getParameter("filterBy"));
+    params.put("filterOp", request.getParameter("filterOp"));
+    params.put("filterValue", request.getParameter("filterValue"));
+    params.put("sortOrder", request.getParameter("sortOrder"));
+    params.put("startIndex", request.getParameter("startIndex"));
+    params.put("updatedSince", request.getParameter("updatedSince"));
+    params.put("fields", request.getParameter("fields"));
 
     // Preconditions
     HandlerPreconditions.requireNotEmpty(contextIds, "No contextId is specified");
@@ -201,7 +198,7 @@ public class ActivityStreamHandler {
       String output = "";
       HttpClient client = new DefaultHttpClient();
 
-      String url = GRAASP_URL+"/rest/activitystreams/"+contextIds.iterator().next()+"/@self/"; // TODO : manage groups and apps 
+      String url = GRAASP_URL+"/rest/activitystreams/"+contextIds.iterator().next()+"/@self/"; 
       if(contextType.equals("@user")){
         url+="@app/@user";
       } else if(contextType.equals("@space")) {
@@ -211,16 +208,7 @@ public class ActivityStreamHandler {
       url += "/?token="+GRAASP_TOKEN+"&user="+viewerId;
 
       //Append parameters to the URL
-      url = appendParam(url, "count", count);
-      url = appendParam(url, "filterBy", filterBy);
-      url = appendParam(url, "filterOp", filterOp);
-      url = appendParam(url, "filterValue", filterValue);
-      url = appendParam(url, "sortOrder", sortOrder);
-      url = appendParam(url, "startIndex", startIndex);
-      url = appendParam(url, "updatedSince", updatedSince);
-      url = appendParam(url, "fields", fields);
-
-      System.out.println("FINAL URL : "+url);
+      url = appendParams(url, params);
 
       HttpGet get = new HttpGet(url);
       get.getParams().setParameter("http.protocol.expect-continue", false);
@@ -233,7 +221,6 @@ public class ActivityStreamHandler {
         while ((line = rd.readLine()) != null) {
           output = line;
         } 
-        System.out.println("Answer : "+output);
         JSONObject jsonOutput = new JSONObject(output);
         return  Futures.immediateFuture(jsonOutput);
       } catch (Exception e) {
@@ -252,10 +239,16 @@ public class ActivityStreamHandler {
     return null;
   }
 
-  private String appendParam(String url, String paramName, String paramValue){
+  private String appendParams(String url, Map<String, String> params){
     String newUrl = url;
-    if (paramValue != null && !paramValue.equals("")) {
+    String paramValue = "";
+    String paramName = "";
+    for (Map.Entry<String,String> param : params.entrySet()) {
+      paramValue = param.getValue();
+      paramName = param.getKey();
+      if (paramValue != null && !paramValue.equals("")) {
         newUrl += "&"+paramName+"="+paramValue;
+      }
     }
     return newUrl;
   }
