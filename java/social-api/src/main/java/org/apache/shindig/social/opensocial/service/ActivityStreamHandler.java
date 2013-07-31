@@ -125,7 +125,7 @@ public class ActivityStreamHandler {
       HandlerPreconditions.requireSingular(userIds, "Multiple userIds not supported");
       HandlerPreconditions.requireEmpty(activityIds, "Cannot specify activity ID in create");
 
-      String activity = request.getParameter("activityEntry");
+      String activity = request.getParameter("activity");
       JSONObject test = new JSONObject(activity);
       activity = test.toString();
       String viewerId = request.getToken().getViewerId();
@@ -149,7 +149,7 @@ public class ActivityStreamHandler {
       String line = "";
       while ((line = rd.readLine()) != null) {
         output = line;
-      }         
+      }
       JSONObject jsonOutput = new JSONObject(output);
       return  Futures.immediateFuture(jsonOutput);
 
