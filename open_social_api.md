@@ -227,10 +227,10 @@ The structure of a Collection for activity streams differs from the one of a cla
 | Field          | Description                                                                                                                                                                 |
 | -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | itemsPerPage   | Number of items per page, corresponds to the *count* request parameter. Default is 10 000.                                                                                    |
-| startIndex     | Index of the first item of the page. Corresponds to the *startIndex* requet parameter. Default is 0.                                                                        |
-| filtered       | Always **true** .The results will allways honor filter params in the request. The default value is 'true' if the field does not exist.                                      |
-| updatedSince   | Always **true**. The results will allways honor updatedSince param in the request. The default value is 'true' if the field does not exist.                                 |
-| sorted         | Always **true**. The results will allways honor sortOrder param in the request. The default value is 'true' if the field does not exist.                                    |
+| startIndex     | Index of the first item of the page. Corresponds to the *startIndex* request parameter. Default is 1.                                                                        |
+| filtered       | Always **true** .The results will always honor filter params in the request. The default value is 'true' if the field does not exist.                                      |
+| updatedSince   | Always **true**. The results will always honor updatedSince param in the request. The default value is 'true' if the field does not exist.                                 |
+| sorted         | Always **true**. The results will always honor sortOrder param in the request. The default value is 'true' if the field does not exist.                                    |
 | totalResults   | The total number of contacts that would be returned if there were no startIndex or count specified. This value tells the Consumer how many total results to expect, regardless of the current pagination being used, but taking into account the current filtering options in the request.|
 | entry          | An array of activity entries, one for each item matching the request.                                                                                                                |
 
@@ -343,7 +343,7 @@ It is possible to create a new Activity Entry from an app. The *activityEntry* p
     var params = {
       userId: '@viewer',
       groupId: '@self',
-      activityEntry: {
+      activity: {
         actor: {
           id: "graasp.epfl.ch/User/42",
         },
