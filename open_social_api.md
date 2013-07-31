@@ -337,7 +337,7 @@ osapi.activitystreams.get({contextId: 1234, contextType: "@space", count:10, sor
 
 ### CREATE AN ACTIVITY ENTRY
 
-It is possible to create a new Activity Entry from an app. The *activityEntry* parameter must contain the new activity, described in the JSON format. *userId* and *groupId* must be specified too.
+It is possible to create a new Activity Entry from an app. The *activity* parameter must contain the new activityEntry, described in the JSON format. *userId* and *groupId* must be specified too.
 
 ```javascript
     var params = {
@@ -359,7 +359,7 @@ It is possible to create a new Activity Entry from an app. The *activityEntry* p
       }
     };
     osapi.activitystreams.create(params).execute(function(response){
- 		response.entry.id; //Id of the newly created activity entry
+ 		response.id; //Id of the newly created activity entry
   });
 ```
 
