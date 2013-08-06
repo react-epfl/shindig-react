@@ -187,6 +187,7 @@ public class ActivityStreamHandler {
     params.put("startIndex", request.getParameter("startIndex"));
     params.put("updatedSince", request.getParameter("updatedSince"));
     params.put("fields", request.getParameter("fields"));
+    params.put("ext", request.getParameter("ext"));
 
     // Preconditions
     HandlerPreconditions.requireNotEmpty(contextIds, "No contextId is specified");
