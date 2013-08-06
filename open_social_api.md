@@ -226,13 +226,13 @@ The structure of a Collection for activity streams differs from the one of a cla
 
 | Field          | Description                                                                                                                                                                 |
 | -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| itemsPerPage   | Number of items per page, corresponds to the *count* request parameter. Default is 10 000.                                                                                    |
-| startIndex     | Index of the first item of the page. Corresponds to the *startIndex* request parameter. Default is 1.                                                                        |
-| filtered       | Always **true** .The results will always honor filter params in the request. The default value is 'true' if the field does not exist.                                      |
-| updatedSince   | Always **true**. The results will always honor updatedSince param in the request. The default value is 'true' if the field does not exist.                                 |
-| sorted         | Always **true**. The results will always honor sortOrder param in the request. The default value is 'true' if the field does not exist.                                    |
-| totalResults   | The total number of contacts that would be returned if there were no startIndex or count specified. This value tells the Consumer how many total results to expect, regardless of the current pagination being used, but taking into account the current filtering options in the request.|
-| entry          | An array of activity entries, one for each item matching the request.                                                                                                                |
+| itemsPerPage   | Number of items per page, corresponds to the *count* request parameter. Default is 10 000.                                                                                  |
+| startIndex     | Index of the first item of the page. Corresponds to the *startIndex* request parameter. Default is 1.                                                                       |
+| filtered       | Always **true** .The results will always honor filter params in the request. The default value is 'true' if the field does not exist.                                       |
+| updatedSince   | Always **true**. The results will always honor updatedSince param in the request. The default value is 'true' if the field does not exist.                                  |
+| sorted         | Always **true**. The results will always honor sortOrder param in the request. The default value is 'true' if the field does not exist.                                     |
+| totalResults   | The total number of contacts that would be returned if there were no startIndex or count specified. This value tells the Consumer how many total results to expect, regardless of the current pagination being used, but taking into account the current filtering options in the request.                                                                                                                              |
+| entry          | An array of activity entries, one for each item matching the request.                                                                                                       |
 
 
 ### ACTIVITY ENTRY
@@ -241,7 +241,7 @@ The structure of a Collection for activity streams differs from the one of a cla
 | -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | id             | Id of the activity **(This is an IRI)**                                                                                                                                     |
 | actor          | User that is the initiator of this activity. This is as an **ActivityObject**.                                                                                              |
-| object         | Primary object of the activity (Ex : **Space** has been visited, **User** has been invited to this space). This is as an **ActivityObject**.                                 |
+| object         | Primary object of the activity (Ex : **Space** has been visited, **User** has been invited to this space). This is as an **ActivityObject**.                                |
 | target         | Target of the activity (Ex : User has been invited to **this space**). May be undefined (Ex: Space has been visited : no target here). This is as an **ActivityObject**.    |
 | verb           | Identifies the action that the activity describes. ( *add, update, invite-remind, invite, request-join, join, remove, delete, access*)                                      |
 | published      | When the activity was **created** in Graasp (no published notion in Graasp) (ISO8601)                                                                                       |
@@ -250,24 +250,24 @@ The structure of a Collection for activity streams differs from the one of a cla
 ### ACTIVITY OBJECT
 An object is a thing, real or imaginary, which participates in an activity. It may be the entity performing the activity, or the entity on which the activity was performed. In Graasp it can be a User, a Space, an Asset, a Rating, a Link, a Tagging, a Comment, a Widget or a Favorite.
 
-| Field          | Description                                                                                                                                                                 |
-| -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| id             | Id of the activity object **(This is an IRI)**                                                                                                                              |
-| objectType     | *User, Space, Asset, Rating, Link, Tagging, Comment, Widget, Favorite*                                                                                                      |
-| displayName    | Name of the activity object (not defined for **Rating, Link**)                                                                                                                                                |
-| author          | Author of this object. This is a **ActivityObject**.(not defined for **User, Anonymous Rating**)                                                                                                                                               |
-| image          | Image of the object. This is a **MediaLink**. (not defined for **Rating, Link**)                                                                                                                                                |
-| url            | Url of the object in Graasp (not defined for **Rating, Link**)                                                                                                                                                |
-| summary        | Description of the object (not defined for **Rating, Link**)                                                                                                                                                  |
-| content        | Content of the object (not defined for **User, Space, Link**)                                                                                                                                                 |
-| published      | When the activity object was **created** in Graasp (no published notion in Graasp) (ISO8601)                                                                                |
-| updated        | Date of the last update (ISO8601)                                                                                                                                           |
+| Field          | Description                                                                                            |
+| -------------- | ------------------------------------------------------------------------------------------------------ |
+| id             | Id of the activity object **(This is an IRI)**                                                         |
+| objectType     | *User, Space, Asset, Rating, Link, Tagging, Comment, Widget, Favorite*                                 |
+| displayName    | Name of the activity object (not defined for **Rating, Link**)                                         |
+| author         | Author of this object. This is a **ActivityObject**.(not defined for **User, Anonymous Rating**)       |
+| image          | Image of the object. This is a **MediaLink**. (not defined for **Rating, Link**)                       |
+| url            | Url of the object in Graasp (not defined for **Rating, Link**)                                         |
+| summary        | Description of the object (not defined for **Rating, Link**)                                           |
+| content        | Content of the object (not defined for **User, Space, Link**)                                          |
+| published      | When the activity object was **created** in Graasp (no published notion in Graasp) (ISO8601)           |
+| updated        | Date of the last update (ISO8601)                                                                      |
 
 ### MEDIA LINK
 
-| Field          | Description                                                                                                                                                                 |
-| -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| url            | url of the media item.                                                                                                                              |
+| Field          | Description              |
+| -------------- | ------------------------ |
+| url            | url of the media item.   |
 
 
 ### RETRIEVE ACTIVITY STREAM OF A USER OR A SPACE
@@ -311,16 +311,16 @@ osapi.activitystreams.get({contextId: 5678, contextType: "@user"}).execute(funct
 
 Supported parameters : 
 
-| Field          | Description                                                                   |
-| -------------- | ----------------------------------------------------------------------------- |
-| count             | The number of items per page, for a paged collection.                                                   |
-| startIndex    | The index of the first result to be retrieved (for paging).                                                             |
-| sortOrder    | Sort order (by update date) of the results. Default is **ascending** (oldest activities first), in order to get the last activities first, it is necessary specify it as **descending**                                                      |
-| updatedSince| Return only entries updated since the date specified in this parameter (ISO8601)                               |
-| filterBy   | Field to filter.|
-| filterOp     | **contains**, **startsWith**, **equals**, **exists**                |
-| filterValue       | Value of the filter                                                |
-| fields        | Comma separated list of fields to include in the response. The response will contain every field if this parameter is not specified.                                     |
+| Field          | Description                                                                                                                                                                              |
+| -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| count          | The number of items per page, for a paged collection.                                                                                                                                    |
+| startIndex     | The index of the first result to be retrieved (for paging).                                                                                                                              |
+| sortOrder      | Sort order (by update date) of the results. Default is **ascending** (oldest activities first), in order to get the last activities first, it is necessary specify it as **descending**. |
+| updatedSince   | Return only entries updated since the date specified in this parameter (ISO8601)                                                                                                         |
+| filterBy       | Field to filter.                                                                                                                                                                         |
+| filterOp       | **contains**, **startsWith**, **equals**, **exists**                                                                                                                                     |
+| filterValue    | Value of the filter                                                                                                                                                                      |
+| fields         | Comma separated list of fields to include in the response. The response will contain every field if this parameter is not specified.                                                     |
 
 
 
