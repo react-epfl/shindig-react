@@ -209,7 +209,6 @@ public class ActivityStreamHandler {
 
       //Append parameters to the URL
       url = appendParams(url, params);
-
       HttpGet get = new HttpGet(url);
       get.getParams().setParameter("http.protocol.expect-continue", false);
 
