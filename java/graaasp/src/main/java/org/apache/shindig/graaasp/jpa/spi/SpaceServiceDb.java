@@ -241,7 +241,7 @@ public class SpaceServiceDb implements SpaceService {
     q.setParameter(SpaceDb.PARAM_SPACEID, spaceId.getSpaceId());
     q.setFirstResult(0);
     q.setMaxResults(1);
-
+    q.setHint("eclipselink.refresh", "true");
 
     List<?> plist = q.getResultList();
     Space space = null;
