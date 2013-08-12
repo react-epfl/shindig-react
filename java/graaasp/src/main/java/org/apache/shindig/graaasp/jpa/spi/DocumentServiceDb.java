@@ -177,6 +177,8 @@ public class DocumentServiceDb implements DocumentService {
       q.setParameter(SpaceDb.PARAM_SPACEID, spaceId);
       q.setFirstResult(0);
       q.setMaxResults(1);
+      q.setHint("eclipselink.refresh", "true");
+
       List<?> plist = q.getResultList();
       SpaceDb s = (SpaceDb) plist.get(0);
       if (!s.getVisibilityLevel().equals("Everyone")) {
@@ -195,14 +197,14 @@ public class DocumentServiceDb implements DocumentService {
    */
   public Future<Document> getDocument(DocumentId documentId, Set<String> fields, SecurityToken token)
       throws ProtocolException {
- 
-	Query q = null;
-	// gets document for documentId from the database
-	q = entityManager.createNamedQuery(AssetDb.FINDBY_DOCUMENTID);
-	q.setParameter(AssetDb.PARAM_DOCUMENTID, documentId.getDocumentId());
-	q.setFirstResult(0);
-	q.setMaxResults(1);
-		
+
+    Query q = null;
+    // gets document for documentId from the database
+    q = entityManager.createNamedQuery(AssetDb.FINDBY_DOCUMENTID);
+    q.setParameter(AssetDb.PARAM_DOCUMENTID, documentId.getDocumentId());
+    q.setFirstResult(0);
+    q.setMaxResults(1);
+    q.setHint("eclipselink.refresh", "true");
 
     List<?> plist = q.getResultList();
     Document document = null;

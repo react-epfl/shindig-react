@@ -211,6 +211,8 @@ public class AppServiceDb implements AppService {
       q.setParameter(SpaceDb.PARAM_SPACEID, spaceId);
       q.setFirstResult(0);
       q.setMaxResults(1);
+      q.setHint("eclipselink.refresh", "true");
+
       List<?> plist = q.getResultList();
       SpaceDb s = (SpaceDb) plist.get(0);
       if (!s.getVisibilityLevel().equals("Everyone")) {
@@ -235,7 +237,7 @@ public class AppServiceDb implements AppService {
     q.setParameter(WidgetDb.PARAM_WIDGETID, AppId.getAppId());
     q.setFirstResult(0);
     q.setMaxResults(1);
-
+    q.setHint("eclipselink.refresh", "true");
 
     List<?> plist = q.getResultList();
     App app = null;

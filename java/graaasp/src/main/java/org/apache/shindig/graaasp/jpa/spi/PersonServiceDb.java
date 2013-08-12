@@ -244,6 +244,7 @@ public class PersonServiceDb implements PersonService {
     q.setParameter(UserDb.PARAM_USERID, uid);
     q.setFirstResult(0);
     q.setMaxResults(1);
+    q.setHint("eclipselink.refresh", "true");
 
     List<?> plist = q.getResultList();
     Person person = null;
@@ -324,6 +325,7 @@ public class PersonServiceDb implements PersonService {
         q.setParameter(UserDb.PARAM_USERID, viewerId);
         q.setFirstResult(0);
         q.setMaxResults(1);
+        q.setHint("eclipselink.refresh", "true");
 
         List<?> plist = q.getResultList();
         UserDb user = null;
