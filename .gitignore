@@ -1,3 +1,8 @@
+# Config files
+java/server-resources/src/main/webapp/WEB-INF/web.xml*
+java/graaasp/src/main/resources/socialjpa.properties*
+java/common/conf/shindig.properties*
+
 *~
 *.swp
 .idea
@@ -323,6 +328,8 @@
 /java/social-api/derby.log
 /java/social-api/maven-eclipse.xml
 
+/java/sample-maven-archetype/target/
+
 # /java/social-api/src/main/java/
 /java/social-api/src/main/java/META-INF
 
@@ -373,3 +380,15 @@
 /php/create.sql
 /php/drop.sql
 /php/derby.log
+
+# Config files
+java/server/src/main/webapp/WEB-INF/web.xml*
+java/graaasp/src/main/resources/socialjpa.properties*
+java/common/conf/shindig.properties*
+
+# Graasp
+java/graaasp/target
+devtest.war
+version.ini
+.plugins
+.lock

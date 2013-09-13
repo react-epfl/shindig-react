@@ -76,6 +76,7 @@
   <!-- ====================================================================== -->
   <!-- C I  M A N A G E M E N T                                               -->
   <!-- ====================================================================== -->
+<!-- TODO: change to react jenkins -->
   <ciManagement>
     <system>Jenkins</system>
     <url>https://builds.apache.org/view/S-Z/view/Shindig/</url>
@@ -501,19 +502,6 @@
     </developer>
   </developers>
 
-  <modules>
-    <module>features</module>
-    <module>java/common</module>
-    <module>java/gadgets</module>
-    <module>java/social-api</module>
-    <module>java/sample-container</module>
-    <module>java/sample-maven-archetype</module>
-    <module>java/server-resources</module>
-    <module>java/server-dependencies</module>
-    <module>java/server</module>
-    <module>extras</module>
-  </modules>
-
 
   <!-- ====================================================================== -->
   <!-- P R O F I L E S                                                        -->
@@ -523,6 +511,46 @@
     <!-- stub for all -->
     <profile>
       <id>all</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <modules>
+        <module>features</module>
+        <module>java/common</module>
+        <module>java/gadgets</module>
+        <module>java/social-api</module>
+        <module>java/sample-container</module>
+        <module>java/sample-maven-archetype</module>
+        <module>java/server-resources</module>
+        <module>java/server-dependencies</module>
+        <module>java/server</module>
+        <module>java/graaasp</module>
+        <module>extras</module>
+      </modules>
+    </profile>
+
+    <!-- profile to build java/rest-api -->
+    <profile>
+      <id>social-api</id>
+      <modules>
+        <module>java/social-api</module>
+      </modules>
+    </profile>
+
+    <!-- profile to build java/samples -->
+    <profile>
+      <id>samples</id>
+      <modules>
+        <module>java/samples</module>
+      </modules>
+    </profile>
+
+    <!-- profile to build java/graaasp -->
+    <profile>
+      <id>graaasp</id>
+      <modules>
+        <module>java/graaasp</module>
+      </modules>
     </profile>
 
     <!-- profile to run an embedded jetty instance -->
@@ -1493,6 +1521,11 @@
       <version>1.3</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.apache.httpcomponents</groupId>
+      <artifactId>httpmime</artifactId>
+      <version>4.1.2</version>
+    </dependency>
   </dependencies>
 
   <dependencyManagement>
@@ -1554,6 +1587,13 @@
         <version>2.5.0</version>
         <classifier>${shindig.jdk.classifier}</classifier>
       </dependency>
+
+      <dependency>
+        <groupId>org.apache.shindig</groupId>
+        <artifactId>shindig-graaasp</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+
       <dependency>
         <groupId>org.apache.shindig</groupId>
         <artifactId>shindig-common</artifactId>

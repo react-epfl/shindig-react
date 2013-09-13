@@ -19,7 +19,7 @@
 package org.apache.shindig.social.opensocial.model;
 
 import org.apache.shindig.protocol.model.Exportablebean;
-import org.apache.shindig.social.core.model.ListFieldImpl;
+import org.apache.shindig.social.core.model.EmailDb;
 
 import com.google.inject.ImplementedBy;
 
@@ -33,7 +33,7 @@ import com.google.inject.ImplementedBy;
  * Introduced in v0.8.1
  * </p>
  */
-@ImplementedBy(ListFieldImpl.class)
+@ImplementedBy(EmailDb.class)
 @Exportablebean
 public interface ListField {
 
@@ -119,4 +119,6 @@ public interface ListField {
    * @param primary set to true if a primary or preferred value
    */
   void setPrimary(Boolean primary);
+
+  void setPerson(Person person);
 }

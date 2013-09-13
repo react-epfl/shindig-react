@@ -19,6 +19,7 @@
 package org.apache.shindig.social.core.model;
 
 import org.apache.shindig.social.opensocial.model.Url;
+import org.apache.shindig.social.opensocial.model.Person;
 
 /**
  * see
@@ -41,5 +42,9 @@ public class UrlImpl extends ListFieldImpl implements Url {
 
   public void setLinkText(String linkText) {
     this.linkText = linkText;
+  }
+
+  public void setPerson(Person person) {
+    // this.person = person;
   }
 }

@@ -20,7 +20,7 @@ package org.apache.shindig.social.opensocial.model;
 
 import org.apache.shindig.protocol.model.Enum;
 import org.apache.shindig.protocol.model.Exportablebean;
-import org.apache.shindig.social.core.model.PersonImpl;
+import org.apache.shindig.social.core.model.UserDb;
 
 import com.google.common.base.Functions;
 import com.google.common.collect.ImmutableSet;
@@ -40,7 +40,7 @@ import java.util.Set;
  * This field is currently only in the RESTful spec.
  *
  */
-@ImplementedBy(PersonImpl.class)
+@ImplementedBy(UserDb.class)
 @Exportablebean
 public interface Person {
   /**

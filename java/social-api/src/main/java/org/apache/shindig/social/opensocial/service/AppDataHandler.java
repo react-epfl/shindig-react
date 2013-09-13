@@ -27,6 +27,7 @@ import org.apache.shindig.social.opensocial.spi.UserId;
 
 import java.util.Map;
 import java.util.Set;
+import java.util.HashSet;
 import java.util.concurrent.Future;
 
 import javax.servlet.http.HttpServletResponse;
@@ -64,8 +65,11 @@ public class AppDataHandler {
     HandlerPreconditions.requireNotEmpty(userIds, "No userId specified");
     HandlerPreconditions.requireSingular(userIds, "Multiple userIds not supported");
 
+    Set<String> fields = new HashSet(request.getListParameter("keys"));
+
     return service.deletePersonData(userIds.iterator().next(), request.getGroup(),
-        request.getAppId(), request.getFields(), request.getToken());
+        // request.getAppId(), request.getFields(), request.getToken());
+        request.getAppId(), fields, request.getToken());
   }
 
   /**

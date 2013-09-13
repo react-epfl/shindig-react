@@ -19,7 +19,7 @@
 package org.apache.shindig.social.opensocial.model;
 
 import org.apache.shindig.protocol.model.Exportablebean;
-import org.apache.shindig.social.core.model.NameImpl;
+import org.apache.shindig.social.core.model.NameDb;
 
 import com.google.inject.ImplementedBy;
 
@@ -30,7 +30,7 @@ import com.google.inject.ImplementedBy;
  * http://www.opensocial.org/Technical-Resources/opensocial-spec-v081/opensocial-reference#opensocial.Name</a>
  */
 
-@ImplementedBy(NameImpl.class)
+@ImplementedBy(NameDb.class)
 @Exportablebean
 public interface Name {
 

@@ -78,15 +78,15 @@
 "gadgets.osDataUri" : "//%host%${CONTEXT_ROOT}/rpc",
 
 // Use an insecure security token by default
-"gadgets.securityTokenType" : "insecure",
+// "gadgets.securityTokenType" : "insecure",
 
 // Uncomment the securityTokenType and one of the securityTokenKey's to switch to a secure version.
 // Note that you can choose to use an embedded key, a filesystem reference or a classpath reference.
 // The best way to generate a key is to do something like this:
 // dd if=/dev/random bs=32 count=1 | openssl base64
 //
-//"gadgets.securityTokenType" : "secure",
-//"gadgets.securityTokenKey" : "default-insecure-embedded-key",
+"gadgets.securityTokenType" : "secure",
+"gadgets.securityTokenKey" : "file:///Graaasp/current/config/security_token.txt",
 //"gadgets.securityTokenKey" : "file:///path/to/key/file.txt",
 //"gadgets.securityTokenKey" : "res://some-file-on-the-classpath.txt",
 

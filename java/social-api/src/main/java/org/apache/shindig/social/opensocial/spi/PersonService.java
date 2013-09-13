@@ -58,6 +58,19 @@ public interface PersonService {
   public static String IS_WITH_FRIENDS_FILTER = "isFriendsWith";
 
   /**
+   * Returns a list of people for the context.
+   *
+   * @param context A context for which spaces to be returned
+   * @param collectionOptions How to filter, sort and paginate the collection being fetched
+   * @param fields The profile details to fetch. Empty set implies all
+   * @param token The gadget token @return a list of people.
+   * @return Future that returns a RestfulCollection of Person
+   */
+  Future<RestfulCollection<Person>> getPeopleForContext(Context context,
+      CollectionOptions collectionOptions, Set<String> fields, SecurityToken token)
+      throws ProtocolException;
+
+  /**
    * Returns a list of people that correspond to the passed in person ids.
    *
    * @param userIds A set of users
@@ -86,8 +99,7 @@ public interface PersonService {
    * Updates person that corresponds to the passed in person id and updates him
    *
    * @param id The id of the person to fetch.
-   * @param request The request object
-   * @param fields The fields to fetch.
+   * @param person The request object
    * @param token The gadget token
    * @return a list of people.
    */

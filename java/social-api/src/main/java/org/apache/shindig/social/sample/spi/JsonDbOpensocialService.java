@@ -59,9 +59,12 @@ import org.apache.shindig.social.opensocial.spi.MediaItemService;
 import org.apache.shindig.social.opensocial.spi.MessageService;
 import org.apache.shindig.social.opensocial.spi.PersonService;
 import org.apache.shindig.social.opensocial.spi.UserId;
+import org.apache.shindig.social.opensocial.spi.Context;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import org.apache.shindig.social.opensocial.service.SocialRequestItem;
 
 import com.google.common.collect.ImmutableSortedSet;
 import com.google.common.collect.Lists;
@@ -446,7 +449,53 @@ public class JsonDbOpensocialService implements ActivityService, PersonService, 
           HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
           je.getMessage(), je);
     }
+  }
 
+  // TODO: from Evgeny's code, check if still used
+  // /** {@inheritDoc} */
+  // public Future<Person> updatePerson(UserId id, Person person, Set<String> fields, SecurityToken token)
+  //     throws ProtocolException {
+  //   try {
+  //     JSONArray people = db.getJSONArray(PEOPLE_TABLE);
+
+  //     for (int i = 0; i < people.length(); i++) {
+  //       JSONObject personDb = people.getJSONObject(i);
+  //       if (id != null && personDb.get(Person.Field.ID.toString()).equals(id.getUserId(token))) {
+  //         Person personObj = filterFields(personDb, fields, Person.class);
+  //         Map<String, Object> appData = getPersonAppData(personDb.getString(Person.Field.ID
+  //             .toString()), fields);
+  //         personObj.setAppData(appData);
+
+  //         return ImmediateFuture.newInstance(personObj);
+  //       }
+  //     }
+  //     throw new ProtocolException(HttpServletResponse.SC_BAD_REQUEST, "Person '" + id.getUserId(token) + "' not found");
+  //   } catch (JSONException je) {
+  //     throw new ProtocolException(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, je.getMessage(),
+  //         je);
+  //   }
+  // }
+
+  // example from real db implementation
+  public Future<RestfulCollection<Person>> getPeopleForContext(Context context, 
+      CollectionOptions collectionOptions, Set<String> fields,
+       SecurityToken token) throws ProtocolException {
+    // list of spaces is retrieved for a context
+
+    // not dealing with the collection options at the moment, and not the fields because they are
+    // either lazy or at no extra costs, the consumer will either access the properties or not
+    List<Person> plist = null;
+    int lastPos = 1;
+    Long totalResults = null;
+
+    plist = Lists.newArrayList();
+    // FIXME: use JPQLUtils.getTotalResults for it
+    totalResults = new Long(plist.size());
+    // all of the above could equally have been placed into a thread to overlay the
+    // db wait times.
+    RestfulCollection<Person> restCollection = new RestfulCollection<Person>(
+        plist, collectionOptions.getFirst(), totalResults.intValue(), collectionOptions.getMax());
+    return  Futures.immediateFuture(restCollection);
   }
 
   /** Check if a viewer is allowed to update the given person record. **/
