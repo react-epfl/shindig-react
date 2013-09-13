@@ -110,7 +110,7 @@ public class AppDataServiceDb implements AppDataService {
    * @return
    * TODO: there is a difference in this method compared to the one in samples. Doublecheck and test it
    */
-  private Map<String,AppdataDb> getDataMap(long contextId, String contextType, GroupId groupId, String appId) {
+  private Map<String, AppdataDb> getDataMap(long contextId, String contextType, GroupId groupId, String appId) {
     List<Long> paramList = Lists.newArrayList();
     paramList.add(contextId);
 
@@ -274,7 +274,7 @@ public class AppDataServiceDb implements AppDataService {
      * TODO: there is a difference in this method compared to the one in samples. Doublecheck and test it
      */
     public Future<Void> updatePersonData(UserId userId, GroupId groupId, String appId,
-        Set<String> fields, Map<String, String> values, SecurityToken token)
+        Set<String> fields, Map<String, Object> values, SecurityToken token)
         throws ProtocolException {
 
         if (appId == null) {
@@ -292,7 +292,7 @@ public class AppDataServiceDb implements AppDataService {
             contextId = Long.parseLong(uid);
         }
 
-        Map<String,AppdataDb> dataMaps = getDataMap(contextId, contextType, groupId, appId);
+        Map<String, AppdataDb> dataMaps = getDataMap(contextId, contextType, groupId, appId);
 
         // TODO How should transactions be managed? Should samples be using warp-persist instead?
         if (!entityManager.getTransaction().isActive()) {
