@@ -1,7 +1,13 @@
 Apache Shindig version for Graasp
 =================================
 An Apache Shindig extended with Spaces and other adaptations
-for Graasp (based on apache shindig 2.0)
+for Graasp (based on apache shindig 2.5.0)
+
+Memo
+====
+
+    $ make info        # shows useful info and all the commands
+
 
 Get the code
 ================
@@ -55,9 +61,9 @@ Clear all production and reacttest temporal changes
 Prepare .war files for Production and Reacttest
 =======================
 
-    make reacttest  -> builds reacttest.war in the current directory
-    make production -> builds production.war in the current directory
-    make all        -> build both reacttest.war and production
+    make test  -> build reacttest.war in the current directory
+    make prod  -> build production.war in the current directory
+    make all   -> build both reacttest.war and production
     
 !!! Compiled .war file should be renamed into ROOT.war on the Tomcat server.
 
@@ -67,6 +73,13 @@ The master branch is automatically deployed to [REACT test server](http://reactt
 are pushed. To delploy reacttest.war to REACT test server manually, use:
 
     $ make deploy_test
+    $ make deploy_prod
+
+Restart server
+=======================
+
+    $ make restart_test
+    $ make restart_prod
 
 License - ASF
 =============
