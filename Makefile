@@ -4,7 +4,7 @@ SHINDIGCONF = java/common/conf/
 SHINDIG = java/common/conf/shindig.properties
 WEBCONF = java/server-resources/src/main/webapp/WEB-INF/
 WEBXML = java/server-resources/src/main/webapp/WEB-INF/web.xml
-WAR = java/server/target/shindig-server-2.5.0-SNAPSHOT.war
+WAR = java/server/target/shindig-server-2.5.0.war
 TOMCAT = /Library/Tomcat
 
 default:
