@@ -47,11 +47,14 @@ prepare: clean settings
 clean:
 	@echo "Cleaning temporary changes"
 	@echo "socialjpa.properties"
-	@cp $(SOCIALJPA)_development $(SOCIALJPA)
+	@if [[ -a $(SOCIALJPA)_development ]]; then cp $(SOCIALJPA)_development $(SOCIALJPA); fi
+	@rm -rf $(SOCIALJPA)_* > /dev/null 2>&1
 	@echo "shindig.properties"
-	@cp $(SHINDIG)_development $(SHINDIG)
+	@if [[ -a $(SHINDIG)_development ]]; then cp $(SHINDIG)_development $(SHINDIG); fi
+	@rm -rf $(SHINDIG)_* > /dev/null 2>&1
 	@echo "web.xml"
-	@cp $(WEBXML)_development $(WEBXML)
+	@if [[ -a $(WEBXML)_development ]]; then cp $(WEBXML)_development $(WEBXML); fi
+	@rm -rf $(WEBXML)_* > /dev/null 2>&1
 	@if [[ -a reacttest.war ]]; then rm reacttest.war; fi
 	@if [[ -a production.war ]]; then rm production.war; fi
 	@mvn clean
