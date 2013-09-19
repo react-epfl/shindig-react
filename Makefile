@@ -27,15 +27,15 @@ info:
 	#
 	# Commands
 	# ========
-	# $ make prepare         # clean everything and loads local/prod/test settings into project
+	# $ make prepare         # clean everything and loads local/prod/react settings into project
 	# $ make                 # compile locally
 	# $ make compile         # call "mvn clean" and compile locally
 	# $ make start           # start the local server
-	# $ make test            # compile .war for reactest
+	# $ make react            # compile .war for reactest
 	# $ make prod            # compile .war for production
-	# $ make deploy_test     # deploy .war to reacttest
+	# $ make deploy_react     # deploy .war to reacttest
 	# $ make deploy_prod     # deploy .war to production
-	# $ make restart_test    # restart shindig at reacttest
+	# $ make restart_react    # restart shindig at reacttest
 	# $ make restart_prod    # restart shindig at production
 
 start:
@@ -68,7 +68,7 @@ settings:
 	@cp $(WEBXML)_development $(WEBXML)
 	@rm -rf prod_config
 
-all: prod test
+all: prod react
 
 prod:
 	@echo "Creating production.war file"
@@ -82,7 +82,7 @@ prod:
 	@mvn -Dmaven.test.skip && cp $(WAR) production.war \
 		&& echo "Move production.war to ROOT.war for Tomcat"
 
-test:
+react:
 	@echo "Creating reacttest.war file"
 	@echo "socialjpa.properties"
 	@cp $(SOCIALJPA)_reacttest $(SOCIALJPA)
@@ -94,12 +94,26 @@ test:
 	@mvn -Dmaven.test.skip && cp $(WAR) reacttest.war \
 		&& echo "Move reacttest.war to ROOT.war for Tomcat"
 
-restart_test:
+jenkins_pre_mvn:
+	# Forces shindig to use reacttest settings during compilation
+	@echo "socialjpa.properties"
+	@cp $(SOCIALJPA)_reacttest $(SOCIALJPA)
+	@echo "shindig.properties"
+	@cp $(SHINDIG)_reacttest $(SHINDIG)
+	@echo "web.xml"
+	@cp $(WEBXML)_reacttest $(WEBXML)
+	@mvn clean
+
+jenkins_post_mvn:
+	# Renames build .war file
+	@ cp $(WAR) reacttest.war
+
+restart_react:
 	echo "Restarting the reacttest server"
 	ssh admin@reacttest.epfl.ch '$(TOMCAT)/bin/shutdown.sh > /dev/null 2>&1 || true; nohup $(TOMCAT)/bin/startup.sh;'
 
 
-deploy_test:
+deploy_react:
 	echo "Starting deployment of reacttest.war to Test server (reacttest.epfl.ch|shindigdev.epfl.ch)"
 	echo "Copying file to the remote server"
 	scp -C reacttest.war admin@reacttest.epfl.ch:/Library/Tomcat/webapps/ROOT.war.new

@@ -61,7 +61,7 @@ Clear all production and reacttest temporal changes
 Prepare .war files for Production and Reacttest
 =======================
 
-    make test  -> build reacttest.war in the current directory
+    make react  -> build reacttest.war in the current directory
     make prod  -> build production.war in the current directory
     make all   -> build both reacttest.war and production
     
@@ -72,13 +72,13 @@ Deployment
 The master branch is automatically deployed to [REACT test server](http://reacttest.epfl.ch) when new changes
 are pushed. To delploy reacttest.war to REACT test server manually, use:
 
-    $ make deploy_test
+    $ make deploy_react
     $ make deploy_prod
 
 Restart server
 =======================
 
-    $ make restart_test
+    $ make restart_react
     $ make restart_prod
 
 License - ASF
