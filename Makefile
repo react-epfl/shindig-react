@@ -45,7 +45,7 @@ start:
 prepare: clean settings
 
 clean:
-	@echo "Cleaning temporal changes"
+	@echo "Cleaning temporary changes"
 	@echo "socialjpa.properties"
 	@cp $(SOCIALJPA)_development $(SOCIALJPA)
 	@echo "shindig.properties"
