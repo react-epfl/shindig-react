@@ -43,9 +43,9 @@ prepare:
 	@cp $(WEBXML)_development $(WEBXML)
 	@rm -rf prod_config
 
-all: production reacttest
+all: prod test
 
-production:
+prod:
 	@echo "Creating production.war file"
 	@echo "socialjpa.properties"
 	@cp $(SOCIALJPA)_production $(SOCIALJPA)
@@ -57,7 +57,7 @@ production:
 	@mvn -Dmaven.test.skip && cp $(WAR) production.war \
 		&& echo "Move production.war to ROOT.war for Tomcat"
 
-reacttest:
+test:
 	@echo "Creating reacttest.war file"
 	@echo "socialjpa.properties"
 	@cp $(SOCIALJPA)_reacttest $(SOCIALJPA)
@@ -69,15 +69,23 @@ reacttest:
 	@mvn -Dmaven.test.skip && cp $(WAR) reacttest.war \
 		&& echo "Move reacttest.war to ROOT.war for Tomcat"
 
+restart_test:
+	echo "Restarting the reacttest server"
+	ssh admin@reacttest.epfl.ch '$(TOMCAT)/bin/shutdown.sh > /dev/null 2>&1 || true; rm -rf $(TOMCAT)/webapps/ROOT; nohup $(TOMCAT)/bin/startup.sh;'
+
+
 deploy_test:
 	echo "Starting deployment of reacttest.war to Test server (reacttest.epfl.ch)"
 	echo "Copying file to the remote server"
 	scp -C reacttest.war admin@reacttest.epfl.ch:/Library/Tomcat/webapps/ROOT.war.new
 	echo "Backing up the previous version and setting the new one"
 	ssh admin@reacttest.epfl.ch 'cd $(TOMCAT)/webapps; if [[ -a ROOT.war ]]; then mv ROOT.war ROOT.war.bak; fi; mv ROOT.war.new ROOT.war'
-	echo "Restarting the test server"
+	echo "Restarting the reacttest server"
 	ssh admin@reacttest.epfl.ch '$(TOMCAT)/bin/shutdown.sh > /dev/null 2>&1 || true; rm -rf $(TOMCAT)/webapps/ROOT; nohup $(TOMCAT)/bin/startup.sh;'
-#	ssh admin@reacttest.epfl.ch 'sudo nohup $(TOMCAT)/bin/restart.sh'
+
+restart_prod:
+	echo "Restarting the production server"
+	ssh admin@graasp.epfl.ch '$(TOMCAT)/bin/shutdown.sh > /dev/null 2>&1 || true; rm -rf $(TOMCAT)/webapps/ROOT; nohup $(TOMCAT)/bin/startup.sh;'
 
 deploy_prod:
 	echo "Starting deployment of production.war to main server (graasp.epfl.ch)"
@@ -85,7 +93,7 @@ deploy_prod:
 	scp -C production.war admin@graasp.epfl.ch:/Library/Tomcat/webapps/ROOT.war.new
 	echo "Backing up the previous version and setting the new one"
 	ssh admin@graasp.epfl.ch 'cd $(TOMCAT)/webapps; if [[ -a ROOT.war ]]; then mv ROOT.war ROOT.war.bak; fi; mv ROOT.war.new ROOT.war'
-	echo "Restarting the test server"
+	echo "Restarting the production server"
 	ssh admin@graasp.epfl.ch '$(TOMCAT)/bin/shutdown.sh > /dev/null 2>&1 || true; rm -rf $(TOMCAT)/webapps/ROOT; nohup $(TOMCAT)/bin/startup.sh;'
 
 release:
