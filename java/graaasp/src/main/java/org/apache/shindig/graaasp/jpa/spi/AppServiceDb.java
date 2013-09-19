@@ -81,8 +81,8 @@ public class AppServiceDb implements AppService {
   /**
    * {@inheritDoc}
    */
-  public Future<RestfulCollection<App>> getApps(Set<AppId> AppIds, 
-		  CollectionOptions collectionOptions, Set<String> fields,
+  public Future<RestfulCollection<App>> getApps(Set<AppId> AppIds,
+      CollectionOptions collectionOptions, Set<String> fields,
        SecurityToken token, String keyFile) throws ProtocolException {
     // for each user id get the filtered userid using the token and then, get the users identified
     // by the group id, the final set is filtered
@@ -97,19 +97,19 @@ public class AppServiceDb implements AppService {
     StringBuilder sb = new StringBuilder();
     // sanitize the list to get the uid's and remove duplicates
     List<String> paramList = SPIUtils.getAppList(AppIds);
-    
+
     sb.append(WidgetDb.JPQL_FINDWIDGET);
     lastPos = JPQLUtils.addInClause(sb, "w", "id", lastPos, paramList.size());
 
-    
+
     // Get total results, that is count the total number of rows for this query
     // totalResults = JPQLUtils.getTotalResults(entityManager, sb.toString(), paramList);
 
-    
+
     // Execute ordered and paginated query
     //if (totalResults > 0) {
-    	//addOrderClause(sb, collectionOptions);
-    	plist = JPQLUtils.getListQuery(entityManager, sb.toString(), paramList, collectionOptions);
+      //addOrderClause(sb, collectionOptions);
+      plist = JPQLUtils.getListQuery(entityManager, sb.toString(), paramList, collectionOptions);
     //}
 
     if (plist == null) {
@@ -128,8 +128,8 @@ public class AppServiceDb implements AppService {
 
   }
 
-  public Future<RestfulCollection<App>> getAppsForContext(Context context, 
-		  CollectionOptions collectionOptions, Set<String> fields,
+  public Future<RestfulCollection<App>> getAppsForContext(Context context,
+      CollectionOptions collectionOptions, Set<String> fields,
        SecurityToken token, String keyFile) throws ProtocolException {
     // list of apps is retrieved for a context
 
@@ -142,26 +142,26 @@ public class AppServiceDb implements AppService {
     StringBuilder sb = new StringBuilder();
     // sanitize the list to get the uid's and remove duplicates
     List<String> paramList = Lists.newArrayList();
-    
+
     sb.append(WidgetDb.JPQL_FINDWIDGETS);
     if(context.getContextType().equals("@person")){
-    	sb.append("w.parentId = "+context.getContextId()+" and w.parentType = 'User'");
+      sb.append("w.parentId = "+context.getContextId()+" and w.parentType = 'User'");
     }else if (context.getContextType().equals("@space")){
-    	sb.append("w.parentId = "+context.getContextId()+" and w.parentType = 'Space'");
+      sb.append("w.parentId = "+context.getContextId()+" and w.parentType = 'Space'");
     }
-    
+
     String viewerId = token.getViewerId();
     if (!viewerCanSee(context.getContextId(),viewerId)) {
       return Futures.immediateFuture(null);
     }
-    
+
     // Get total results, that is count the total number of rows for this query
     // totalResults = JPQLUtils.getTotalResults(entityManager, sb.toString(), paramList);
-    
+
     // Execute ordered and paginated query
     //if (totalResults > 0) {
-    	//addOrderClause(sb, collectionOptions);
-    	plist = JPQLUtils.getListQuery(entityManager, sb.toString(), paramList, collectionOptions);
+      //addOrderClause(sb, collectionOptions);
+      plist = JPQLUtils.getListQuery(entityManager, sb.toString(), paramList, collectionOptions);
     //}
 
     if (plist == null) {
@@ -247,12 +247,12 @@ public class AppServiceDb implements AppService {
       app = (App) plist.get(0);
       app.setToken(buildEncryptedToken(keyFile, token, app));
     }
-    
+
     String viewerId = token.getViewerId();
     if (!viewerCanSee(widgetDb.getParentId(),viewerId)) {
       return Futures.immediateFuture(null);
     }
-    
+
     return Futures.immediateFuture(app);
   }
 

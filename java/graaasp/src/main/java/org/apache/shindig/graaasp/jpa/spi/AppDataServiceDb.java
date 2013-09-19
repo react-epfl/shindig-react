@@ -24,6 +24,7 @@ import java.util.Set;
 import java.util.concurrent.Future;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
 
 import org.apache.shindig.auth.SecurityToken;
 import org.apache.shindig.protocol.DataCollection;
@@ -294,36 +295,38 @@ public class AppDataServiceDb implements AppDataService {
 
         Map<String, AppdataDb> dataMaps = getDataMap(contextId, contextType, groupId, appId);
 
+        EntityTransaction transaction = entityManager.getTransaction();
+
         // TODO How should transactions be managed? Should samples be using warp-persist instead?
-        if (!entityManager.getTransaction().isActive()) {
-            entityManager.getTransaction().begin();
+        if (!transaction.isActive()) {
+            transaction.begin();
         }
 
-        // go through all new values and update key-value
-        for (String k : values.keySet()) {
-            if (dataMaps.containsKey(k)) {
-                // update the key
-                AppdataDb ad = dataMaps.get(k);
-                ad.setValue(values.get(k));
-                entityManager.persist(ad);
-            } else {
-                // create the new key-value
-                AppdataDb ad = new AppdataDb();
-                ad.setContextId(contextId);
-                ad.setContextType(contextType);
-                ad.setAppId(Long.parseLong(appId));
-                ad.setName(k);
-                ad.setValue(values.get(k));
-                entityManager.persist(ad);
-            }
+        try {
+          // go through all new values and update key-value
+          for (String k : values.keySet()) {
+              if (dataMaps.containsKey(k)) {
+                  // update the key
+                  AppdataDb ad = dataMaps.get(k);
+                  ad.setValue(values.get(k));
+                  entityManager.persist(ad);
+              } else {
+                  // create the new key-value
+                  AppdataDb ad = new AppdataDb();
+                  ad.setContextId(contextId);
+                  ad.setContextType(contextType);
+                  ad.setAppId(Long.parseLong(appId));
+                  ad.setName(k);
+                  ad.setValue(values.get(k));
+                  entityManager.persist(ad);
+              }
+          }
+        } catch (ProtocolException err) {
+          transaction.rollback();
+          return Futures.immediateFuture(null);
         }
 
-        // for (AppdataDb adm : dataMaps) {
-        //   entityManager.persist(adm);
-        // }
-        // entityManager.flush();
-
-        entityManager.getTransaction().commit();
+        transaction.commit();
 
         return Futures.immediateFuture(null);
     }

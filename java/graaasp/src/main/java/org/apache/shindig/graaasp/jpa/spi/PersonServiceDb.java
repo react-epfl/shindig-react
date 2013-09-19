@@ -227,7 +227,9 @@ public class PersonServiceDb implements PersonService {
             // If viewer is in the list of owners for a space it returns him,
             // otherwise returns first user from owners list.
             if (owners.size() == 0) {
-                throw new ProtocolException(HttpServletResponse.SC_NOT_FOUND ,"space does not have owners!");
+                //space does not have owners, return null user instead of exception
+                Person p = null;
+                return Futures.immediateFuture(p);
             }
 
             uid = owners.get(0);

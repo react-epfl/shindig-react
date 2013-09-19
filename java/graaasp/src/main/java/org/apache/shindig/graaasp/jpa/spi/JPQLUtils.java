@@ -65,6 +65,8 @@ public class JPQLUtils {
   public static <T> List<T> getListQuery(EntityManager entityManager, String query,
       List<?> parametersValues, CollectionOptions collectionOptions) {
     Query q = createQuery(entityManager, query, parametersValues);
+    // cancel cache everywhere
+    q.setHint("eclipselink.refresh", "true");
     if (collectionOptions != null) {
       q.setFirstResult(collectionOptions.getFirst());
       q.setMaxResults(collectionOptions.getMax());
