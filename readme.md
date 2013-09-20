@@ -1,39 +1,34 @@
-Apache Shindig version for Graasp
-=================================
+# Apache Shindig version for Graasp
+
 An Apache Shindig extended with Spaces and other adaptations
 for Graasp (based on apache shindig 2.5.0)
 
-Memo
-====
+## Memo
 
     $ make info        # shows useful info and all the commands
 
 
-Get the code
-================
+## Get the code
 
-Checkout the main code
---------
+
+### Checkout the main code
 Get the shindig source code
 
     $ git clone git@github.com:react-epfl/shindig.git
 
-Checkout the configuration files
-----------
+### Checkout the configuration files
+
 The Graasp-specific configuration files are extracted from the public repo for security reasons. They are hosted on the internal React server as a git repo: ssh://admin@reacttest.epfl.ch/opt/git/config.git. The following command gets all config files and put the into correct places in the code.
 
     $ make prepare
 
-Install OAuth keys
-================
+## Install OAuth keys
 
-Create folder
--------
+### Create folder
 
     /Graaasp/current/lib/java_shindig
     
-Copy there the folder from the trunk
--------
+### Copy there the folder from the trunk
 
     ssl_keys
     
@@ -41,25 +36,21 @@ If you have your ssl_keys in another location, specify this location in the foll
 
     shindig.signing.key-file=/Graaasp/current/lib/java_shindig/ssl_keys/oauthkey.pem
 
-Compile
-===================
+## Compile
 
     $ make
 
-Run server at localhost
-===================
+## Run server at localhost
 
     $ make start
 
 Shindig should be accessible at [localhost:8080](http://localhost:8080)
 
-Clear all production and reacttest temporal changes
-=================================================
+## Clear all production and reacttest temporal changes
   
     $ make clean
 
-Prepare .war files for Production and Reacttest
-=======================
+## Prepare .war files for Production and Reacttest
 
     make react  -> build reacttest.war in the current directory
     make prod  -> build production.war in the current directory
@@ -67,16 +58,14 @@ Prepare .war files for Production and Reacttest
     
 !!! Compiled .war file should be renamed into ROOT.war on the Tomcat server.
 
-Deployment
-=======================
+## Deployment
 The master branch is automatically deployed to [REACT test server](http://reacttest.epfl.ch) when new changes
 are pushed. To delploy reacttest.war to REACT test server manually, use:
 
     $ make deploy_react
     $ make deploy_prod
 
-Restart server
-=======================
+## Restart server
 from local machine
 
     $ make restart_react
@@ -88,8 +77,7 @@ from production machine
     $ /Library/Tomcat/bin/shutdown.sh
     $ /Library/Tomcat/bin/startup.sh
 
-License - ASF
-=============
+## License - ASF
 ```
 /**
  * Licensed to the Apache Software Foundation (ASF) under one
