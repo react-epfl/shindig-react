@@ -19,11 +19,11 @@ info:
 	# Server urls
 	# ===========
 	# Reacttest:
-	#     reacttest.epfl.ch
-	#     shindigdev.epfl.ch
+	#     http://reacttest.epfl.ch
+	#     http://shindigdev.epfl.ch
 	# Production:
-	#     graasp.epfl.ch
-	#     shindig.epfl.ch
+	#     http://graasp.epfl.ch
+	#     http://shindig.epfl.ch
 	#
 	# Commands
 	# ========
