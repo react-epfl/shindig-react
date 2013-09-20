@@ -46,7 +46,7 @@ If you have your ssl_keys in another location, specify this location in the foll
 
 Shindig should be accessible at [localhost:8080](http://localhost:8080)
 
-## Clear all production and reacttest temporal changes
+## Clear all temporary changes
   
     $ make clean
 
