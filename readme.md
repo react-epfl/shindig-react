@@ -77,9 +77,16 @@ are pushed. To delploy reacttest.war to REACT test server manually, use:
 
 Restart server
 =======================
+from local machine
 
     $ make restart_react
     $ make restart_prod
+
+from production machine
+
+    $ ssh admin@graasp.epfl.ch
+    $ /Library/Tomcat/bin/shutdown.sh
+    $ /Library/Tomcat/bin/startup.sh
 
 License - ASF
 =============
