@@ -97,24 +97,9 @@ react:
 	@mvn -Dmaven.test.skip && cp $(WAR) reacttest.war \
 		&& echo "Move reacttest.war to ROOT.war for Tomcat"
 
-jenkins_pre_mvn:
-	# Forces shindig to use reacttest settings during compilation
-	@echo "socialjpa.properties"
-	@cp $(SOCIALJPA)_reacttest $(SOCIALJPA)
-	@echo "shindig.properties"
-	@cp $(SHINDIG)_reacttest $(SHINDIG)
-	@echo "web.xml"
-	@cp $(WEBXML)_reacttest $(WEBXML)
-	@mvn clean
-
-jenkins_post_mvn:
-	# Renames build .war file
-	@ cp $(WAR) reacttest.war
-
 restart_react:
 	echo "Restarting the reacttest server"
 	ssh admin@reacttest.epfl.ch '$(TOMCAT)/bin/shutdown.sh > /dev/null 2>&1 || true; nohup $(TOMCAT)/bin/startup.sh;'
-
 
 deploy_react:
 	echo "Starting deployment of reacttest.war to Test server (reacttest.epfl.ch|shindigdev.epfl.ch)"
@@ -137,19 +122,3 @@ deploy_prod:
 	ssh admin@graasp.epfl.ch 'cd $(TOMCAT)/webapps; if [[ -a ROOT.war ]]; then mv ROOT.war ROOT.war.bak; fi; mv ROOT.war.new ROOT.war'
 	echo "Restarting the production server"
 	ssh admin@graasp.epfl.ch '$(TOMCAT)/bin/shutdown.sh > /dev/null 2>&1 || true; rm -rf $(TOMCAT)/webapps/ROOT; nohup $(TOMCAT)/bin/startup.sh;'
-
-release:
-	# merge changes from master to release
-	@git checkout master
-	@git pull origin master
-	@git checkout release
-	@git pull origin release
-	@git merge master
-	@git push origin release
-	# create a new tag
-	@git tag -a `date "+%Y-%m-%d,%Hh%M"` -m "tag created on `date`"
-	# push tag to the repo
-	@git push origin `date "+%Y-%m-%d,%Hh%M"`
-	# go back to master
-	@git checkout master
-
