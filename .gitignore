@@ -9,6 +9,7 @@ java/common/conf/shindig.properties*
 
 # output of git svn show-ignore below
 # /
+.rootdir
 /target
 /work
 /dojo
