@@ -75,6 +75,8 @@ from production machine
 
     $ ssh admin@graasp.epfl.ch
     $ /Library/Tomcat/bin/shutdown.sh
+    # check if the service is killed (ps aux | grep catalina)
+    # if not kill it manually (kill -9 catalina_PID)
     $ /Library/Tomcat/bin/startup.sh
 
 ## License - ASF
