@@ -600,7 +600,8 @@ shindig.BaseIfrGadget.prototype.handleOpenUserPrefsDialog = function() {
 
     var script = document.createElement('script');
     script.src = 'http://www.gmodules.com/ig/gadgetsettings?mid=' + this.id +
-        '&output=js' + this.getUserPrefsParams() + '&url=' + this.specUrl;
+        '&output=js' + this.getUserPrefsParams() + '&url=' + this.specUrl +
+        '&lang=' + shindig.container.language_;
     document.body.appendChild(script);
   }
 };
