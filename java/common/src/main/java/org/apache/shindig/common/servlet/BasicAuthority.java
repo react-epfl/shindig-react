@@ -50,9 +50,15 @@ public class BasicAuthority implements Authority {
   }
 
   public String getAuthority() {
-    return Joiner.on(':').join(
+    String output = Joiner.on(':').join(
         Objects.firstNonNull(host, getServerHostname()),
         Objects.firstNonNull(port, getServerPort()));
+    if (port == null) {
+      // if port is not specified, we only have a URL of shindig
+      // this way it will work on both http:80 and https:443
+      output = Objects.firstNonNull(host, getServerHostname());
+    }
+    return output;
   }
 
   public String getScheme(){
